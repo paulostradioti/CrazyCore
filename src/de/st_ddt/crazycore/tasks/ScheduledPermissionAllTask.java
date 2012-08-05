@@ -1,4 +1,4 @@
-package de.st_ddt.crazycore;
+package de.st_ddt.crazycore.tasks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;

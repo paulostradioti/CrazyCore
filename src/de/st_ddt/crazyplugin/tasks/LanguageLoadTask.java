@@ -1,15 +1,17 @@
-package de.st_ddt.crazyplugin;
+package de.st_ddt.crazyplugin.tasks;
 
 import org.bukkit.command.CommandSender;
 
-public class LanguageLoadRunnable implements Runnable
+import de.st_ddt.crazyplugin.CrazyPlugin;
+
+public class LanguageLoadTask implements Runnable
 {
 
 	protected final CrazyPlugin plugin;
 	protected final String language;
 	protected final CommandSender sender;
 
-	public LanguageLoadRunnable(final CrazyPlugin plugin, final String language, final CommandSender sender)
+	public LanguageLoadTask(final CrazyPlugin plugin, final String language, final CommandSender sender)
 	{
 		super();
 		this.plugin = plugin;

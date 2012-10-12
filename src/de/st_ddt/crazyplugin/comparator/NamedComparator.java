@@ -1,6 +1,8 @@
-package de.st_ddt.crazyutil;
+package de.st_ddt.crazyplugin.comparator;
 
 import java.util.Comparator;
+
+import de.st_ddt.crazyutil.Named;
 
 public class NamedComparator implements Comparator<Named>
 {

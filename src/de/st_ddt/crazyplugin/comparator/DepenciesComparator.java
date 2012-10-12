@@ -1,14 +1,14 @@
-package de.st_ddt.crazyutil;
+package de.st_ddt.crazyplugin.comparator;
 
 import java.util.Comparator;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class DepenciesComparator implements Comparator<JavaPlugin>
+public class DepenciesComparator<S extends JavaPlugin> implements Comparator<S>
 {
 
 	@Override
-	public int compare(final JavaPlugin o1, final JavaPlugin o2)
+	public int compare(final S o1, final S o2)
 	{
 		if (isDependent(o1, o2))
 			return 1;

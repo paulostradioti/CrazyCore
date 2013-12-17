@@ -20,33 +20,45 @@ public class BooleanParamitrisable extends TypedParamitrisable<Boolean>
 	}
 
 	@Override
-	public void setParameter(String parameter) throws CrazyException
+	public void setParameter(final String parameter) throws CrazyException
 	{
-		parameter = parameter.toLowerCase();
-		if (parameter.equals("true"))
-			value = true;
-		else if (parameter.equals("1"))
-			value = true;
-		else if (parameter.equals("y"))
-			value = true;
-		else if (parameter.equals("yes"))
-			value = true;
-		else if (parameter.equals("false"))
-			value = false;
-		else if (parameter.equals("0"))
-			value = false;
-		else if (parameter.equals("n"))
-			value = false;
-		else if (parameter.equals("no"))
-			value = false;
-		else
+		try
+		{
+			value = getFromString(parameter);
+		}
+		catch (final IllegalArgumentException e)
+		{
 			throw new CrazyCommandParameterException(0, "Boolean (false/true)");
+		}
 	}
 
 	@Override
 	public List<String> tab(final String parameter)
 	{
 		return tabHelp(parameter);
+	}
+
+	public static boolean getFromString(String parameter) throws IllegalArgumentException
+	{
+		parameter = parameter.toLowerCase();
+		if (parameter.equals("true"))
+			return true;
+		else if (parameter.equals("1"))
+			return true;
+		else if (parameter.equals("y"))
+			return true;
+		else if (parameter.equals("yes"))
+			return true;
+		else if (parameter.equals("false"))
+			return false;
+		else if (parameter.equals("0"))
+			return false;
+		else if (parameter.equals("n"))
+			return false;
+		else if (parameter.equals("no"))
+			return false;
+		else
+			throw new IllegalArgumentException("The input " + parameter + " could not be converted into a boolean!");
 	}
 
 	public static List<String> tabHelp(String parameter)

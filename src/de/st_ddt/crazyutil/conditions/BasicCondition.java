@@ -5,6 +5,8 @@ import java.lang.reflect.Constructor;
 import org.bukkit.configuration.ConfigurationSection;
 
 import de.st_ddt.crazyutil.conditions.checker.ConditionChecker;
+import de.st_ddt.crazyutil.conditions.player.Condition_Player_Group;
+import de.st_ddt.crazyutil.conditions.player.Condition_Player_Money;
 import de.st_ddt.crazyutil.conditions.player.Condition_Player_Permission;
 
 public abstract class BasicCondition implements Condition
@@ -17,6 +19,8 @@ public abstract class BasicCondition implements Condition
 		CONDITIONCLASSES.put("NOT", Condition_NOT.class);
 		CONDITIONCLASSES.put("AND", Condition_AND.class);
 		CONDITIONCLASSES.put("OR", Condition_OR.class);
+		CONDITIONCLASSES.put("PLAYER_GROUP", Condition_Player_Group.class);
+		CONDITIONCLASSES.put("PLAYER_MONEY", Condition_Player_Money.class);
 		CONDITIONCLASSES.put("PLAYER_PERMISSION", Condition_Player_Permission.class);
 	}
 

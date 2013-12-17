@@ -7,7 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import de.st_ddt.crazyplugin.CrazyLightPluginInterface;
+import de.st_ddt.crazyutil.ChatHeaderProvider;
 import de.st_ddt.crazyutil.ChatHelper;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
 import de.st_ddt.crazyutil.source.Localized;
@@ -37,7 +37,7 @@ public abstract class PlayerData<S extends PlayerDataInterface> implements Playe
 	{
 		final CrazyLocale locale = CrazyLocale.getLocaleHead().getSecureLanguageEntry("CRAZYPLUGIN.PLAYERINFO");
 		final Player player = getPlayer();
-		ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("HEAD"), CrazyLightPluginInterface.DATETIMEFORMAT.format(new Date()));
+		ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("HEAD"), ChatHeaderProvider.DATETIMEFORMAT.format(new Date()));
 		if (player == null)
 			ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("USERNAME"), getName());
 		else
@@ -54,8 +54,8 @@ public abstract class PlayerData<S extends PlayerDataInterface> implements Playe
 		final OfflinePlayer plr = getOfflinePlayer();
 		if (plr != null)
 		{
-			ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("FIRSTCONNECT"), CrazyLightPluginInterface.DATETIMEFORMAT.format(new Date(plr.getFirstPlayed())));
-			ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("LASTCONNECT"), CrazyLightPluginInterface.DATETIMEFORMAT.format(new Date(plr.getLastPlayed())));
+			ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("FIRSTCONNECT"), ChatHeaderProvider.DATETIMEFORMAT.format(new Date(plr.getFirstPlayed())));
+			ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("LASTCONNECT"), ChatHeaderProvider.DATETIMEFORMAT.format(new Date(plr.getLastPlayed())));
 			ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("OP"), plr.isOp() ? "True" : "False");
 			if (Bukkit.hasWhitelist())
 				ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("WHITELISTED"), plr.isWhitelisted() ? "True" : "False");

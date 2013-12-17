@@ -18,7 +18,6 @@ import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.ListOptionsModder;
 import de.st_ddt.crazyutil.Tabbed;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.paramitrisable.IntegerParamitrisable;
 import de.st_ddt.crazyutil.paramitrisable.OfflinePlayerParamitrisable;
 import de.st_ddt.crazyutil.paramitrisable.Paramitrisable;
@@ -61,7 +60,7 @@ public class CommandPlayerAssociates extends CommandExecutor
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		final AssoicatesListModer moder = new AssoicatesListModer(sender);
-		final String[] pipeArgs = ChatHelperExtended.processListCommand(sender, args, plugin.getChatHeader(), listFormat, null, null, null, moder, new ArrayList<String>(), moder);
+		final String[] pipeArgs = ChatHelperExtended.processListCommand(sender, args, owner.getChatHeader(), listFormat, null, null, null, moder, new ArrayList<String>(), moder);
 		if (pipeArgs != null)
 			CrazyPipe.pipe(sender, moder.getList(), false, pipeArgs);
 	}
@@ -79,7 +78,7 @@ public class CommandPlayerAssociates extends CommandExecutor
 	@Permission("crazycore.player.associates")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazycore.player.associates");
+		return sender.hasPermission("crazycore.player.associates");
 	}
 
 	private class AssoicatesListModer implements ListOptionsModder<String>

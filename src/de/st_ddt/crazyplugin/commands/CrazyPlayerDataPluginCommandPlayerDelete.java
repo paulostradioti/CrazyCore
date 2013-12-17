@@ -10,7 +10,6 @@ import de.st_ddt.crazyplugin.data.PlayerDataInterface;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.ChatHelper;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.paramitrisable.PlayerDataParamitrisable;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
@@ -29,10 +28,10 @@ public class CrazyPlayerDataPluginCommandPlayerDelete<T extends PlayerDataInterf
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		final String name = ChatHelper.listingString(" ", args);
-		CrazyCore.getPlugin().checkProtectedPlayer(name, sender, plugin.getName() + ".player.delete.protected", plugin.getName(), "deleting plugin's player data");
-		if (!plugin.deletePlayerData(name))
+		CrazyCore.getPlugin().checkProtectedPlayer(name, sender, owner.getName() + ".player.delete.protected", owner.getName(), "deleting plugin's player data");
+		if (!owner.deletePlayerData(name))
 			throw new CrazyCommandNoSuchException("PlayerData", name);
-		plugin.sendLocaleMessage("COMMAND.PLAYER.DELETE.SUCCESS", sender, name);
+		owner.sendLocaleMessage("COMMAND.PLAYER.DELETE.SUCCESS", sender, name);
 	}
 
 	@Override
@@ -41,13 +40,13 @@ public class CrazyPlayerDataPluginCommandPlayerDelete<T extends PlayerDataInterf
 		if (args.length != 1)
 			return null;
 		else
-			return PlayerDataParamitrisable.tabHelp(plugin, args[0]);
+			return PlayerDataParamitrisable.tabHelp(owner, args[0]);
 	}
 
 	@Override
 	@Permission("$CRAZYPLAYERDATAPLUGIN$.player.delete")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, plugin.getName().toLowerCase() + ".player.delete");
+		return sender.hasPermission(owner.getName() + ".player.delete");
 	}
 }

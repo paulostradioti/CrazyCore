@@ -2,6 +2,7 @@ package de.st_ddt.crazycore.data;
 
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -10,7 +11,7 @@ import de.st_ddt.crazyplugin.data.PlayerData;
 import de.st_ddt.crazyplugin.events.CrazyPlayerAssociatesEvent;
 import de.st_ddt.crazyutil.ChatHelper;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
+import de.st_ddt.crazyutil.modules.permissiongroups.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
 
 public class PseudoPlayerData extends PlayerData<PseudoPlayerData>
@@ -60,12 +61,12 @@ public class PseudoPlayerData extends PlayerData<PseudoPlayerData>
 	@Localized({ "CRAZYCORE.PLAYERINFO.LANGUAGE $Language$", "CRAZYCORE.PLAYERINFO.ASSOCIATES $Associates$", "CRAZYCORE.PLAYERINFO.GROUPS $Groups$", "CRAZYCORE.PLAYERINFO.PROTECTEDPLAYER $Protected$" })
 	public void showDetailed(final CommandSender target, final String chatHeader)
 	{
-		final CrazyLocale locale = getPlugin().getLocale().getSecureLanguageEntry("PLAYERINFO");
-		ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("LANGUAGE"), CrazyLocale.getUserLanguageName(name, true));
+		final CrazyCore plugin = CrazyCore.getPlugin();
+		plugin.sendLocaleMessage("PLAYERINFO.LANGUAGE", target, CrazyLocale.getUserLanguageName(name, true));
 		final CrazyPlayerAssociatesEvent associatesEvent = new CrazyPlayerAssociatesEvent(name);
 		associatesEvent.callEvent();
-		ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("ASSOCIATES"), ChatHelper.listingString(associatesEvent.getAssociates()));
-		final Player player = getPlayer();
+		plugin.sendLocaleMessage("PLAYERINFO.ASSOCIATES", target, ChatHelper.listingString(associatesEvent.getAssociates()));
+		final Player player = Bukkit.getPlayerExact(name);
 		if (player != null)
 		{
 			final Set<String> groups = PermissionModule.getGroups(player);
@@ -73,11 +74,11 @@ public class PseudoPlayerData extends PlayerData<PseudoPlayerData>
 			{
 				final String group = PermissionModule.getGroup(player);
 				if (group != null)
-					ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("GROUPS"), group);
+					plugin.sendLocaleMessage("PLAYERINFO.GROUPS", target, group);
 			}
 			else
-				ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("GROUPS"), ChatHelper.listingString(groups));
+				plugin.sendLocaleMessage("PLAYERINFO.GROUPS", target, ChatHelper.listingString(groups));
 		}
-		ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("PROTECTEDPLAYER"), getPlugin().isProtectedPlayer(name) ? "True" : "False");
+		plugin.sendLocaleMessage("PLAYERINFO.PROTECTEDPLAYER", target, plugin.isProtectedPlayer(name) ? "True" : "False");
 	}
 }

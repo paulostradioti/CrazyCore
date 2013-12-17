@@ -6,35 +6,34 @@ import org.bukkit.command.CommandSender;
 import de.st_ddt.crazycore.CrazyCore;
 import de.st_ddt.crazycore.tasks.PluginUpdateCheckTask;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
 
 public class CommandUpdateCheck extends CommandExecutor
 {
 
-	public CommandUpdateCheck(final CrazyCore plugin)
+	public CommandUpdateCheck(final CrazyCore owner)
 	{
-		super(plugin);
+		super(owner);
 	}
 
 	@Override
 	@Localized({ "CRAZYCORE.COMMAND.UPDATECHECK", "CRAZYCORE.COMMAND.UPDATECHECK.DISABLED", })
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
-		if (plugin.isCheckingForUpdatesEnabled())
+		if (owner.isCheckingForUpdatesEnabled())
 		{
-			plugin.sendLocaleMessage("COMMAND.UPDATECHECK", sender);
-			Bukkit.getScheduler().runTaskAsynchronously(plugin, new PluginUpdateCheckTask(plugin, sender, true));
+			owner.sendLocaleMessage("COMMAND.UPDATECHECK", sender);
+			Bukkit.getScheduler().runTaskAsynchronously(owner, new PluginUpdateCheckTask(owner, sender, true));
 		}
 		else
-			plugin.sendLocaleMessage("COMMAND.UPDATECHECK.DISABLED", sender);
+			owner.sendLocaleMessage("UPDATECHECK.DISABLED", sender);
 	}
 
 	@Override
 	@Permission("crazycore.updatecheck")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazycore.updatecheck");
+		return sender.hasPermission("crazycore.updatecheck");
 	}
 }

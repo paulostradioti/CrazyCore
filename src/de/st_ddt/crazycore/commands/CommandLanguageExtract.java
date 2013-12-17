@@ -13,7 +13,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandUsageException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
 
@@ -40,9 +39,8 @@ public class CommandLanguageExtract extends CommandExecutor
 				{
 					plugin.unpackLanguage(language);
 					plugin.loadLanguage(language, sender);
-					plugin.checkLocale();
 				}
-				plugin.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED", sender, language);
+				owner.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED", sender, language);
 			}
 			return;
 		}
@@ -52,9 +50,8 @@ public class CommandLanguageExtract extends CommandExecutor
 			{
 				plugin.unpackLanguage(name, sender);
 				plugin.loadLanguage(name, sender);
-				plugin.checkLocale();
 			}
-			plugin.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED", sender, name);
+			owner.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED", sender, name);
 			return;
 		}
 		final CrazyPlugin plugin = CrazyPlugin.getPlugin(name);
@@ -71,7 +68,6 @@ public class CommandLanguageExtract extends CommandExecutor
 			{
 				plugin.unpackLanguage(language, sender);
 				plugin.loadLanguage(language, sender);
-				plugin.checkLocale();
 				plugin.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED.PLUGIN", sender, language, plugin.getName());
 			}
 	}
@@ -97,6 +93,6 @@ public class CommandLanguageExtract extends CommandExecutor
 	@Permission("crazylanguage.advanced")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazylanguage.advanced");
+		return sender.hasPermission("crazylanguage.advanced");
 	}
 }

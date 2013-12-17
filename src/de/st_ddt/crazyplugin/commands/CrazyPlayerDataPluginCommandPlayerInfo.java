@@ -13,7 +13,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandPermissionException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandUsageException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.ChatHelper;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.paramitrisable.OfflinePlayerParamitrisable;
 import de.st_ddt.crazyutil.paramitrisable.PlayerDataParamitrisable;
 import de.st_ddt.crazyutil.source.Permission;
@@ -39,12 +38,12 @@ public class CrazyPlayerDataPluginCommandPlayerInfo<T extends PlayerDataInterfac
 
 	protected void commandPlayerInfo(final CommandSender sender, final String name, final boolean detailed) throws CrazyCommandException
 	{
-		if (!PermissionModule.hasPermission(sender, plugin.getName().toLowerCase() + ".player.info." + (sender.getName().equals(name) ? "self" : "other")))
+		if (!sender.hasPermission(owner.getName() + ".player.info." + (sender.getName().equals(name) ? "self" : "other")))
 			throw new CrazyCommandPermissionException();
-		final T data = plugin.getPlayerData(name);
+		final T data = owner.getPlayerData(name);
 		if (data == null)
 			throw new CrazyCommandNoSuchException("PlayerData", name);
-		data.show(sender, plugin.getChatHeader(), detailed);
+		data.show(sender, owner.getChatHeader(), detailed);
 	}
 
 	@Override
@@ -54,7 +53,7 @@ public class CrazyPlayerDataPluginCommandPlayerInfo<T extends PlayerDataInterfac
 			return null;
 		else
 		{
-			final List<String> res = PlayerDataParamitrisable.tabHelp(plugin, args[0]);
+			final List<String> res = PlayerDataParamitrisable.tabHelp(owner, args[0]);
 			final List<String> players = OfflinePlayerParamitrisable.tabHelp(args[0]);
 			players.removeAll(res);
 			res.addAll(players);
@@ -66,6 +65,6 @@ public class CrazyPlayerDataPluginCommandPlayerInfo<T extends PlayerDataInterfac
 	@Permission({ "$CRAZYPLAYERDATAPLUGIN$.player.info.self", "$CRAZYPLAYERDATAPLUGIN$.player.info.other" })
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, plugin.getName().toLowerCase() + ".player.info.self") || PermissionModule.hasPermission(sender, plugin.getName().toLowerCase() + ".player.info.other");
+		return sender.hasPermission(owner.getName() + ".player.info.self") || sender.hasPermission(owner.getName() + ".player.info.other");
 	}
 }

@@ -21,15 +21,15 @@ public class CrazyCommandTreeExecutor<S extends ChatHeaderProvider> extends Craz
 	protected final TreeMap<String, CrazyCommandExecutorInterface> subExecutor = new TreeMap<String, CrazyCommandExecutorInterface>();
 	protected CrazyCommandExecutorInterface defaultExecutor;
 
-	public CrazyCommandTreeExecutor(final S chatHeaderProvider)
+	public CrazyCommandTreeExecutor(final S owner)
 	{
-		super(chatHeaderProvider);
-		defaultExecutor = new CrazyCommandTreeDefaultExecutor(plugin);
+		super(owner);
+		defaultExecutor = new CrazyCommandTreeDefaultExecutor(owner);
 	}
 
-	public CrazyCommandTreeExecutor(final S chatHeaderProvider, final CrazyCommandExecutor<?> defaultExecutor)
+	public CrazyCommandTreeExecutor(final S owner, final CrazyCommandExecutor<?> defaultExecutor)
 	{
-		super(chatHeaderProvider);
+		super(owner);
 		this.defaultExecutor = defaultExecutor;
 	}
 

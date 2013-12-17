@@ -1,47 +1,27 @@
 package de.st_ddt.crazyplugin.commands;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import org.bukkit.command.CommandSender;
 
+import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandPermissionException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.ChatHeaderProvider;
 import de.st_ddt.crazyutil.paramitrisable.MapParamitrisable;
 import de.st_ddt.crazyutil.paramitrisable.MultiParamitrisable;
+import de.st_ddt.crazyutil.reloadable.Reloadable;
+import de.st_ddt.crazyutil.reloadable.ReloadableProvider;
 
 public class CrazyCommandReload<S extends ChatHeaderProvider> extends CrazyCommandExecutor<S>
 {
 
-	protected final Map<String, Reloadable> reloadables = new TreeMap<String, Reloadable>();
-	protected final Reloadable allReloadable = new Reloadable()
+	protected final ReloadableProvider reloadableProvider;
+
+	public CrazyCommandReload(final S owner, final ReloadableProvider reloadableProvider)
 	{
-
-		@Override
-		public void reload(final CommandSender sender) throws CrazyException
-		{
-			final Set<Reloadable> reloads = new HashSet<Reloadable>(reloadables.values());
-			for (final Reloadable reloadable : reloads)
-				if (reloadable != this)
-					if (reloadable.hasAccessPermission(sender))
-						reloadable.reload(sender);
-		}
-
-		@Override
-		public boolean hasAccessPermission(final CommandSender sender)
-		{
-			return true;
-		}
-	};
-
-	public CrazyCommandReload(final S chatHeaderProvider)
-	{
-		super(chatHeaderProvider);
-		addReloadable(allReloadable, "*", "all");
+		super(owner);
+		this.reloadableProvider = reloadableProvider;
 	}
 
 	@Override
@@ -49,42 +29,31 @@ public class CrazyCommandReload<S extends ChatHeaderProvider> extends CrazyComma
 	{
 		if (args.length > 0)
 		{
-			final MapParamitrisable<Reloadable> reload = new MapParamitrisable<Reloadable>("Reloadable", reloadables, null, true);
+			final MapParamitrisable<Reloadable> reload = new MapParamitrisable<Reloadable>("Reloadable", reloadableProvider.getReloadables(), null, true);
 			final MultiParamitrisable<Reloadable> reloads = new MultiParamitrisable<Reloadable>(reload);
 			for (final String arg : args)
 				reloads.setParameter(arg);
 			for (final Reloadable reloadable : reloads.getValue())
-				if (!reloadable.hasAccessPermission(sender))
+				if (!reloadable.hasReloadPermission(sender))
 					throw new CrazyCommandPermissionException();
 			for (final Reloadable reloadable : reloads.getValue())
 				reloadable.reload(sender);
 		}
 		else
-			getDefaultReloadable().reload(sender);
+		{
+			final Reloadable reloadable = reloadableProvider.getReloadables().get("default");
+			if (reloadable == null)
+				throw new CrazyCommandNoSuchException("Reloadable", "(none)", tab(sender, args));
+			else if (!reloadable.hasReloadPermission(sender))
+				throw new CrazyCommandPermissionException();
+			else
+				reloadable.reload(sender);
+		}
 	}
 
 	@Override
 	public List<String> tab(final CommandSender sender, final String[] args)
 	{
-		return MapParamitrisable.tabHelp(reloadables, args[args.length - 1]);
-	}
-
-	public final void addReloadable(final Reloadable reloadable, final String... aliases)
-	{
-		for (final String alias : aliases)
-			reloadables.put(alias.toLowerCase(), reloadable);
-	}
-
-	public Reloadable getDefaultReloadable()
-	{
-		return allReloadable;
-	}
-
-	public interface Reloadable
-	{
-
-		public void reload(CommandSender sender) throws CrazyException;
-
-		public boolean hasAccessPermission(final CommandSender sender);
+		return MapParamitrisable.tabHelp(reloadableProvider.getReloadables(), args[args.length - 1]);
 	}
 }

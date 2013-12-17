@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.st_ddt.crazyplugin.CrazyLightPluginInterface;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandParameterException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.ChatConverter;
+import de.st_ddt.crazyutil.ChatHeaderProvider;
 
 public class TargetDateParamitrisable extends DateParamitrisable
 {
@@ -36,9 +36,9 @@ public class TargetDateParamitrisable extends DateParamitrisable
 			try
 			{
 				if (parameter.contains(" "))
-					value = CrazyLightPluginInterface.DATETIMEFORMAT.parse(parameter);
+					value = ChatHeaderProvider.DATETIMEFORMAT.parse(parameter);
 				else
-					value = CrazyLightPluginInterface.DATEFORMAT.parse(parameter);
+					value = ChatHeaderProvider.DATEFORMAT.parse(parameter);
 			}
 			catch (final ParseException e)
 			{

@@ -415,11 +415,7 @@ public class Metrics
 			{
 				response = reader.readLine();
 			}
-			finally
-			{}
 		}
-		finally
-		{}
 		if (response == null || response.startsWith("ERR") || response.startsWith("7"))
 		{
 			if (response == null)

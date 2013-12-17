@@ -11,7 +11,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandUsageException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
 
@@ -32,9 +31,9 @@ public class CommandLanguageAddPreloaded extends CommandExecutor
 		final String language = args[0].toLowerCase();
 		if (!CrazyLocale.PATTERN_LANGUAGE.matcher(language).matches())
 			throw new CrazyCommandNoSuchException("Language", args[0], CrazyLocale.getActiveLanguagesNames(true));
-		if (plugin.getPreloadedLanguages().add(language))
-			plugin.loadLanguageFiles(language, true);
-		plugin.sendLocaleMessage("COMMAND.LANGUAGE.PRELOADED.ADDED", sender, CrazyLocale.getSaveLanguageName(language), language);
+		if (owner.getPreloadedLanguages().add(language))
+			owner.loadLanguageFiles(language, true);
+		owner.sendLocaleMessage("COMMAND.LANGUAGE.PRELOADED.ADDED", sender, CrazyLocale.getSaveLanguageName(language), language);
 	}
 
 	@Override
@@ -55,6 +54,6 @@ public class CommandLanguageAddPreloaded extends CommandExecutor
 	@Permission("crazylanguage.advanced")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazylanguage.advanced");
+		return sender.hasPermission("crazylanguage.advanced");
 	}
 }

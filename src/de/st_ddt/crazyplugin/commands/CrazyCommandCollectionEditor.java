@@ -21,20 +21,20 @@ import de.st_ddt.crazyutil.paramitrisable.Paramitrisable;
 public abstract class CrazyCommandCollectionEditor<S extends ChatHeaderProvider, T> extends CrazyCommandTreeExecutor<S>
 {
 
-	public CrazyCommandCollectionEditor(final S chatHeaderProvider)
+	public CrazyCommandCollectionEditor(final S owner)
 	{
-		this(chatHeaderProvider, true, true);
+		this(owner, true, true);
 	}
 
-	public CrazyCommandCollectionEditor(final S chatHeaderProvider, final boolean add, final boolean remove)
+	public CrazyCommandCollectionEditor(final S owner, final boolean add, final boolean remove)
 	{
-		super(chatHeaderProvider, null);
-		defaultExecutor = new CrazyCommandCollectionList(plugin);
+		super(owner, null);
+		defaultExecutor = new CrazyCommandCollectionList(owner);
 		addSubCommand(defaultExecutor, "list");
 		if (add)
-			addSubCommand(new CrazyCommandCollectionAdd(plugin), "add", "+");
+			addSubCommand(new CrazyCommandCollectionAdd(owner), "add", "+");
 		if (remove)
-			addSubCommand(new CrazyCommandCollectionRemove(plugin), "rem", "remove", "del", "delete", "-");
+			addSubCommand(new CrazyCommandCollectionRemove(owner), "rem", "remove", "del", "delete", "-");
 	}
 
 	protected abstract Collection<T> getCollection();
@@ -96,7 +96,7 @@ public abstract class CrazyCommandCollectionEditor<S extends ChatHeaderProvider,
 		};
 		final IntegerParamitrisable amount = new IntegerParamitrisable(10);
 		ChatHelperExtended.readParameters(args, params, page, amount);
-		ChatHelperExtended.sendList(sender, plugin.getChatHeader(), listFormat(), amount.getValue(), page.getValue(), new ArrayList<T>(getCollection()));
+		ChatHelperExtended.sendList(sender, owner.getChatHeader(), listFormat(), amount.getValue(), page.getValue(), new ArrayList<T>(getCollection()));
 	}
 
 	protected List<String> tabList(final CommandSender sender, final String[] args)

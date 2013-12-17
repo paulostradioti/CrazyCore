@@ -4,7 +4,6 @@ import org.bukkit.command.CommandSender;
 
 import de.st_ddt.crazyplugin.CrazyPluginInterface;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Permission;
 
 public class CrazyPluginCommandMainInfo extends CrazyPluginCommandExecutor<CrazyPluginInterface>
@@ -18,13 +17,13 @@ public class CrazyPluginCommandMainInfo extends CrazyPluginCommandExecutor<Crazy
 	@Override
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
-		plugin.show(sender, plugin.getChatHeader(), true);
+		owner.show(sender, owner.getChatHeader(), true);
 	}
 
 	@Override
 	@Permission("$CRAZYPLUGIN$.info")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, plugin.getName().toLowerCase() + ".info");
+		return sender.hasPermission(owner.getName() + ".info");
 	}
 }

@@ -14,7 +14,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandUsageException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.ChatHelper;
 import de.st_ddt.crazyutil.CommandHelper;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
 
@@ -38,19 +37,19 @@ public class CommandCommandInfo extends CommandExecutor
 		final Command command = commands.get(commandName);
 		if (command == null)
 			throw new CrazyCommandNoSuchException("Command", commandName);
-		plugin.sendLocaleMessage("COMMAND.COMMANDINFO.NAME", sender, command.getName());
-		plugin.sendLocaleMessage("COMMAND.COMMANDINFO.DESCRIPTION", sender, command.getDescription());
-		plugin.sendLocaleMessage("COMMAND.COMMANDINFO.USAGE", sender, command.getUsage());
+		owner.sendLocaleMessage("COMMAND.COMMANDINFO.NAME", sender, command.getName());
+		owner.sendLocaleMessage("COMMAND.COMMANDINFO.DESCRIPTION", sender, command.getDescription());
+		owner.sendLocaleMessage("COMMAND.COMMANDINFO.USAGE", sender, command.getUsage());
 		final String permission = command.getPermission();
 		if (permission == null)
-			plugin.sendLocaleMessage("COMMAND.COMMANDINFO.PERMISSION", sender, "UNKNOWN");
+			owner.sendLocaleMessage("COMMAND.COMMANDINFO.PERMISSION", sender, "UNKNOWN");
 		else
-			plugin.sendLocaleMessage("COMMAND.COMMANDINFO.PERMISSION", sender, permission.toLowerCase());
-		plugin.sendLocaleMessage("COMMAND.COMMANDINFO.ALIASES", sender, ChatHelper.listingString(",  ", command.getAliases()));
+			owner.sendLocaleMessage("COMMAND.COMMANDINFO.PERMISSION", sender, permission.toLowerCase());
+		owner.sendLocaleMessage("COMMAND.COMMANDINFO.ALIASES", sender, ChatHelper.listingString(",  ", command.getAliases()));
 		if (command instanceof PluginIdentifiableCommand)
-			plugin.sendLocaleMessage("COMMAND.COMMANDINFO.OWNER", sender, ((PluginIdentifiableCommand) command).getPlugin().getName());
+			owner.sendLocaleMessage("COMMAND.COMMANDINFO.OWNER", sender, ((PluginIdentifiableCommand) command).getPlugin().getName());
 		else
-			plugin.sendLocaleMessage("COMMAND.COMMANDINFO.OWNER", sender, "SERVER");
+			owner.sendLocaleMessage("COMMAND.COMMANDINFO.OWNER", sender, "SERVER");
 	}
 
 	@Override
@@ -74,6 +73,6 @@ public class CommandCommandInfo extends CommandExecutor
 	@Permission("crazycore.commandinfo")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazycore.commandinfo");
+		return sender.hasPermission("crazycore.commandinfo");
 	}
 }

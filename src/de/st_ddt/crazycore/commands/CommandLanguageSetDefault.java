@@ -11,7 +11,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandUsageException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
 
@@ -35,10 +34,10 @@ public class CommandLanguageSetDefault extends CommandExecutor
 		if (!CrazyLocale.getDefaultLanguage().equals(language))
 		{
 			CrazyLocale.setDefaultLanguage(language);
-			plugin.loadLanguageFiles(language, true);
+			owner.loadLanguageFiles(language, true);
 		}
-		plugin.save();
-		plugin.sendLocaleMessage("COMMAND.LANGUAGE.DEFAULT.SET", sender, CrazyLocale.getSaveLanguageName(language), language);
+		owner.save();
+		owner.sendLocaleMessage("COMMAND.LANGUAGE.DEFAULT.SET", sender, CrazyLocale.getSaveLanguageName(language), language);
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class CommandLanguageSetDefault extends CommandExecutor
 		final List<String> res = new ArrayList<String>();
 		final String arg = args[0];
 		final Pattern pattern = Pattern.compile(arg, Pattern.CASE_INSENSITIVE);
-		for (final String language : plugin.getPreloadedLanguages())
+		for (final String language : owner.getPreloadedLanguages())
 			if (pattern.matcher(language).find() || pattern.matcher(CrazyLocale.getSaveLanguageName(language)).find())
 				res.add(language);
 		return res;
@@ -59,6 +58,6 @@ public class CommandLanguageSetDefault extends CommandExecutor
 	@Permission("crazylanguage.advanced")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazylanguage.advanced");
+		return sender.hasPermission("crazylanguage.advanced");
 	}
 }

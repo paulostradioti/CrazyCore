@@ -14,18 +14,23 @@ import de.st_ddt.crazyutil.ChatHeaderProvider;
 public abstract class CrazyCommandExecutor<S extends ChatHeaderProvider> implements CrazyCommandExecutorInterface
 {
 
-	// should be named chatHeaderProvider but isn't because its mostly used as plugin and would massive changes
+	protected final S owner;
+	/**
+	 * {@link #owner} should be used instead.
+	 */
+	@Deprecated
 	protected final S plugin;
 
-	public CrazyCommandExecutor(final S chatHeaderProvider)
+	public CrazyCommandExecutor(final S owner)
 	{
 		super();
-		this.plugin = chatHeaderProvider;
+		this.owner = owner;
+		this.plugin = owner;
 	}
 
-	public final S getChatHeaderProvider()
+	public final S getOwner()
 	{
-		return plugin;
+		return owner;
 	}
 
 	@Override
@@ -41,15 +46,15 @@ public abstract class CrazyCommandExecutor<S extends ChatHeaderProvider> impleme
 		{
 			e.addCommandPrefix(commandLabel);
 			e.setCommand(commandLabel, args);
-			e.print(sender, plugin.getChatHeader());
+			e.print(sender, owner.getChatHeader());
 		}
 		catch (final CrazyException e)
 		{
-			e.print(sender, plugin.getChatHeader());
+			e.print(sender, owner.getChatHeader());
 		}
 		catch (final Exception e)
 		{
-			new CrazyCommandErrorException(e).print(sender, plugin.getChatHeader());
+			new CrazyCommandErrorException(e).print(sender, owner.getChatHeader());
 			e.printStackTrace();
 		}
 		return true;

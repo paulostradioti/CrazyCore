@@ -30,11 +30,11 @@ public class CommandLanguageSelect extends CommandExecutor
 		final String language = args[0].toLowerCase();
 		if (!CrazyLocale.PATTERN_LANGUAGE.matcher(language).matches())
 			throw new CrazyCommandNoSuchException("Language", args[0], CrazyLocale.getActiveLanguagesNames(true));
-		if (plugin.isLoadingUserLanguagesEnabled())
-			plugin.loadLanguageFiles(language, false);
+		if (owner.isLoadingUserLanguagesEnabled())
+			owner.loadLanguageFiles(language, false);
 		CrazyLocale.setUserLanguage(sender, language);
-		plugin.save();
-		plugin.sendLocaleMessage("COMMAND.LANGUAGE.CHANGED", sender, CrazyLocale.getSaveLanguageName(language), language);
+		owner.save();
+		owner.sendLocaleMessage("COMMAND.LANGUAGE.CHANGED", sender, CrazyLocale.getSaveLanguageName(language), language);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class CommandLanguageSelect extends CommandExecutor
 		final List<String> res = new ArrayList<String>();
 		final String arg = args[0];
 		final Pattern pattern = Pattern.compile(arg, Pattern.CASE_INSENSITIVE);
-		for (final String language : plugin.getPreloadedLanguages())
+		for (final String language : owner.getPreloadedLanguages())
 			if (pattern.matcher(language).find() || pattern.matcher(CrazyLocale.getSaveLanguageName(language)).find())
 				res.add(language);
 		return res;

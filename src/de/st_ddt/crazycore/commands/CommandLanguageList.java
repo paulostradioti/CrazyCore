@@ -31,8 +31,8 @@ public class CommandLanguageList extends CommandExecutor
 			}
 			else
 				throw new CrazyCommandUsageException("[> CrazyPipe]");
-		plugin.sendLocaleMessage("COMMAND.LANGUAGE.CURRENT", sender, CrazyLocale.getLanguageName(), CrazyLocale.getUserLanguage(sender));
-		plugin.sendLocaleMessage("COMMAND.LANGUAGE.DEFAULT", sender, CrazyLocale.getLanguageName().getDefaultLanguageText(), CrazyLocale.getDefaultLanguage());
-		plugin.sendLocaleList(sender, "COMMAND.LANGUAGE.LIST.HEADER", "COMMAND.LANGUAGE.LIST.LISTFORMAT", null, -1, 1, CrazyLocale.getActiveLanguagesNames(true));
+		owner.sendLocaleMessage("COMMAND.LANGUAGE.CURRENT", sender, CrazyLocale.getLanguageName(), CrazyLocale.getUserLanguage(sender));
+		owner.sendLocaleMessage("COMMAND.LANGUAGE.DEFAULT", sender, CrazyLocale.getLanguageName().getDefaultLanguageText(), CrazyLocale.getDefaultLanguage());
+		owner.sendLocaleList(sender, "COMMAND.LANGUAGE.LIST.HEADER", "COMMAND.LANGUAGE.LIST.LISTFORMAT", null, -1, 1, CrazyLocale.getActiveLanguagesNames(true));
 	}
 }

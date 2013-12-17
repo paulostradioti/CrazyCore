@@ -12,7 +12,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.ChatHelperExtended;
 import de.st_ddt.crazyutil.Logger;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.paramitrisable.BooleanParamitrisable;
 import de.st_ddt.crazyutil.paramitrisable.Paramitrisable;
 import de.st_ddt.crazyutil.paramitrisable.StringParamitrisable;
@@ -31,10 +30,10 @@ public class CrazyPluginCommandMainLogger extends CrazyPluginCommandExecutor<Cra
 	@Localized({ "CRAZYPLUGIN.COMMAND.CONFIG.NOLOGGERS", "CRAZYPLUGIN.COMMAND.CONFIG.LOGGER $Channel$ $Path$ $Console$" })
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
-		final Logger logger = plugin.getCrazyLogger();
+		final Logger logger = owner.getCrazyLogger();
 		if (logger.getAllLogChannelCount() == 0)
 		{
-			plugin.sendLocaleMessage("COMMAND.CONFIG.NOLOGGERS", sender);
+			owner.sendLocaleMessage("COMMAND.CONFIG.NOLOGGERS", sender);
 			return;
 		}
 		if (args.length == 0)
@@ -85,13 +84,13 @@ public class CrazyPluginCommandMainLogger extends CrazyPluginCommandExecutor<Cra
 		}
 		// Show
 		if (logger.isActiveLogChannel(channel))
-			plugin.sendLocaleMessage("COMMAND.CONFIG.LOGGER", sender, channel, logger.getPath(channel), logger.isLoggedToConsole(channel) ? "True" : "False");
+			owner.sendLocaleMessage("COMMAND.CONFIG.LOGGER", sender, channel, logger.getPath(channel), logger.isLoggedToConsole(channel) ? "True" : "False");
 		else
-			plugin.sendLocaleMessage("COMMAND.CONFIG.LOGGER", sender, channel, "disabled", logger.isLoggedToConsole(channel) ? "True" : "False");
+			owner.sendLocaleMessage("COMMAND.CONFIG.LOGGER", sender, channel, "disabled", logger.isLoggedToConsole(channel) ? "True" : "False");
 		if (changes)
 		{
-			logger.save(plugin.getConfig(), "logs.");
-			plugin.saveConfig();
+			logger.save(owner.getConfig(), "logs.");
+			owner.saveConfig();
 		}
 	}
 
@@ -101,7 +100,7 @@ public class CrazyPluginCommandMainLogger extends CrazyPluginCommandExecutor<Cra
 		final List<String> res = new ArrayList<String>();
 		if (args.length == 1)
 		{
-			for (final String name : plugin.getCrazyLogger().getLogChannelNames())
+			for (final String name : owner.getCrazyLogger().getLogChannelNames())
 				if (name.toLowerCase().startsWith(args[0].toLowerCase()))
 					res.add(name);
 		}
@@ -120,6 +119,6 @@ public class CrazyPluginCommandMainLogger extends CrazyPluginCommandExecutor<Cra
 	@Permission("$CRAZYPLUGIN$.logger")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, plugin.getName().toLowerCase() + ".logger");
+		return sender.hasPermission(owner.getName() + ".logger");
 	}
 }

@@ -21,7 +21,7 @@ public class CrazyPluginCommandMainTree extends CrazyCommandTreeExecutor<CrazyPl
 	@Override
 	public final CrazyPluginInterface getPlugin()
 	{
-		return plugin;
+		return owner;
 	}
 
 	public CrazyPluginCommandMainReload getReloadCommand()

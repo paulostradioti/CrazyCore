@@ -22,6 +22,14 @@ public class MapParamitrisable<S> extends TypedParamitrisable<S>
 		this.lowercase = false;
 	}
 
+	public MapParamitrisable(final String type, final Map<String, ? extends S> values, final boolean foo, final String defaultValue)
+	{
+		super(values.get(defaultValue));
+		this.type = type;
+		this.values = values;
+		this.lowercase = false;
+	}
+
 	public MapParamitrisable(final String type, final Map<String, ? extends S> values, final S defaultValue, final boolean lowercase)
 	{
 		super(defaultValue);

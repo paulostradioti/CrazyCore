@@ -15,7 +15,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandUsageException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.ChatHelper;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.paramitrisable.OfflinePlayerParamitrisable;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
@@ -53,14 +52,14 @@ public class CommandPlayerInfo extends CommandExecutor
 			throw new CrazyCommandNoSuchException("Player", name);
 		final PseudoPlayerData main = new PseudoPlayerData(player.getName());
 		main.show(sender);
-		plugin.sendLocaleMessage("PLAYERINFO.SEPARATOR", sender);
-		main.showDetailed(sender, plugin.getChatHeader());
+		owner.sendLocaleMessage("PLAYERINFO.SEPARATOR", sender);
+		main.showDetailed(sender, owner.getChatHeader());
 		for (final PlayerDataProvider provider : PlayerDataProvider.PROVIDERS)
 		{
 			final PlayerDataInterface data = provider.getAvailablePlayerData(name);
 			if (data != null)
 			{
-				plugin.sendLocaleMessage("PLAYERINFO.SEPARATOR", sender);
+				owner.sendLocaleMessage("PLAYERINFO.SEPARATOR", sender);
 				data.showDetailed(sender, provider.getChatHeader());
 			}
 		}
@@ -78,6 +77,6 @@ public class CommandPlayerInfo extends CommandExecutor
 	@Permission("crazycore.player.info")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazycore.player.info");
+		return sender.hasPermission("crazycore.player.info");
 	}
 }

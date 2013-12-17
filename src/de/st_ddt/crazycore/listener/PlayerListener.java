@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import de.st_ddt.crazycore.CrazyCore;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Permission;
 
 public class PlayerListener implements Listener
@@ -26,7 +25,7 @@ public class PlayerListener implements Listener
 	public void PlayerJoin(final PlayerJoinEvent event)
 	{
 		final Player player = event.getPlayer();
-		if (PermissionModule.hasPermission(player, "crazycore.protectedplayer"))
+		if (player.hasPermission("crazycore.protectedplayer"))
 			if (plugin.getProtectedPlayers().add(player.getName().toLowerCase()))
 				plugin.saveConfiguration();
 	}

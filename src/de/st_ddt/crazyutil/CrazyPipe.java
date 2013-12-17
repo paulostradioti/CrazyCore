@@ -17,7 +17,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 
 import de.st_ddt.crazycore.CrazyCore;
-import de.st_ddt.crazyplugin.CrazyLightPluginInterface;
 import de.st_ddt.crazyplugin.data.ParameterData;
 import de.st_ddt.crazyplugin.data.PlayerDataInterface;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandErrorException;
@@ -27,7 +26,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandPermissionException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandUnsupportedException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandUsageException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.paramitrisable.BooleanParamitrisable;
 import de.st_ddt.crazyutil.paramitrisable.ColoredStringParamitrisable;
 import de.st_ddt.crazyutil.paramitrisable.FileParamitrisable;
@@ -35,7 +33,7 @@ import de.st_ddt.crazyutil.paramitrisable.Paramitrisable;
 import de.st_ddt.crazyutil.paramitrisable.StringParamitrisable;
 import de.st_ddt.crazyutil.source.Permission;
 
-public abstract class CrazyPipe
+public abstract class CrazyPipe implements RestrictedAccess
 {
 
 	private final static Map<String, CrazyPipe> pipes = new HashMap<String, CrazyPipe>();
@@ -53,7 +51,7 @@ public abstract class CrazyPipe
 	{
 		if (disabled)
 			return;
-		if (!PermissionModule.hasPermission(sender, "crazypipe.use"))
+		if (!sender.hasPermission("crazypipe.use"))
 			throw new CrazyCommandPermissionException();
 		if (datas.size() == 0)
 			return;
@@ -89,7 +87,7 @@ public abstract class CrazyPipe
 	{
 		if (disabled)
 			return;
-		if (!PermissionModule.hasPermission(sender, "crazypipe.use"))
+		if (!sender.hasPermission("crazypipe.use"))
 			throw new CrazyCommandPermissionException();
 		if (pipeArgs == null)
 		{
@@ -164,7 +162,7 @@ public abstract class CrazyPipe
 	{
 		if (disabled)
 			return;
-		if (!PermissionModule.hasPermission(sender, "crazypipe.use"))
+		if (!sender.hasPermission("crazypipe.use"))
 			throw new CrazyCommandPermissionException();
 		if (pipeArgs == null)
 		{
@@ -192,7 +190,7 @@ public abstract class CrazyPipe
 	{
 		if (disabled)
 			return;
-		if (!PermissionModule.hasPermission(sender, "crazypipe.use"))
+		if (!sender.hasPermission("crazypipe.use"))
 			throw new CrazyCommandPermissionException();
 		if (pipeArgs == null)
 		{
@@ -287,6 +285,7 @@ public abstract class CrazyPipe
 		return new LinkedList<String>();
 	}
 
+	@Override
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
 		return true;
@@ -518,7 +517,7 @@ public abstract class CrazyPipe
 				try (final Writer writer = new FileWriter(file.getValue(), append.getValue()))
 				{
 					if (headFormat.getValue() != null)
-						writer.write(ChatHelper.putArgs(headFormat.getValue() + "\n", "", "", chatHeader.getValue(), CrazyLightPluginInterface.DATETIMEFORMAT.format(new Date())));
+						writer.write(ChatHelper.putArgs(headFormat.getValue() + "\n", "", "", chatHeader.getValue(), ChatHeaderProvider.DATETIMEFORMAT.format(new Date())));
 					for (final ParameterData data : datas)
 						writer.write(ChatHelper.putArgs(listFormat.getValue(), Integer.toString(i++), ChatHelper.putArgsPara(sender, entryFormat.getValue(), data), chatHeader.getValue()));
 				}
@@ -552,7 +551,7 @@ public abstract class CrazyPipe
 				try (final Writer writer = new FileWriter(file.getValue(), append.getValue()))
 				{
 					if (headFormat.getValue() != null)
-						writer.write(ChatHelper.putArgs(headFormat.getValue() + "\n", "", "", chatHeader.getValue(), CrazyLightPluginInterface.DATETIMEFORMAT.format(new Date())));
+						writer.write(ChatHelper.putArgs(headFormat.getValue() + "\n", "", "", chatHeader.getValue(), ChatHeaderProvider.DATETIMEFORMAT.format(new Date())));
 					for (final String data : datas)
 						writer.write(ChatHelper.putArgs(listFormat.getValue(), Integer.toString(i++), ChatHelper.putArgs(entryFormat.getValue(), data), chatHeader.getValue()));
 				}

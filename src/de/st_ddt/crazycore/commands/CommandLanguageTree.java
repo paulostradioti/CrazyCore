@@ -9,8 +9,8 @@ import de.st_ddt.crazyplugin.exceptions.CrazyException;
 public final class CommandLanguageTree extends CrazyCommandTreeExecutor<CrazyCore>
 {
 
-	private final CommandExecutor list = new CommandLanguageList(plugin);
-	private final CommandExecutor select = new CommandLanguageSelect(plugin);
+	private final CommandExecutor list = new CommandLanguageList(owner);
+	private final CommandExecutor select = new CommandLanguageSelect(owner);
 
 	public CommandLanguageTree(final CrazyCore plugin)
 	{

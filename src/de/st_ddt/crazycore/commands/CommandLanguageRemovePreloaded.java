@@ -11,7 +11,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandUsageException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
 
@@ -32,8 +31,8 @@ public class CommandLanguageRemovePreloaded extends CommandExecutor
 		final String language = args[0].toLowerCase();
 		if (!CrazyLocale.PATTERN_LANGUAGE.matcher(language).matches())
 			throw new CrazyCommandNoSuchException("Language", args[0], CrazyLocale.getActiveLanguagesNames(true));
-		plugin.getPreloadedLanguages().remove(language);
-		plugin.sendLocaleMessage("COMMAND.LANGUAGE.PRELOADED.REMOVED", sender, CrazyLocale.getSaveLanguageName(language), language);
+		owner.getPreloadedLanguages().remove(language);
+		owner.sendLocaleMessage("COMMAND.LANGUAGE.PRELOADED.REMOVED", sender, CrazyLocale.getSaveLanguageName(language), language);
 	}
 
 	@Override
@@ -44,7 +43,7 @@ public class CommandLanguageRemovePreloaded extends CommandExecutor
 		final List<String> res = new ArrayList<String>();
 		final String arg = args[0];
 		final Pattern pattern = Pattern.compile(arg, Pattern.CASE_INSENSITIVE);
-		for (final String language : plugin.getPreloadedLanguages())
+		for (final String language : owner.getPreloadedLanguages())
 			if (pattern.matcher(language).find() || pattern.matcher(CrazyLocale.getSaveLanguageName(language)).find())
 				res.add(language);
 		return res;
@@ -54,6 +53,6 @@ public class CommandLanguageRemovePreloaded extends CommandExecutor
 	@Permission("crazylanguage.advanced")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazylanguage.advanced");
+		return sender.hasPermission("crazylanguage.advanced");
 	}
 }

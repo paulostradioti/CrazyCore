@@ -17,7 +17,6 @@ import de.st_ddt.crazyutil.ChatHelperExtended;
 import de.st_ddt.crazyutil.Filter;
 import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.Tabbed;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Permission;
 
 public class CrazyPlayerDataPluginCommandPlayerList<T extends PlayerDataInterface> extends CrazyPlayerDataPluginCommandExecutor<T, CrazyPlayerDataPluginInterface<T, ? extends T>>
@@ -41,11 +40,11 @@ public class CrazyPlayerDataPluginCommandPlayerList<T extends PlayerDataInterfac
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		final List<T> list;
-		synchronized (plugin.getPlayerDataLock())
+		synchronized (owner.getPlayerDataLock())
 		{
-			list = new ArrayList<T>(plugin.getPlayerData());
+			list = new ArrayList<T>(owner.getPlayerData());
 		}
-		ChatHelperExtended.processFullListCommand(sender, args, plugin.getChatHeader(), format, Filter.getFilterInstances(availableFilters), availableSorters, defaultSort, plugin.getPlayerDataListModder(), list);
+		ChatHelperExtended.processFullListCommand(sender, args, owner.getChatHeader(), format, Filter.getFilterInstances(availableFilters), availableSorters, defaultSort, owner.getPlayerDataListModder(), list);
 	}
 
 	@Override
@@ -60,6 +59,6 @@ public class CrazyPlayerDataPluginCommandPlayerList<T extends PlayerDataInterfac
 	@Permission("$CRAZYPLAYERDATAPLUGIN$.player.list")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, plugin.getName().toLowerCase() + ".player.list");
+		return sender.hasPermission(owner.getName() + ".player.list");
 	}
 }

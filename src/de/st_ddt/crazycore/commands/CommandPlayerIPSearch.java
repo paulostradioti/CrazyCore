@@ -17,7 +17,6 @@ import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.ListOptionsModder;
 import de.st_ddt.crazyutil.Tabbed;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.paramitrisable.Paramitrisable;
 import de.st_ddt.crazyutil.paramitrisable.StringParamitrisable;
 import de.st_ddt.crazyutil.source.Localized;
@@ -59,7 +58,7 @@ public class CommandPlayerIPSearch extends CommandExecutor
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		final IPListModer moder = new IPListModer();
-		final String[] pipeArgs = ChatHelperExtended.processListCommand(sender, args, plugin.getChatHeader(), listFormat, null, null, null, moder, new ArrayList<String>(), moder);
+		final String[] pipeArgs = ChatHelperExtended.processListCommand(sender, args, owner.getChatHeader(), listFormat, null, null, null, moder, new ArrayList<String>(), moder);
 		if (pipeArgs != null)
 			CrazyPipe.pipe(sender, moder.getList(), false, pipeArgs);
 	}
@@ -77,7 +76,7 @@ public class CommandPlayerIPSearch extends CommandExecutor
 	@Permission("crazycore.player.ipsearch")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazycore.player.ipsearch");
+		return sender.hasPermission("crazycore.player.ipsearch");
 	}
 
 	private class IPListModer implements ListOptionsModder<String>

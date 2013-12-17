@@ -13,7 +13,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandUsageException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
 
@@ -37,22 +36,16 @@ public class CommandLanguageReload extends CommandExecutor
 			for (final String language : CrazyLocale.getLoadedLanguages())
 			{
 				for (final CrazyPlugin plugin : CrazyPlugin.getCrazyPlugins())
-				{
 					plugin.loadLanguage(language, sender);
-					plugin.checkLocale();
-				}
-				plugin.sendLocaleMessage("COMMAND.LANGUAGE.RELOADED", sender, language);
+				owner.sendLocaleMessage("COMMAND.LANGUAGE.RELOADED", sender, language);
 			}
 			return;
 		}
 		if (CrazyLocale.PATTERN_LANGUAGE.matcher(name).matches())
 		{
 			for (final CrazyPlugin plugin : CrazyPlugin.getCrazyPlugins())
-			{
 				plugin.loadLanguage(name, sender);
-				plugin.checkLocale();
-			}
-			plugin.sendLocaleMessage("COMMAND.LANGUAGE.RELOADED", sender, name);
+			owner.sendLocaleMessage("COMMAND.LANGUAGE.RELOADED", sender, name);
 			return;
 		}
 		final CrazyPlugin plugin = CrazyPlugin.getPlugin(name);
@@ -68,7 +61,6 @@ public class CommandLanguageReload extends CommandExecutor
 			for (final String language : CrazyLocale.getLoadedLanguages())
 			{
 				plugin.loadLanguage(language, sender);
-				plugin.checkLocale();
 				plugin.sendLocaleMessage("COMMAND.LANGUAGE.RELOADED.PLUGIN", sender, language, plugin.getName());
 			}
 	}
@@ -94,6 +86,6 @@ public class CommandLanguageReload extends CommandExecutor
 	@Permission("crazylanguage.advanced")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazylanguage.advanced");
+		return sender.hasPermission("crazylanguage.advanced");
 	}
 }

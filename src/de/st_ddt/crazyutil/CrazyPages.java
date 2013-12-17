@@ -7,7 +7,6 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
-import de.st_ddt.crazyplugin.CrazyLightPluginInterface;
 import de.st_ddt.crazyplugin.data.ParameterData;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandCircumstanceException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandException;
@@ -132,7 +131,7 @@ public class CrazyPages
 	{
 		int lastIndex = datas.size();
 		page = Math.max(1, page);
-		ChatHelper.sendMessage(target, "", headFormat, page, getMaxPage(), chatHeader, CrazyLightPluginInterface.DATETIMEFORMAT.format(new Date()));
+		ChatHelper.sendMessage(target, "", headFormat, page, getMaxPage(), chatHeader, ChatHeaderProvider.DATETIMEFORMAT.format(new Date()));
 		if (lastIndex + amount - 1 < page * amount)
 			return;
 		final StringBuilder formatString = new StringBuilder();
@@ -146,8 +145,8 @@ public class CrazyPages
 			for (int i = page * amount - amount; i < lastIndex; i++)
 				if (datas.get(i) instanceof ParameterData)
 					message.append(ChatHelper.putArgs(listFormat, listShiftHelperConsole(String.valueOf(i + 1), format), ChatHelper.putArgsPara(target, entryFormat, (ParameterData) datas.get(i)), chatHeader));
-				else if (datas.get(i) instanceof Showable)
-					message.append(ChatHelper.putArgs(listFormat, listShiftHelperConsole(String.valueOf(i + 1), format), ((Showable) datas.get(i)).getShortInfo(), chatHeader));
+				else if (datas.get(i) instanceof Named)
+					message.append(ChatHelper.putArgs(listFormat, listShiftHelperConsole(String.valueOf(i + 1), format), ((Named) datas.get(i)).getName(), chatHeader));
 				else
 					message.append(ChatHelper.putArgs(listFormat, listShiftHelperConsole(String.valueOf(i + 1), format), datas.get(i).toString(), chatHeader));
 		}
@@ -157,8 +156,8 @@ public class CrazyPages
 			for (int i = page * amount - amount; i < lastIndex; i++)
 				if (datas.get(i) instanceof ParameterData)
 					message.append(ChatHelper.putArgs(listFormat, listShiftHelper(String.valueOf(i + 1), format), ChatHelper.putArgsPara(target, entryFormat, (ParameterData) datas.get(i)), chatHeader));
-				else if (datas.get(i) instanceof Showable)
-					message.append(ChatHelper.putArgs(listFormat, listShiftHelperConsole(String.valueOf(i + 1), format), ((Showable) datas.get(i)).getShortInfo(), chatHeader));
+				else if (datas.get(i) instanceof Named)
+					message.append(ChatHelper.putArgs(listFormat, listShiftHelperConsole(String.valueOf(i + 1), format), ((Named) datas.get(i)).getName(), chatHeader));
 				else
 					message.append(ChatHelper.putArgs(listFormat, listShiftHelper(String.valueOf(i + 1), format), datas.get(i).toString(), chatHeader));
 		}

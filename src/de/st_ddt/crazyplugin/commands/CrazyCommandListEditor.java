@@ -19,11 +19,11 @@ public abstract class CrazyCommandListEditor<S extends ChatHeaderProvider, T> ex
 		this(chatHeaderProvider, true, true, true);
 	}
 
-	public CrazyCommandListEditor(final S chatHeaderProvider, final boolean add, final boolean insert, final boolean remove)
+	public CrazyCommandListEditor(final S owner, final boolean add, final boolean insert, final boolean remove)
 	{
-		super(chatHeaderProvider, add, remove);
+		super(owner, add, remove);
 		if (insert)
-			addSubCommand(new CrazyCommandListInsert(plugin), "insert");
+			addSubCommand(new CrazyCommandListInsert(owner), "insert");
 	}
 
 	@Override

@@ -14,7 +14,6 @@ import java.util.logging.Level;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import de.st_ddt.crazyplugin.CrazyLightPluginInterface;
 import de.st_ddt.crazyplugin.CrazyPluginInterface;
 
 public class CrazyLogger implements Logger
@@ -239,7 +238,7 @@ public class CrazyLogger implements Logger
 		{
 			try
 			{
-				out.write(CrazyLightPluginInterface.DATETIMEFORMAT.format(new Date()) + " - " + message + '\n');
+				out.write(ChatHeaderProvider.DATETIMEFORMAT.format(new Date()) + " - " + message + '\n');
 				out.flush();
 			}
 			catch (final IOException e)

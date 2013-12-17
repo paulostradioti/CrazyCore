@@ -52,7 +52,6 @@ import de.st_ddt.crazyutil.metrics.Metrics;
 import de.st_ddt.crazyutil.metrics.Metrics.Graph;
 import de.st_ddt.crazyutil.metrics.Metrics.Plotter;
 import de.st_ddt.crazyutil.modes.BooleanFalseMode;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.LocalizedVariable;
 import de.st_ddt.crazyutil.source.Permission;
@@ -232,7 +231,7 @@ public final class CrazyCore extends CrazyPlugin
 		getCommand("crazypipe").setExecutor(new CommandPipe(this));
 	}
 
-	private void registerHooks()
+	protected void registerHooks()
 	{
 		final PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new CrazyListener(this), this);
@@ -311,7 +310,6 @@ public final class CrazyCore extends CrazyPlugin
 	@Override
 	public void onEnable()
 	{
-		PermissionModule.init(getChatHeader(), Bukkit.getConsoleSender());
 		registerHooks();
 		Bukkit.getScheduler().runTaskLaterAsynchronously(this, new ScheduledPermissionAllTask(), 20);
 		super.onEnable();
@@ -476,7 +474,7 @@ public final class CrazyCore extends CrazyPlugin
 		{
 			final String accessingPlayerIP = accessingPlayer.getAddress().getAddress().getHostAddress();
 			final Object[] args = new String[] { accessedPlayer, accessingPlayer.getName(), accessingPlayerIP, plugin, task };
-			if (PermissionModule.hasPermission(accessingPlayer, permission))
+			if (accessingPlayer.hasPermission(permission))
 			{
 				final CrazyProtectedPlayerAccessEvent event = new CrazyProtectedPlayerAccessEvent(accessedPlayer, accessingPlayer, plugin, task);
 				event.callEvent();

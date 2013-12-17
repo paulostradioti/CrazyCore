@@ -13,6 +13,6 @@ public abstract class CrazyPluginCommandExecutor<S extends CrazyPluginInterface>
 	@Override
 	public final S getPlugin()
 	{
-		return plugin;
+		return owner;
 	}
 }

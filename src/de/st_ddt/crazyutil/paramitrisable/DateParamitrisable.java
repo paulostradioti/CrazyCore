@@ -6,9 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.st_ddt.crazyplugin.CrazyLightPluginInterface;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandParameterException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
+import de.st_ddt.crazyutil.ChatHeaderProvider;
 
 public class DateParamitrisable extends TypedParamitrisable<Date>
 {
@@ -29,9 +29,9 @@ public class DateParamitrisable extends TypedParamitrisable<Date>
 		try
 		{
 			if (parameter.contains(" "))
-				value = CrazyLightPluginInterface.DATETIMEFORMAT.parse(parameter);
+				value = ChatHeaderProvider.DATETIMEFORMAT.parse(parameter);
 			else
-				value = CrazyLightPluginInterface.DATEFORMAT.parse(parameter);
+				value = ChatHeaderProvider.DATEFORMAT.parse(parameter);
 		}
 		catch (final ParseException e)
 		{
@@ -55,7 +55,7 @@ public class DateParamitrisable extends TypedParamitrisable<Date>
 				case 1:
 				case 2:
 				case 3:
-					final String[] dateSplit = PATTERN_DOT.split(CrazyLightPluginInterface.DATEFORMAT.format(new Date()));
+					final String[] dateSplit = PATTERN_DOT.split(ChatHeaderProvider.DATEFORMAT.format(new Date()));
 					if (dateSplit[0].startsWith(part))
 						res.add(dateSplit[0]);
 					break;

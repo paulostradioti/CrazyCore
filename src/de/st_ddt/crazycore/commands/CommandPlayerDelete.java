@@ -12,7 +12,6 @@ import de.st_ddt.crazyplugin.events.CrazyPlayerRemoveEvent;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandPermissionException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.ChatHelper;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.paramitrisable.OfflinePlayerParamitrisable;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
@@ -31,21 +30,21 @@ public class CommandPlayerDelete extends CommandExecutor
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		String name = ChatHelper.listingString(" ", args);
-		plugin.checkProtectedPlayer(name, sender, "crazycore.player.delete.protected", plugin.getName(), "deleting all player data");
+		owner.checkProtectedPlayer(name, sender, "crazycore.player.delete.protected", owner.getName(), "deleting all player data");
 		final Player player = Bukkit.getPlayer(name);
 		if (player != null)
 			name = player.getName();
 		final boolean self = sender.getName().equalsIgnoreCase(name);
-		if (!PermissionModule.hasPermission(sender, "crazycore.player.delete." + (self ? "self" : "other")))
+		if (!sender.hasPermission("crazycore.player.delete." + (self ? "self" : "other")))
 			throw new CrazyCommandPermissionException();
 		final CrazyPlayerRemoveEvent event = new CrazyPlayerRemoveEvent(name);
 		if (self)
 			event.callEvent();
 		else
 			event.checkAndCallEvent();
-		plugin.sendLocaleMessage("COMMAND.PLAYER.DELETE.SUCCESS", sender, name, event.getDeletionsCount());
+		owner.sendLocaleMessage("COMMAND.PLAYER.DELETE.SUCCESS", sender, name, event.getDeletionsCount());
 		if (event.getDeletionsCount() != 0)
-			plugin.sendLocaleList(sender, "COMMAND.PLAYER.DELETE.LISTHEADER", "COMMAND.PLAYER.DELETE.LISTFORMAT", null, -1, 1, new ArrayList<String>(event.getDeletions()));
+			owner.sendLocaleList(sender, "COMMAND.PLAYER.DELETE.LISTHEADER", "COMMAND.PLAYER.DELETE.LISTFORMAT", null, -1, 1, new ArrayList<String>(event.getDeletions()));
 	}
 
 	@Override
@@ -60,6 +59,6 @@ public class CommandPlayerDelete extends CommandExecutor
 	@Permission({ "crazycore.player.delete.self", "crazycore.player.delete.other" })
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazycore.player.delete.self") || PermissionModule.hasPermission(sender, "crazycore.player.delete.other");
+		return sender.hasPermission("crazycore.player.delete.self") || sender.hasPermission("crazycore.player.delete.other");
 	}
 }

@@ -14,18 +14,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import de.st_ddt.crazyplugin.commands.CrazyCommandReload.Reloadable;
 import de.st_ddt.crazyplugin.commands.CrazyPlayerDataPluginCommandPlayerTree;
 import de.st_ddt.crazyplugin.comparator.PlayerDataComparator;
 import de.st_ddt.crazyplugin.comparator.PlayerDataNameComparator;
 import de.st_ddt.crazyplugin.data.PlayerDataFilter;
 import de.st_ddt.crazyplugin.data.PlayerDataInterface;
-import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.ChatHelper;
 import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.ListOptionsModder;
 import de.st_ddt.crazyutil.databases.PlayerDataDatabase;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
+import de.st_ddt.crazyutil.reloadable.Reloadable;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.LocalizedVariable;
 import de.st_ddt.crazyutil.source.Permission;
@@ -269,12 +267,12 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	{
 		super.onEnable();
 		mainCommand.addSubCommand(playerCommand, "p", "plr", "player", "players");
-		mainCommand.getReloadCommand().addReloadable(new Reloadable()
+		final Reloadable reloadable = new Reloadable()
 		{
 
 			@Override
 			@Localized("$CRAZYPLAYERDATAPLUGIN$.COMMAND.DATABASE.RELOADED")
-			public void reload(final CommandSender sender) throws CrazyException
+			public void reload(final CommandSender sender)
 			{
 				loadDatabase();
 				saveDatabase();
@@ -283,11 +281,29 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 
 			@Override
 			@Permission("$CRAZYPLAYERDATAPLUGIN$.reload.database")
-			public boolean hasAccessPermission(final CommandSender sender)
+			public boolean hasReloadPermission(final CommandSender sender)
 			{
-				return PermissionModule.hasPermission(sender, getName().toLowerCase() + ".reload.database") || PermissionModule.hasPermission(sender, getName().toLowerCase() + ".reload.*");
+				return sender.hasPermission(getName() + ".reload.database") || sender.hasPermission(getName() + ".reload.*");
 			}
-		}, "d", "db", "database");
+
+			@Override
+			@Localized("$CRAZYPLAYERDATAPLUGIN$.COMMAND.DATABASE.SAVED")
+			public void save(final CommandSender sender)
+			{
+				saveDatabase();
+				sendLocaleMessage("COMMAND.DATABASE.SAVED", sender);
+			}
+
+			@Override
+			@Permission("$CRAZYPLAYERDATAPLUGIN$.save.database")
+			public boolean hasSavePermission(final CommandSender sender)
+			{
+				return sender.hasPermission(getName() + ".save.database") || sender.hasPermission(getName() + ".save.*");
+			}
+		};
+		reloadables.put("d", reloadable);
+		reloadables.put("db", reloadable);
+		reloadables.put("database", reloadable);
 	}
 
 	@Override

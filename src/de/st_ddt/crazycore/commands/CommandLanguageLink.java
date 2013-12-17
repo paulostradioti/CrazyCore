@@ -10,7 +10,6 @@ import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandUsageException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
 
@@ -28,7 +27,7 @@ public class CommandLanguageLink extends CommandExecutor
 	{
 		if (args.length != 1)
 			throw new CrazyCommandUsageException("<Path>");
-		plugin.sendLocaleMessage("COMMAND.LANGUAGE.LINK", sender);
+		owner.sendLocaleMessage("COMMAND.LANGUAGE.LINK", sender);
 		final CrazyLocale locale = CrazyLocale.getLocaleHead().getLanguageEntry(args[0]);
 		if (locale == null)
 			throw new CrazyCommandNoSuchException("LanguageEntry", args[0]);
@@ -73,6 +72,6 @@ public class CommandLanguageLink extends CommandExecutor
 	@Permission("crazylanguage.advanced")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
-		return PermissionModule.hasPermission(sender, "crazylanguage.advanced");
+		return sender.hasPermission("crazylanguage.advanced");
 	}
 }

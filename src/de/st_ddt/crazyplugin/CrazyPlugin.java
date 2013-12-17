@@ -12,6 +12,8 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -30,7 +32,7 @@ import de.st_ddt.crazyutil.CrazyLogger;
 import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.UpdateChecker;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.modules.permissions.PermissionModule;
+import de.st_ddt.crazyutil.reloadable.Reloadable;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.LocalizedVariable;
 import de.st_ddt.crazyutil.source.Permission;
@@ -43,6 +45,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	protected final CrazyLogger logger = new CrazyLogger(this);
 	protected final CrazyPluginCommandMainTree mainCommand = new CrazyPluginCommandMainTree(this);
 	protected final CrazyPluginCommandMainMode modeCommand = new CrazyPluginCommandMainMode(this);
+	protected final Map<String, Reloadable> reloadables = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	private UpdateChecker updateChecker = null;
 	protected CrazyLocale locale = null;
 	protected String previousVersion = "0";
@@ -295,7 +298,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		Player: for (final Player player : Bukkit.getOnlinePlayers())
 		{
 			for (final String permission : permissions)
-				if (!PermissionModule.hasPermission(player, permission))
+				if (!player.hasPermission(permission))
 					continue Player;
 			sendLocaleMessage(locale, player, args);
 		}
@@ -305,6 +308,12 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	public final CrazyLogger getCrazyLogger()
 	{
 		return logger;
+	}
+
+	@Override
+	public final Map<String, Reloadable> getReloadables()
+	{
+		return reloadables;
 	}
 
 	@Override
@@ -323,10 +332,9 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		loadLanguage(language, Bukkit.getConsoleSender());
 	}
 
-	@SuppressWarnings("deprecation")
 	public void loadLanguageDelayed(final String language, final CommandSender sender)
 	{
-		getServer().getScheduler().scheduleAsyncDelayedTask(this, new LanguageLoadTask(this, language, sender));
+		Bukkit.getScheduler().runTaskAsynchronously(this, new LanguageLoadTask(this, language, sender));
 	}
 
 	@Localized({ "CRAZYPLUGIN.LANGUAGE.ERROR.AVAILABLE $Language$ CRAZYPLUGIN.LANGUAGE", "CRAZYPLUGIN.LANGUAGE.ERROR.READ $Language$ $Plugin$" })
@@ -335,7 +343,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		if (!isSupportingLanguages())
 			return;
 		// default files
-		File file = new File(getDataFolder().getPath() + "/lang/" + language + ".lang");
+		File file = new File(getDataFolder(), "lang/" + language + ".lang");
 		if (!file.exists())
 		{
 			unpackLanguage(language);
@@ -354,7 +362,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 			sendLocaleMessage("LANGUAGE.ERROR.READ", sender, language, getName());
 		}
 		// Custom files:
-		file = new File(getDataFolder().getPath() + "/lang/custom_" + language + ".lang");
+		file = new File(getDataFolder(), "lang/custom_" + language + ".lang");
 		if (file.exists())
 			try
 			{
@@ -370,7 +378,6 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	// {
 	// return "https://raw.github.com/ST-DDT/Crazy/master/" + getName() + "/src/resource";
 	// }
-	
 	public final void updateLanguage(final String language, final boolean reload)
 	{
 		updateLanguage(language, Bukkit.getConsoleSender(), reload);
@@ -398,7 +405,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 			{
 				sendLocaleMessage("LANGUAGE.ERROR.READ", sender, language, getName());
 			}
-			final File customFile = new File(getDataFolder().getPath() + "/lang/custom_" + language + ".lang");
+			final File customFile = new File(getDataFolder(), "lang/custom_" + language + ".lang");
 			if (customFile.exists())
 				try
 				{

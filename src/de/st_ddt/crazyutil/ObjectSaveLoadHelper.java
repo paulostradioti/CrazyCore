@@ -20,8 +20,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.st_ddt.crazyplugin.CrazyLightPluginInterface;
-
 public class ObjectSaveLoadHelper
 {
 
@@ -78,7 +76,7 @@ public class ObjectSaveLoadHelper
 			return defaultDate;
 		try
 		{
-			return CrazyLightPluginInterface.DATETIMEFORMAT.parse(date);
+			return ChatHeaderProvider.DATETIMEFORMAT.parse(date);
 		}
 		catch (final ParseException e)
 		{
@@ -95,7 +93,7 @@ public class ObjectSaveLoadHelper
 
 	public static String DateToString(final Date date)
 	{
-		return CrazyLightPluginInterface.DATETIMEFORMAT.format(date);
+		return ChatHeaderProvider.DATETIMEFORMAT.format(date);
 	}
 
 	// ItemStack

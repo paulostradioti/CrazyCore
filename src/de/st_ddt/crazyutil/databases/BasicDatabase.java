@@ -1,95 +1,161 @@
 package de.st_ddt.crazyutil.databases;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.TreeMap;
 
-import org.bukkit.configuration.ConfigurationSection;
+import de.st_ddt.crazyutil.databases.datas.DatabaseDataInterface;
+import de.st_ddt.crazyutil.databases.datas.DatabaseField;
+import de.st_ddt.crazyutil.databases.tasks.DatabaseTaskInterface;
+import de.st_ddt.crazyutil.databases.tasks.DatabaseTaskQueue;
 
-import de.st_ddt.crazyutil.ChatHelper;
-
-public abstract class BasicDatabase<S extends DatabaseEntry> implements Database<S>
+public abstract class BasicDatabase<A extends DatabaseDataInterface, F extends DatabaseField<?>> implements DatabaseInterface<A>
 {
 
-	protected final Map<String, S> datas = Collections.synchronizedMap(new HashMap<String, S>());
-	protected final DatabaseType type;
-	protected final Class<S> clazz;
-	protected final Constructor<S> constructor;
-	protected final String[] defaultColumnNames;
+	protected static int newDatabaseID = 0;
+	protected final int databaseID = newDatabaseID++;
+	protected final Map<String, A> datas = Collections.synchronizedMap(new TreeMap<String, A>(String.CASE_INSENSITIVE_ORDER));
+	protected final DatabaseTaskQueue taskQueue = new DatabaseTaskQueue();
+	protected final String databaseIdentifier;
+	protected final Constructor<? extends A> newConstructor;
+	protected final F[] fields;
+	protected boolean active = true;
+	protected boolean shutingDown = false;
 
-	public BasicDatabase(final DatabaseType type, final Class<S> clazz, final String[] defaultColumnNames)
+	public BasicDatabase(final Class<? extends A> entryClass, final F[] fields)
 	{
 		super();
-		this.type = type;
-		this.clazz = clazz;
-		this.constructor = getConstructor(clazz);
-		this.defaultColumnNames = defaultColumnNames;
+		databaseIdentifier = entryClass.getSimpleName() + "Database";
+		Constructor<? extends A> constructor = null;
+		try
+		{
+			constructor = entryClass.getConstructor(DatabaseInterface.class, String.class);
+		}
+		catch (final Exception e)
+		{
+			System.err.println("WARNING: Serious Bug detected, please report this! (newConstructor)");
+			e.printStackTrace();
+		}
+		this.newConstructor = constructor;
+		this.fields = fields;
+		new WorkerThread().start();
 	}
 
 	@Override
-	public final DatabaseType getType()
+	public final void addData(final A data)
 	{
-		return type;
+		if (data == null)
+			return;
+		datas.put(data.getPrimaryKey(), data);
+		taskQueue.add(saveTask(data));
+		if (shutingDown)
+			flush();
+	}
+
+	protected A newData(final String key)
+	{
+		try
+		{
+			return newConstructor.newInstance(this, key);
+		}
+		catch (final Exception e)
+		{
+			System.err.println("Could not create new instance for key: " + key);
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
-	public Class<S> getEntryClazz()
+	public final A createData(final String key)
 	{
-		return clazz;
-	}
-
-	protected abstract Constructor<S> getConstructor(final Class<S> clazz);
-
-	@Override
-	public abstract void initialize() throws Exception;
-
-	@Override
-	public void checkTable() throws Exception
-	{
+		final A data = newData(key);
+		addData(data);
+		return data;
 	}
 
 	@Override
-	public abstract boolean isStaticDatabase();
-
-	@Override
-	public abstract boolean isCachedDatabase();
-
-	@Override
-	public boolean hasEntry(final String key)
+	public boolean hasRawKey(final String key)
 	{
-		return datas.containsKey(key.toLowerCase());
+		return getAllRawKeys().contains(key);
 	}
 
 	@Override
-	public final S getEntry(final String key)
+	public abstract Collection<String> getAllRawKeys();
+
+	@Override
+	public final void loadData(final String key)
 	{
-		return datas.get(key.toLowerCase());
+		final A data = datas.get(key);
+		if (data == null)
+			taskQueue.add(loadTask(newData(key)));
+		else
+			taskQueue.add(loadTask(data));
 	}
 
 	@Override
-	public final S getOrLoadEntry(final String key)
+	public final void loadAllData()
 	{
-		final S data = getEntry(key);
-		if (isStaticDatabase())
-			return data;
-		else if (data == null)
-			return loadEntry(key);
+		for (final String key : getAllRawKeys())
+			loadData(key);
+	}
+
+	@Override
+	public final A getData(final String key)
+	{
+		processImportantTasks(key);
+		return datas.get(key);
+	}
+
+	@Override
+	public A getOrLoadData(final String key)
+	{
+		final A data = getData(key);
+		if (data == null)
+		{
+			loadData(key);
+			return getData(key);
+		}
 		else
 			return data;
 	}
 
 	@Override
-	public Object getDatabaseLock()
+	public A getOrCreateData(final String key)
 	{
+		final A data = getData(key);
+		if (data == null)
+			return createData(key);
+		else
+			return data;
+	}
+
+	@Override
+	public A getOrLoadOrCreateData(final String key)
+	{
+		final A data = getOrLoadData(key);
+		if (data == null)
+			return createData(key);
+		return data;
+	}
+
+	@Override
+	public final Map<String, A> getAllData()
+	{
+		processAllTasks();
 		return datas;
 	}
 
 	@Override
-	public final Collection<S> getAllEntries()
+	public final Set<String> getAllKeys()
 	{
-		return datas.values();
+		return datas.keySet();
 	}
 
 	@Override
@@ -99,83 +165,147 @@ public abstract class BasicDatabase<S extends DatabaseEntry> implements Database
 	}
 
 	@Override
-	public abstract S updateEntry(final String key);
-
-	@Override
-	public abstract S loadEntry(String key);
-
-	@Override
-	public abstract void loadAllEntries();
-
-	@Override
-	public boolean unloadEntry(final String key)
+	public final void unloadData(final String key)
 	{
-		save(key);
-		return datas.remove(key.toLowerCase()) != null;
+		processTasks(key);
+		datas.remove(key);
 	}
 
 	@Override
-	public void unloadAllEntries()
+	public final void unloadAllData()
 	{
-		synchronized (datas)
+		processAllTasks();
+		datas.clear();
+	}
+
+	@Override
+	public A removeData(final String key)
+	{
+		taskQueue.dropTasks(key);
+		return datas.remove(key);
+	}
+
+	@Override
+	public void removeAllData(final String key)
+	{
+		taskQueue.dropAllTasks();
+		datas.clear();
+	}
+
+	@Override
+	public void flush()
+	{
+		processAllTasks();
+	}
+
+	@Override
+	public final boolean isActive()
+	{
+		return active && !shutingDown;
+	}
+
+	@Override
+	public boolean isShutingDown()
+	{
+		return shutingDown;
+	}
+
+	@Override
+	public void shutdown()
+	{
+		processAllTasks();
+		shutingDown = true;
+		taskQueue.shutdown();
+		flush();
+	}
+
+	@Override
+	public final void queueTask(final DatabaseTaskInterface task)
+	{
+		if (shutingDown)
+			task.run();
+		else
+			taskQueue.add(task);
+	}
+
+	private void processQueue(final Queue<DatabaseTaskInterface> queue)
+	{
+		while (!queue.isEmpty())
+			queue.poll().run();
+	}
+
+	protected void processTasks(final String key)
+	{
+		synchronized (taskQueue)
 		{
-			saveAll(getAllEntries());
+			final Queue<DatabaseTaskInterface> queue = taskQueue.getTaskQueue(key);
+			if (queue != null)
+				synchronized (queue)
+				{
+					processQueue(queue);
+				}
 		}
-		datas.clear();
+	}
+
+	protected void processImportantTasks(final String key)
+	{
+		synchronized (taskQueue)
+		{
+			final Queue<DatabaseTaskInterface> queue = taskQueue.getTaskQueue(key);
+			if (queue != null)
+				synchronized (queue)
+				{
+					final List<DatabaseTaskInterface> tasks = new ArrayList<DatabaseTaskInterface>(queue);
+					queue.clear();
+					for (final DatabaseTaskInterface task : tasks)
+					{
+						queue.add(task);
+						if (task.isImportantTask())
+							processQueue(queue);
+					}
+				}
+		}
 	}
 
 	@Override
-	public void save(final String key)
+	public void processAllTasks()
 	{
-		final S entry = datas.get(key.toLowerCase());
-		if (entry != null)
-			save(entry);
+		DatabaseTaskInterface task;
+		while ((task = taskQueue.poll()) != null)
+			task.run();
 	}
 
 	@Override
-	public void save(final S entry)
-	{
-		datas.put(entry.getName().toLowerCase(), entry);
-	}
+	public abstract DatabaseTaskInterface loadTask(A data);
 
 	@Override
-	public void saveAll(final Collection<S> entries)
-	{
-		for (final S entry : entries)
-			save(entry);
-		saveDatabase();
-	}
+	public abstract DatabaseTaskInterface loadTask(A data, int index);
 
 	@Override
-	public boolean deleteEntry(final String key)
-	{
-		return datas.remove(key.toLowerCase()) != null;
-	}
+	public abstract DatabaseTaskInterface saveTask(A data);
 
 	@Override
-	public void purgeDatabase()
-	{
-		datas.clear();
-		saveDatabase();
-	}
+	public abstract DatabaseTaskInterface saveTask(A data, int index);
 
-	@Override
-	public abstract void saveDatabase();
-
-	@Override
-	public void save(final ConfigurationSection config, final String path)
+	private class WorkerThread extends Thread
 	{
-		config.set(path + "saveType", type.toString());
-	}
 
-	protected final void shortPrintStackTrace(final Throwable main, final Throwable throwable)
-	{
-		ChatHelper.shortPrintStackTrace(main, throwable, this);
-	}
+		public WorkerThread()
+		{
+			super(databaseIdentifier + "_" + databaseID + "_Worker");
+		}
 
-	@Override
-	public String toString()
-	{
-		return getClass().getSimpleName() + " (Contains " + size() + " entries of type " + clazz.getSimpleName() + ")";
+		@Override
+		public void run()
+		{
+			while (!shutingDown)
+				if (active)
+				{
+					final DatabaseTaskInterface task = taskQueue.poll();
+					if (task != null)
+						if (!task.run())
+							taskQueue.addPrimaryTask(task);
+				}
+		}
 	}
 }

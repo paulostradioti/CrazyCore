@@ -1,14 +1,10 @@
 package de.st_ddt.crazyplugin;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,6 +28,7 @@ import de.st_ddt.crazyutil.CrazyLogger;
 import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.UpdateChecker;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
+import de.st_ddt.crazyutil.resources.ResourceHelper;
 import de.st_ddt.crazyutil.reloadable.Reloadable;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.LocalizedVariable;
@@ -340,14 +337,11 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		// default files
 		File file = new File(getDataFolder(), "lang/" + language + ".lang");
 		if (!file.exists())
-		{
-			unpackLanguage(language);
-			if (!file.exists())
+			if (!ResourceHelper.saveResource(this, "/lang/" + language + ".lang", file))
 			{
 				sendLocaleMessage("LANGUAGE.ERROR.AVAILABLE", sender, language, getName());
 				return;
 			}
-		}
 		try
 		{
 			loadLanguageFile(language, file);
@@ -384,8 +378,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		if (!isSupportingLanguages())
 			return;
 		final File file = new File(getDataFolder().getPath() + "/lang/" + language + ".lang");
-		unpackLanguage(language);
-		if (!file.exists())
+		if (!ResourceHelper.saveResource(this, "/lang/" + language + ".lang", file))
 		{
 			sendLocaleMessage("LANGUAGE.ERROR.AVAILABLE", sender, language, getName());
 			return;
@@ -421,26 +414,8 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	@Localized("CRAZYPLUGIN.LANGUAGE.ERROR.EXTRACT $Language$ $Plugin$")
 	public void unpackLanguage(final String language, final CommandSender sender)
 	{
-		try (InputStream stream = getClass().getResourceAsStream("/resource/lang/" + language + ".lang"))
-		{
-			if (stream == null)
-				return;
-			try (InputStream in = new BufferedInputStream(stream);
-					OutputStream out = new BufferedOutputStream(new FileOutputStream(getDataFolder().getPath() + "/lang/" + language + ".lang"));)
-			{
-				final byte data[] = new byte[1024];
-				int count;
-				while ((count = in.read(data, 0, 1024)) != -1)
-					out.write(data, 0, count);
-				out.flush();
-			}
-			finally
-			{}
-		}
-		catch (final IOException e)
-		{
+		if (!ResourceHelper.unpackResource(this, "/lang/" + language + ".lang", "lang/" + language + ".lang"))
 			sendLocaleMessage("LANGUAGE.ERROR.EXTRACT", sender, language, getName());
-		}
 	}
 
 	public final void loadLanguageFile(final String language, final File file) throws IOException

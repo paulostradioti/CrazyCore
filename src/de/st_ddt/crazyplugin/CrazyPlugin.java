@@ -425,8 +425,6 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		{
 			CrazyLocale.readFile(language, reader);
 		}
-		finally
-		{}
 	}
 
 	public Integer getBukkitProjectId()

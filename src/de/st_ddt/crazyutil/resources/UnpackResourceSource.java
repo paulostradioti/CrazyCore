@@ -10,7 +10,7 @@ public class UnpackResourceSource extends AbstractResourceSource
 	@Override
 	public InputStream openStream(final Plugin plugin, final String resourcePath)
 	{
-		System.out.println("[" + plugin.getName() + "] Accessing internal resource from: /plugins/" + plugin.getName() + ".jar/" + resourcePath);
-		return plugin.getResource(resourcePath);
+		System.out.println("[" + plugin.getName() + "] Accessing internal resource from: /plugins/" + plugin.getName() + ".jar/resource" + resourcePath);
+		return plugin.getResource("/resource" + resourcePath);
 	}
 }

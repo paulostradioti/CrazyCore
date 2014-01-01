@@ -80,7 +80,7 @@ public class ResourceHelper
 	 *            The resourcePath starting with "/".
 	 * @param target
 	 *            The target the resource should be copied to.
-	 * @return True, if the file was save successfully, otherwise False.
+	 * @return True, if the file was saved successfully, otherwise False.
 	 */
 	public static boolean saveResource(final Plugin plugin, final String resourcePath, final String target)
 	{
@@ -95,7 +95,7 @@ public class ResourceHelper
 	 *            The resourcePath starting with "/".
 	 * @param target
 	 *            The target the resource should be copied to.
-	 * @return True, if the file was save successfully, otherwise False.
+	 * @return True, if the file was saved successfully, otherwise False.
 	 */
 	public static boolean saveResource(final Plugin plugin, final String resourcePath, final File target)
 	{

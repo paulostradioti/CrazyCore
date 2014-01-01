@@ -51,7 +51,7 @@ public class CompatibilityLoader
 		if (implementation == null || version == null)
 			return false;
 		final File target = new File(plugin.getDataFolder(), "/compatibility/" + implementation + "/" + version + fileSuffix + ".jar");
-		if (target.exists())
+		if (!target.exists())
 			ResourceHelper.saveResource(plugin, "/compatibility/" + implementation + "/" + version + fileSuffix + ".jar", target);
 		try
 		{

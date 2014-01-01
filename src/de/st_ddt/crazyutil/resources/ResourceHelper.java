@@ -13,11 +13,11 @@ import org.bukkit.plugin.Plugin;
 public class ResourceHelper
 {
 
-	protected final static ResourceSoruce UNPACK_RESOURCE_SORUCE = new UnpackResourceSource();
+	protected final static ResourceSoruce UNPACK_RESOURCE_SOURCE = new UnpackResourceSource();
 	protected static boolean silentResourceAccess = false;
 	static
 	{
-		ResourceSoruce.SOURCES.add(UNPACK_RESOURCE_SORUCE);
+		ResourceSoruce.SOURCES.add(UNPACK_RESOURCE_SOURCE);
 	}
 
 	/**
@@ -39,10 +39,6 @@ public class ResourceHelper
 	public static final void setSilentResourceAccess(final boolean silentResourceAccess)
 	{
 		ResourceHelper.silentResourceAccess = silentResourceAccess;
-	}
-
-	protected ResourceHelper()
-	{
 	}
 
 	/**
@@ -71,7 +67,10 @@ public class ResourceHelper
 	 */
 	public static boolean unpackResource(final Plugin plugin, final String resourcePath, final File target)
 	{
-		return UNPACK_RESOURCE_SORUCE.saveResource(plugin, resourcePath, target);
+		if (UNPACK_RESOURCE_SOURCE.saveResource(plugin, resourcePath, target))
+			return true;
+		printResourceNotFound(plugin, resourcePath);
+		return false;
 	}
 
 	/**
@@ -103,7 +102,7 @@ public class ResourceHelper
 		for (final ResourceSoruce source : ResourceSoruce.SOURCES)
 			if (source.saveResource(plugin, resourcePath, target))
 				return true;
-		System.err.println("[" + plugin.getName() + "] Resource \"" + resourcePath + "\" not found!");
+		printResourceNotFound(plugin, resourcePath);
 		return false;
 	}
 
@@ -130,5 +129,14 @@ public class ResourceHelper
 				out.write(data, 0, count);
 			out.flush();
 		}
+	}
+
+	protected static void printResourceNotFound(final Plugin plugin, final String resourcePath)
+	{
+		System.err.println("[" + plugin.getName() + "] Resource \"" + resourcePath + "\" not found!");
+	}
+
+	protected ResourceHelper()
+	{
 	}
 }

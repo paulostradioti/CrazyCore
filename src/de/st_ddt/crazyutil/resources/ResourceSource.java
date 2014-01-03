@@ -7,10 +7,10 @@ import java.util.List;
 
 import org.bukkit.plugin.Plugin;
 
-public interface ResourceSoruce
+public interface ResourceSource
 {
 
-	public final static List<ResourceSoruce> SOURCES = new ArrayList<>();
+	public final static List<ResourceSource> SOURCES = new ArrayList<>();
 
 	public InputStream openStream(Plugin plugin, String resourcePath);
 

@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import org.bukkit.plugin.Plugin;
 
-public abstract class AbstractResourceSource implements ResourceSoruce
+public abstract class AbstractResourceSource implements ResourceSource
 {
 
 	@Override

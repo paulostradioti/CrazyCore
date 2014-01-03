@@ -7,38 +7,51 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import org.bukkit.plugin.Plugin;
 
-public class ResourceHelper
+public final class ResourceHelper
 {
 
-	protected final static ResourceSoruce UNPACK_RESOURCE_SOURCE = new UnpackResourceSource();
-	protected static boolean silentResourceAccess = false;
+	private final static List<ResourceSource> SOURCES = ResourceSource.SOURCES;
+	private final static ResourceSource UNPACK_RESOURCE_SOURCE = new UnpackResourceSource();
+	private static boolean logResourceAccess = false;
 	static
 	{
-		ResourceSoruce.SOURCES.add(UNPACK_RESOURCE_SOURCE);
+		SOURCES.add(UNPACK_RESOURCE_SOURCE);
+	}
+
+	/**
+	 * Helper method to add a new {@link ResourceSource} to the {@link ResourceSource#SOURCES} list.
+	 * 
+	 * @param source
+	 *            The {@link ResourceSource} to be added.
+	 */
+	public static void addResourceSoruce(final ResourceSource source)
+	{
+		SOURCES.add(0, source);
 	}
 
 	/**
 	 * Whether the access to resources will be announced to log.
 	 * 
-	 * @return False, if resource access will be announced to log.
+	 * @return True, if resource access will be announced to log.
 	 */
-	public static final boolean isSilentResourceAccess()
+	public static final boolean isLogResourceAccessEnabled()
 	{
-		return silentResourceAccess;
+		return logResourceAccess;
 	}
 
 	/**
 	 * Sets whether the access to resources will be announced to log.
 	 * 
-	 * @param silentResourceAccess
+	 * @param logResourceAccess
 	 *            Whether the access to resources will be announced to log
 	 */
-	public static final void setSilentResourceAccess(final boolean silentResourceAccess)
+	public static final void setLogResourceAccessEnabled(final boolean logResourceAccess)
 	{
-		ResourceHelper.silentResourceAccess = silentResourceAccess;
+		ResourceHelper.logResourceAccess = logResourceAccess;
 	}
 
 	/**
@@ -69,7 +82,7 @@ public class ResourceHelper
 	{
 		if (UNPACK_RESOURCE_SOURCE.saveResource(plugin, resourcePath, target))
 			return true;
-		printResourceNotFound(plugin, resourcePath);
+		logResourceNotFound(plugin, resourcePath);
 		return false;
 	}
 
@@ -99,10 +112,10 @@ public class ResourceHelper
 	 */
 	public static boolean saveResource(final Plugin plugin, final String resourcePath, final File target)
 	{
-		for (final ResourceSoruce source : ResourceSoruce.SOURCES)
+		for (final ResourceSource source : ResourceSource.SOURCES)
 			if (source.saveResource(plugin, resourcePath, target))
 				return true;
-		printResourceNotFound(plugin, resourcePath);
+		logResourceNotFound(plugin, resourcePath);
 		return false;
 	}
 
@@ -117,7 +130,7 @@ public class ResourceHelper
 	 * @throws IOException
 	 *             If something went wrong.
 	 */
-	protected static void streamCopy(final InputStream stream, final File target) throws IOException
+	static void streamCopy(final InputStream stream, final File target) throws IOException
 	{
 		target.getParentFile().mkdirs();
 		try (InputStream in = new BufferedInputStream(stream);
@@ -131,9 +144,16 @@ public class ResourceHelper
 		}
 	}
 
-	protected static void printResourceNotFound(final Plugin plugin, final String resourcePath)
+	static void logResourceNotFound(final Plugin plugin, final String resourcePath)
 	{
-		System.err.println("[" + plugin.getName() + "] Resource \"" + resourcePath + "\" not found!");
+		if (logResourceAccess)
+			System.err.println("[" + plugin.getName() + "] Resource \"" + resourcePath + "\" not found!");
+	}
+
+	static void logLocalResourceAccess(final Plugin plugin, final String resolvedResourcePath)
+	{
+		if (logResourceAccess)
+			System.err.println("[" + plugin.getName() + "] Accessing local resource from \"" + resolvedResourcePath + "\"");
 	}
 
 	protected ResourceHelper()

@@ -1,5 +1,6 @@
 package de.st_ddt.crazyutil.modules.permissiongroups;
 
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -11,15 +12,26 @@ import de.st_ddt.crazycore.CrazyCore;
 public final class PermissionModule
 {
 
+	private final static List<Class<? extends PermissionSystem>> PERMISSIONSYSTEMCLASSES = PermissionSystem.PERMISSIONSYSTEMCLASSES;
 	private static PermissionSystem INSTANCE;
 	static
 	{
-		PermissionSystem.PERMISSIONSYSTEMCLASSES.add(VaultPermissionSystem.class);
-		PermissionSystem.PERMISSIONSYSTEMCLASSES.add(GroupManagerPermissionSystem.class);
-		PermissionSystem.PERMISSIONSYSTEMCLASSES.add(PermissionsExPermissionSystem.class);
-		PermissionSystem.PERMISSIONSYSTEMCLASSES.add(bPermissionsPermissionSystem.class);
-		PermissionSystem.PERMISSIONSYSTEMCLASSES.add(PermissionsBukkitPermissionSystem.class);
-		PermissionSystem.PERMISSIONSYSTEMCLASSES.add(NoPermissionSystem.class);
+		registerPermissionSystem(VaultPermissionSystem.class);
+		registerPermissionSystem(GroupManagerPermissionSystem.class);
+		registerPermissionSystem(PermissionsExPermissionSystem.class);
+		registerPermissionSystem(bPermissionsPermissionSystem.class);
+		registerPermissionSystem(PermissionsBukkitPermissionSystem.class);
+		registerPermissionSystem(NoPermissionSystem.class);
+	}
+
+	public static void registerPermissionSystem(final Class<? extends PermissionSystem> clazz)
+	{
+		PERMISSIONSYSTEMCLASSES.add(clazz);
+	}
+
+	public static void registerFallbackPermissionSystem(final Class<? extends PermissionSystem> clazz)
+	{
+		PERMISSIONSYSTEMCLASSES.add(PERMISSIONSYSTEMCLASSES.size() - 1, clazz);
 	}
 
 	public static void initialize()

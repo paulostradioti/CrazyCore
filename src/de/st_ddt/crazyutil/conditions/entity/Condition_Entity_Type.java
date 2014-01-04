@@ -10,17 +10,17 @@ import org.bukkit.entity.EntityType;
 
 import de.st_ddt.crazyutil.conditions.checker.EntityConditionChecker;
 
-public class Condition_Type_Entity extends BasicEntityCondition
+public class Condition_Entity_Type extends BasicEntityCondition
 {
 
 	protected final Set<EntityType> allowedTypes = EnumSet.noneOf(EntityType.class);
 
-	public Condition_Type_Entity()
+	public Condition_Entity_Type()
 	{
 		super();
 	}
 
-	public Condition_Type_Entity(final ConfigurationSection config)
+	public Condition_Entity_Type(final ConfigurationSection config)
 	{
 		super(config);
 		final List<String> allowedTypeNames = config.getStringList("allowedTypes");

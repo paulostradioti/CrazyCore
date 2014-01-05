@@ -1,6 +1,7 @@
 package de.st_ddt.crazyutil.conditions.entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,19 @@ public class Condition_Entity_Type extends BasicEntityCondition
 	public Condition_Entity_Type()
 	{
 		super();
+	}
+
+	public Condition_Entity_Type(final EntityType... types)
+	{
+		super();
+		for (final EntityType type : types)
+			allowedTypes.add(type);
+	}
+
+	public Condition_Entity_Type(final Collection<EntityType> types)
+	{
+		super();
+		allowedTypes.addAll(types);
 	}
 
 	public Condition_Entity_Type(final ConfigurationSection config)

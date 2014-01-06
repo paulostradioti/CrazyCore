@@ -149,6 +149,7 @@ public class PlayerSaver implements Named
 			inventory.put(-3, inv.getChestplate().clone());
 		if (inv.getHelmet() != null)
 			inventory.put(-4, inv.getHelmet().clone());
+		player.saveData();
 		backup = true;
 	}
 
@@ -207,6 +208,7 @@ public class PlayerSaver implements Named
 			inv.setHelmet(inventory.get(-4).clone());
 		else
 			inv.setHelmet(null);
+		player.saveData();
 	}
 
 	/**
@@ -231,6 +233,7 @@ public class PlayerSaver implements Named
 		inventory.setLeggings(null);
 		inventory.setBoots(null);
 		player.setItemInHand(null);
+		player.saveData();
 	}
 
 	/**

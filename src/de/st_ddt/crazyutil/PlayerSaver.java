@@ -224,7 +224,12 @@ public class PlayerSaver implements Named
 		player.setExhaustion(20);
 		player.setSaturation(20);
 		player.setFireTicks(0);
-		player.getInventory().clear();
+		final PlayerInventory inventory = player.getInventory();
+		inventory.clear();
+		inventory.setHelmet(null);
+		inventory.setChestplate(null);
+		inventory.setLeggings(null);
+		inventory.setBoots(null);
 		player.setItemInHand(null);
 	}
 
@@ -327,6 +332,12 @@ public class PlayerSaver implements Named
 		config.set("backup", backup);
 	}
 
+	/**
+	 * Removes the backup file from the file system.
+	 * 
+	 * @return True, if the player never had a backup file or the backup file has been deleted successfully.<br>
+	 *         False otherwise.
+	 */
 	public final boolean wipeFile()
 	{
 		if (file == null)

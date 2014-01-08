@@ -26,7 +26,7 @@ public final class EconomyModule
 			}
 			catch (final Throwable e)
 			{}
-		Bukkit.getConsoleSender().sendMessage(CrazyCore.getPlugin().getChatHeader() + ChatColor.GREEN +"Activated " + INSTANCE.getName() + "-EconomySystem-Module!");
+		Bukkit.getConsoleSender().sendMessage(CrazyCore.getPlugin().getChatHeader() + ChatColor.GREEN + "Activated " + INSTANCE.getName() + "-EconomySystem-Module!");
 	}
 
 	public static String getName()

@@ -62,6 +62,8 @@ permissions:
       crazycore.protectedplayer.illegalaccesswarn.staff: true
       crazycore.protectedplayer.illegalaccesswarn.user: true
       crazycore.reload: true
+      crazycore.reload.*: true
+      crazycore.reload.config: true
       crazycore.save: true
       crazycore.updatecheck: true
       crazycore.wipecommands: true
@@ -142,6 +144,12 @@ permissions:
     default: true
   crazycore.reload:
     description: Allow reloading the plugin.
+    default: op
+  crazycore.reload.*:
+    description: Allow reloading the entire plugin.
+    default: op
+  crazycore.reload.config:
+    description: Allow reloading the config of this plugin.
     default: op
   crazycore.save:
     description: Allow saving plugin.

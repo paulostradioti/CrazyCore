@@ -108,7 +108,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	}
 
 	@Override
-	@Localized("CRAZYPLUGIN.UPDATED $Name$ $Version$")
+	@Localized("CRAZYPLUGIN.UPDATED {Name} {Version}")
 	public void onEnable()
 	{
 		if (isUpdated)
@@ -236,7 +236,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	}
 
 	@Override
-	@Localized({ "CRAZYPLUGIN.LIST.HEADER $CurrentPage$ $MaxPage$ $ChatHeader$ $DateTime$", "CRAZYPLUGIN.LIST.LISTFORMAT $Index$ $Entry$ $ChatHeader$", "CRAZYPLUGIN.LIST.ENTRYFORMAT $Name$ ..." })
+	@Localized({ "CRAZYPLUGIN.LIST.HEADER {CurrentPage} {MaxPage} {ChatHeader} {DateTime}", "CRAZYPLUGIN.LIST.LISTFORMAT {Index} {Entry} {ChatHeader}", "CRAZYPLUGIN.LIST.ENTRYFORMAT {Name} ..." })
 	public final void sendLocaleList(final CommandSender target, CrazyLocale headFormat, CrazyLocale listFormat, CrazyLocale entryFormat, final int amount, final int page, final List<?> datas)
 	{
 		if (headFormat == null)
@@ -329,7 +329,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		Bukkit.getScheduler().runTaskAsynchronously(this, new LanguageLoadTask(this, language, sender));
 	}
 
-	@Localized({ "CRAZYPLUGIN.LANGUAGE.ERROR.AVAILABLE $Language$ CRAZYPLUGIN.LANGUAGE", "CRAZYPLUGIN.LANGUAGE.ERROR.READ $Language$ $Plugin$" })
+	@Localized({ "CRAZYPLUGIN.LANGUAGE.ERROR.AVAILABLE {Language} CRAZYPLUGIN.LANGUAGE", "CRAZYPLUGIN.LANGUAGE.ERROR.READ {Language} {Plugin}" })
 	public void loadLanguage(final String language, final CommandSender sender)
 	{
 		if (!isSupportingLanguages())
@@ -372,7 +372,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		updateLanguage(language, Bukkit.getConsoleSender(), reload);
 	}
 
-	@Localized({ "CRAZYPLUGIN.LANGUAGE.ERROR.AVAILABLE $Language$ $Plugin$", "CRAZYPLUGIN.LANGUAGE.ERROR.READ $Language$ $Plugin$" })
+	@Localized({ "CRAZYPLUGIN.LANGUAGE.ERROR.AVAILABLE {Language} {Plugin}", "CRAZYPLUGIN.LANGUAGE.ERROR.READ {Language} {Plugin}" })
 	public void updateLanguage(final String language, final CommandSender sender, final boolean reload)
 	{
 		if (!isSupportingLanguages())
@@ -411,7 +411,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		unpackLanguage(language, Bukkit.getConsoleSender());
 	}
 
-	@Localized("CRAZYPLUGIN.LANGUAGE.ERROR.EXTRACT $Language$ $Plugin$")
+	@Localized("CRAZYPLUGIN.LANGUAGE.ERROR.EXTRACT {Language} {Plugin}")
 	public void unpackLanguage(final String language, final CommandSender sender)
 	{
 		if (!ResourceHelper.unpackResource(this, "/lang/" + language + ".lang", "lang/" + language + ".lang"))
@@ -467,7 +467,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	}
 
 	@Permission("crazycore.updatecheck")
-	@Localized("CRAZYPLUGIN.PLUGININFO.UPDATE $UpdateVersion$ $UpdateType$ $UpdateGameVersion$ $UpdateDownloadLink$")
+	@Localized("CRAZYPLUGIN.PLUGININFO.UPDATE {UpdateVersion} {UpdateType} {UpdateGameVersion} {UpdateDownloadLink}")
 	public final boolean checkForUpdateWithMessage(final boolean force, final CommandSender sender)
 	{
 		final boolean res = checkForUpdate(force);

@@ -20,7 +20,7 @@ public class CrazyPluginCommandMainReload extends CrazyCommandReload<CrazyPlugin
 	}
 
 	@Override
-	@Permission("$CRAZYPLUGIN$.reload")
+	@Permission({ "{CRAZYPLUGIN}.reload", "{CRAZYPLUGIN}.reload.*" })
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
 		return sender.hasPermission(owner.getName() + ".reload");

@@ -23,7 +23,7 @@ public class CommandLanguageAddPreloaded extends CommandExecutor
 	}
 
 	@Override
-	@Localized("CRAZYCORE.COMMAND.LANGUAGE.PRELOADED.ADDED $LanguageName$ $Language$")
+	@Localized("CRAZYCORE.COMMAND.LANGUAGE.PRELOADED.ADDED {LanguageName} {Language}")
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		if (args.length != 1)

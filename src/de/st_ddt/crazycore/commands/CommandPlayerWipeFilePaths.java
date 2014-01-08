@@ -19,7 +19,7 @@ public class CommandPlayerWipeFilePaths extends CrazyCommandListEditor<CrazyCore
 	{
 
 		@Override
-		@Localized("CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.LISTHEAD $CurrentPage$ $MaxPage$ $ChatHeader$ $DateTime$")
+		@Localized("CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.LISTHEAD {CurrentPage} {MaxPage} {ChatHeader} {DateTime}")
 		public String headFormat(final CommandSender sender)
 		{
 			return owner.getLocale().getLanguageEntry("COMMAND.PLAYERWIPEFILEPATHS.LISTHEAD").getLanguageText(sender);
@@ -28,13 +28,13 @@ public class CommandPlayerWipeFilePaths extends CrazyCommandListEditor<CrazyCore
 		@Override
 		public String listFormat(final CommandSender sender)
 		{
-			return "$1$\n";
+			return "{1}\n";
 		}
 
 		@Override
 		public String entryFormat(final CommandSender sender)
 		{
-			return "$0$";
+			return "{0}";
 		}
 	};
 
@@ -57,14 +57,14 @@ public class CommandPlayerWipeFilePaths extends CrazyCommandListEditor<CrazyCore
 	}
 
 	@Override
-	@Localized("CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.ADD2 $Element$ $Index$")
+	@Localized("CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.ADD2 {Element} {Index}")
 	public String addViaIndexLocale()
 	{
 		return "CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.ADD2";
 	}
 
 	@Override
-	@Localized("CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.REMOVE2 $Element$ $Index$")
+	@Localized("CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.REMOVE2 {Element} {Index}")
 	public String removeViaIndexLocale()
 	{
 		return "CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.REMOVE2";
@@ -83,14 +83,14 @@ public class CommandPlayerWipeFilePaths extends CrazyCommandListEditor<CrazyCore
 	}
 
 	@Override
-	@Localized("CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.ADD $Element$")
+	@Localized("CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.ADD {Element}")
 	public String addLocale()
 	{
 		return "CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.ADD";
 	}
 
 	@Override
-	@Localized("CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.REMOVE $Element$")
+	@Localized("CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.REMOVE {Element}")
 	public String removeLocale()
 	{
 		return "CRAZYCORE.COMMAND.PLAYERWIPEFILEPATHS.REMOVE";

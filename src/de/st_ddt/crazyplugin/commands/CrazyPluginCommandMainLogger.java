@@ -27,7 +27,7 @@ public class CrazyPluginCommandMainLogger extends CrazyPluginCommandExecutor<Cra
 	}
 
 	@Override
-	@Localized({ "CRAZYPLUGIN.COMMAND.CONFIG.NOLOGGERS", "CRAZYPLUGIN.COMMAND.CONFIG.LOGGER $Channel$ $Path$ $Console$" })
+	@Localized({ "CRAZYPLUGIN.COMMAND.CONFIG.NOLOGGERS", "CRAZYPLUGIN.COMMAND.CONFIG.LOGGER {Channel} {Path} {Console}" })
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		final Logger logger = owner.getCrazyLogger();
@@ -116,7 +116,7 @@ public class CrazyPluginCommandMainLogger extends CrazyPluginCommandExecutor<Cra
 	}
 
 	@Override
-	@Permission("$CRAZYPLUGIN$.logger")
+	@Permission("{CRAZYPLUGIN}.logger")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
 		return sender.hasPermission(owner.getName() + ".logger");

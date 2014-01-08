@@ -36,7 +36,7 @@ public class CrazyCommandUnsupportedException extends CrazyCommandException
 	}
 
 	@Override
-	@Localized("CRAZYEXCEPTION.COMMAND.UNSUPPORTED $Command$ $Type$ $UnsupportedCommandPart$")
+	@Localized("CRAZYEXCEPTION.COMMAND.UNSUPPORTED {Command} {Type} {UnsupportedCommandPart}")
 	public void print(final CommandSender sender, final String header)
 	{
 		ChatHelper.sendMessage(sender, header, locale, command, type, unsupportedCommandPart);

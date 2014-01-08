@@ -29,10 +29,10 @@ public abstract class CrazyCommandListEditor<S extends ChatHeaderProvider, T> ex
 	@Override
 	protected abstract List<T> getCollection();
 
-	// @ // Localized("PATH $Element$ $Index$")
+	// @ // Localized("PATH {Element} {Index}")
 	protected abstract String addViaIndexLocale();
 
-	// @ // Localized("PATH $Element$ $Index$")
+	// @ // Localized("PATH {Element} {Index}")
 	protected abstract String removeViaIndexLocale();
 
 	private class CrazyCommandListInsert extends CrazyCommandExecutor<S>

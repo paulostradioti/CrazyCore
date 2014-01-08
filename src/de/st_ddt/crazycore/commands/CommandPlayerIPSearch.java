@@ -29,14 +29,14 @@ public class CommandPlayerIPSearch extends CommandExecutor
 	{
 
 		@Override
-		@Localized("CRAZYCORE.COMMAND.PLAYER.IPSEARCH.LISTFORMAT $Index$ $Entry$ $ChatHeader$")
+		@Localized("CRAZYCORE.COMMAND.PLAYER.IPSEARCH.LISTFORMAT {Index} {Entry} {ChatHeader}")
 		public String listFormat(final CommandSender target)
 		{
 			return CrazyLocale.getLocaleHead().getLocaleMessage(target, "CRAZYCORE.COMMAND.PLAYER.IPSEARCH.LISTFORMAT");
 		}
 
 		@Override
-		@Localized("CRAZYCORE.COMMAND.PLAYER.IPSEARCH.HEADFORMAT $CurrentPage$ $MaxPage$ $ChatHeader$ $DateTime$ $IP$")
+		@Localized("CRAZYCORE.COMMAND.PLAYER.IPSEARCH.HEADFORMAT {CurrentPage} {MaxPage} {ChatHeader} {DateTime} {IP}")
 		public String headFormat(final CommandSender target)
 		{
 			return CrazyLocale.getLocaleHead().getLocaleMessage(target, "CRAZYCORE.COMMAND.PLAYER.IPSEARCH.HEADFORMAT");
@@ -45,7 +45,7 @@ public class CommandPlayerIPSearch extends CommandExecutor
 		@Override
 		public String entryFormat(final CommandSender target)
 		{
-			return "$0$";
+			return "{0}";
 		}
 	};
 

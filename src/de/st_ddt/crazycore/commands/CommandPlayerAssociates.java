@@ -31,14 +31,14 @@ public class CommandPlayerAssociates extends CommandExecutor
 	{
 
 		@Override
-		@Localized("CRAZYCORE.COMMAND.PLAYER.ASSOCIATES.LISTFORMAT $Index$ $Entry$ $ChatHeader$")
+		@Localized("CRAZYCORE.COMMAND.PLAYER.ASSOCIATES.LISTFORMAT {Index} {Entry} {ChatHeader}")
 		public String listFormat(final CommandSender target)
 		{
 			return CrazyLocale.getLocaleHead().getLocaleMessage(target, "CRAZYCORE.COMMAND.PLAYER.ASSOCIATES.LISTFORMAT");
 		}
 
 		@Override
-		@Localized("CRAZYCORE.COMMAND.PLAYER.ASSOCIATES.HEADFORMAT $CurrentPage$ $MaxPage$ $ChatHeader$ $DateTime$ $PlayerName$")
+		@Localized("CRAZYCORE.COMMAND.PLAYER.ASSOCIATES.HEADFORMAT {CurrentPage} {MaxPage} {ChatHeader} {DateTime} {PlayerName}")
 		public String headFormat(final CommandSender target)
 		{
 			return CrazyLocale.getLocaleHead().getLocaleMessage(target, "CRAZYCORE.COMMAND.PLAYER.ASSOCIATES.HEADFORMAT");
@@ -47,7 +47,7 @@ public class CommandPlayerAssociates extends CommandExecutor
 		@Override
 		public String entryFormat(final CommandSender target)
 		{
-			return "$0$";
+			return "{0}";
 		}
 	};
 

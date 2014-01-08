@@ -23,7 +23,7 @@ public class CommandLanguageSetDefault extends CommandExecutor
 	}
 
 	@Override
-	@Localized("CRAZYCORE.COMMAND.LANGUAGE.DEFAULT.SET $LanguageName$ $Language$")
+	@Localized("CRAZYCORE.COMMAND.LANGUAGE.DEFAULT.SET {LanguageName} {Language}")
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		if (args.length != 1)

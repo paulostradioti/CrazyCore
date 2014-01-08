@@ -15,7 +15,7 @@ public class CrazyPluginCommandMainMode extends CrazyCommandModeEditor<CrazyPlug
 	}
 
 	@Override
-	@Permission("$CRAZYPLUGIN$.mode")
+	@Permission("{CRAZYPLUGIN}.mode")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
 		return sender.hasPermission(owner.getName() + ".mode");
@@ -28,7 +28,7 @@ public class CrazyPluginCommandMainMode extends CrazyCommandModeEditor<CrazyPlug
 	}
 
 	@Override
-	@Permission({ "$CRAZYPLUGIN$.mode.*", "$CRAZYPLUGIN$.mode.<MODENAME>" })
+	@Permission({ "{CRAZYPLUGIN}.mode.*", "{CRAZYPLUGIN}.mode.<MODENAME>" })
 	public boolean hasAccessPermission(final CommandSender sender, final Mode<?> mode)
 	{
 		return sender.hasPermission(owner.getName() + ".mode.*") || sender.hasPermission(owner.getName() + ".mode." + mode.getName());

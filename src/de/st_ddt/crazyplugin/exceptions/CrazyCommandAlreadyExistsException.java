@@ -26,7 +26,7 @@ public class CrazyCommandAlreadyExistsException extends CrazyCommandException
 	}
 
 	@Override
-	@Localized("CRAZYEXCEPTION.COMMAND.ALREADYEXISTS $Command$ $Type$ $Creation$")
+	@Localized("CRAZYEXCEPTION.COMMAND.ALREADYEXISTS {Command} {Type} {Creation}")
 	public void print(final CommandSender sender, final String header)
 	{
 		ChatHelper.sendMessage(sender, header, locale, command, type, creation);

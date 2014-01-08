@@ -22,7 +22,7 @@ public class CrazyCommandPermissionException extends CrazyCommandException
 	}
 
 	@Override
-	@Localized("CRAZYEXCEPTION.COMMAND.PERMISSION $Command$")
+	@Localized("CRAZYEXCEPTION.COMMAND.PERMISSION {Command}")
 	public void print(final CommandSender sender, final String header)
 	{
 		ChatHelper.sendMessage(sender, header, locale, command);

@@ -25,7 +25,7 @@ public class CommandList extends CommandExecutor
 	}
 
 	@Override
-	@Localized({ "CRAZYCORE.COMMAND.PLUGINLIST.HEADER $CurrentPage$ $MaxPage$ $ChatHeader$ $DateTime$", "CRAZYCORE.COMMAND.PLUGINLIST.LISTFORMAT $Index$ $Entry$ $ChatHeader$", "CRAZYCORE.COMMAND.PLUGINLIST.ENTRYFORMAT $Name$ $ChatHeader$ $Version$" })
+	@Localized({ "CRAZYCORE.COMMAND.PLUGINLIST.HEADER {CurrentPage} {MaxPage} {ChatHeader} {DateTime}", "CRAZYCORE.COMMAND.PLUGINLIST.LISTFORMAT {Index} {Entry} {ChatHeader}", "CRAZYCORE.COMMAND.PLUGINLIST.ENTRYFORMAT {Name} {ChatHeader} {Version}" })
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		ChatHelperExtended.processFullListCommand(sender, args, owner.getChatHeader(), owner.getLocale().getLanguageEntry("COMMAND.PLUGINLIST.HEADER").getLanguageText(sender), owner.getLocale().getLanguageEntry("COMMAND.PLUGINLIST.LISTFORMAT").getLanguageText(sender), owner.getLocale().getLanguageEntry("COMMAND.PLUGINLIST.ENTRYFORMAT").getLanguageText(sender), null, null, new DepenciesComparator<CrazyLightPlugin>(), null, new ArrayList<CrazyLightPlugin>(CrazyLightPlugin.getCrazyLightPlugins()));

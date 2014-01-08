@@ -30,7 +30,7 @@ public class CommandPipe extends CommandExecutor
 	{
 		if (args.length == 0)
 			throw new CrazyCommandUsageException("<$PresetList> [> PipeCommand]", "<Arg1>, [Arg2], ... [> PipeCommand]");
-		String[] pipeArgs = new String[] { "show", "$0$" };
+		String[] pipeArgs = new String[] { "show", "{0}" };
 		if (args[0].startsWith("$"))
 		{
 			final String value = args[0].toLowerCase().substring(1);

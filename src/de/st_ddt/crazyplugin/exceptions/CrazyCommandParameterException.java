@@ -47,7 +47,7 @@ public class CrazyCommandParameterException extends CrazyCommandException
 	}
 
 	@Override
-	@Localized("CRAZYEXCEPTION.COMMAND.PARAMETER $Command$ $Number$ $Type$ $Allowed$")
+	@Localized("CRAZYEXCEPTION.COMMAND.PARAMETER {Command} {Number} {Type} {Allowed}")
 	public void print(final CommandSender sender, final String header)
 	{
 		ChatHelper.sendMessage(sender, header, locale, command, number, type, ChatHelper.listingString("\\n", allowed));

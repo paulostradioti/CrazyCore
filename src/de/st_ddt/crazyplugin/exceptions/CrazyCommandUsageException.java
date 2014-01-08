@@ -25,7 +25,7 @@ public class CrazyCommandUsageException extends CrazyCommandException
 	}
 
 	@Override
-	@Localized("CRAZYEXCEPTION.COMMAND.USAGE $Command$ $CommandHierarchy$ $ValidUsages$")
+	@Localized("CRAZYEXCEPTION.COMMAND.USAGE {Command} {CommandHierarchy} {ValidUsages}")
 	public void print(final CommandSender sender, final String header)
 	{
 		ChatHelper.sendMessage(sender, header, locale, command, "/" + commandHierarchy, ChatHelper.listingString("\\n...", validUsage));

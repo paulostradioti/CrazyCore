@@ -21,7 +21,7 @@ public class CrazyPluginCommandMainInfo extends CrazyPluginCommandExecutor<Crazy
 	}
 
 	@Override
-	@Permission("$CRAZYPLUGIN$.info")
+	@Permission("{CRAZYPLUGIN}.info")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
 		return sender.hasPermission(owner.getName() + ".info");

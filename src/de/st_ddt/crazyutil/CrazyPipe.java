@@ -505,9 +505,9 @@ public abstract class CrazyPipe implements RestrictedAccess
 				params.put("chatheader", chatHeader);
 				final StringParamitrisable headFormat = new ColoredStringParamitrisable(null);
 				params.put("headformat", headFormat);
-				final StringParamitrisable listFormat = new ColoredStringParamitrisable("$1$\n");
+				final StringParamitrisable listFormat = new ColoredStringParamitrisable("{1}\n");
 				params.put("listformat", listFormat);
-				final StringParamitrisable entryFormat = new ColoredStringParamitrisable("$0$");
+				final StringParamitrisable entryFormat = new ColoredStringParamitrisable("{0}");
 				params.put("entryformat", entryFormat);
 				ChatHelperExtended.readParameters(pipeArgs, params, file);
 				if (file.getValue() == null)
@@ -539,9 +539,9 @@ public abstract class CrazyPipe implements RestrictedAccess
 				params.put("chatheader", chatHeader);
 				final StringParamitrisable headFormat = new ColoredStringParamitrisable(null);
 				params.put("headformat", headFormat);
-				final StringParamitrisable listFormat = new ColoredStringParamitrisable("$1$\n");
+				final StringParamitrisable listFormat = new ColoredStringParamitrisable("{1}\n");
 				params.put("listformat", listFormat);
-				final StringParamitrisable entryFormat = new ColoredStringParamitrisable("$0$");
+				final StringParamitrisable entryFormat = new ColoredStringParamitrisable("{0}");
 				params.put("entryformat", entryFormat);
 				ChatHelperExtended.readParameters(pipeArgs, params, file);
 				if (file.getValue() == null)

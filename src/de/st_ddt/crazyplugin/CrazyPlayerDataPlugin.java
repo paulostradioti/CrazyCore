@@ -42,21 +42,21 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	{
 
 		@Override
-		@Localized("CRAZYPLUGIN.COMMAND.PLAYER.LIST.HEADER $CurrentPage$ $MaxPage$ $ChatHeader$ $DateTime$")
+		@Localized("CRAZYPLUGIN.COMMAND.PLAYER.LIST.HEADER {CurrentPage} {MaxPage} {ChatHeader} {DateTime}")
 		public String headFormat(final CommandSender sender)
 		{
 			return getLocale().getLanguageEntry("COMMAND.PLAYER.LIST.HEADER").getLanguageText(sender);
 		}
 
 		@Override
-		@Localized("CRAZYPLUGIN.COMMAND.PLAYER.LIST.LISTFORMAT $Index$ $Entry$ $ChatHeader$")
+		@Localized("CRAZYPLUGIN.COMMAND.PLAYER.LIST.LISTFORMAT {Index} {Entry} {ChatHeader}")
 		public String listFormat(final CommandSender sender)
 		{
 			return getLocale().getLanguageEntry("COMMAND.PLAYER.LIST.LISTFORMAT").getLanguageText(sender);
 		}
 
 		@Override
-		@Localized("CRAZYPLUGIN.COMMAND.PLAYER.LIST.ENTRYFORMAT $Name$ $...$")
+		@Localized("CRAZYPLUGIN.COMMAND.PLAYER.LIST.ENTRYFORMAT {Name} $...$")
 		public String entryFormat(final CommandSender sender)
 		{
 			return getLocale().getLanguageEntry("COMMAND.PLAYER.LIST.ENTRYFORMAT").getLanguageText(sender);
@@ -246,7 +246,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	}
 
 	@Override
-	@Localized("$CRAZYPLAYERDATAPLUGIN$.PLUGININFO.DATABASEENTRIES $EntryCount$")
+	@Localized("{CRAZYPLAYERDATAPLUGIN}.PLUGININFO.DATABASEENTRIES {EntryCount}")
 	public void show(final CommandSender target, final String chatHeader, final boolean showDetailed)
 	{
 		super.show(target, chatHeader, showDetailed);
@@ -271,7 +271,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 		{
 
 			@Override
-			@Localized("$CRAZYPLAYERDATAPLUGIN$.COMMAND.DATABASE.RELOADED")
+			@Localized("{CRAZYPLAYERDATAPLUGIN}.COMMAND.DATABASE.RELOADED")
 			public void reload(final CommandSender sender)
 			{
 				loadDatabase();
@@ -280,7 +280,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 			}
 
 			@Override
-			@Permission("$CRAZYPLAYERDATAPLUGIN$.reload.database")
+			@Permission("{CRAZYPLAYERDATAPLUGIN}.reload.database")
 			public boolean hasReloadPermission(final CommandSender sender)
 			{
 				return sender.hasPermission(getName() + ".reload.database") || sender.hasPermission(getName() + ".reload.*");
@@ -322,7 +322,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	}
 
 	@Override
-	@Localized({ "$CRAZYPLAYERDATAPLUGIN$.DATABASE.ACCESSWARN $SaveType$", "$CRAZYPLAYERDATAPLUGIN$.DATABASE.LOADED $EntryCount$" })
+	@Localized({ "{CRAZYPLAYERDATAPLUGIN}.DATABASE.ACCESSWARN {SaveType}", "{CRAZYPLAYERDATAPLUGIN}.DATABASE.LOADED {EntryCount}" })
 	public void loadDatabase()
 	{
 	}

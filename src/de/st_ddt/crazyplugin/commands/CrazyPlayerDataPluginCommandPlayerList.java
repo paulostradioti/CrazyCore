@@ -56,7 +56,7 @@ public class CrazyPlayerDataPluginCommandPlayerList<T extends PlayerDataInterfac
 	}
 
 	@Override
-	@Permission("$CRAZYPLAYERDATAPLUGIN$.player.list")
+	@Permission("{CRAZYPLAYERDATAPLUGIN}.player.list")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
 		return sender.hasPermission(owner.getName() + ".player.list");

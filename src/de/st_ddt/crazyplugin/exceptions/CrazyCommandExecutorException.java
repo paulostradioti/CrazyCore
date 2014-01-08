@@ -18,7 +18,7 @@ public class CrazyCommandExecutorException extends CrazyCommandCircumstanceExcep
 	}
 
 	@Override
-	@Localized({ "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE.CONSOLE $Command$", "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE.PLAYER $Command$" })
+	@Localized({ "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE.CONSOLE {Command}", "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE.PLAYER {Command}" })
 	public void print(final CommandSender sender, final String header)
 	{
 		ChatHelper.sendMessage(sender, header, locale.getLanguageEntry(forConsole ? "CONSOLE" : "PLAYER"), command);

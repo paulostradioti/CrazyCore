@@ -94,9 +94,9 @@ public class ChatHelperExtended extends ChatHelper
 	 * @param defaultChatHeader
 	 *            The chatHeader which should be shown.
 	 * @param defaultHeadFormat
-	 *            Used in {@link CrazyPages#show(CommandSender) CrazyPages} as message head. </br> $0$ = current Page </br> $1$ = max Page </br> $2$ = chatHeader </br> $3$ = current date. </br> $4$, ..., $n$ custom args defined in headArgs.
+	 *            Used in {@link CrazyPages#show(CommandSender) CrazyPages} as message head. </br> {0} = current Page </br> {1} = max Page </br> {2} = chatHeader </br> {3} = current date. </br> {4}, ..., {n} custom args defined in headArgs.
 	 * @param defaultListFormat
-	 *            Used to show and seperate entries. </br> $0$ = index </br> $1$ = entry </br> $2$ = chatHeader.
+	 *            Used to show and seperate entries. </br> {0} = index </br> {1} = entry </br> {2} = chatHeader.
 	 * @param defaultEntryFormat
 	 *            Used to format entries (Works only with {@link ParameterData}. Used in {@link #putArgsPara(String, ParameterData) putArgsPara}.
 	 * @param filters

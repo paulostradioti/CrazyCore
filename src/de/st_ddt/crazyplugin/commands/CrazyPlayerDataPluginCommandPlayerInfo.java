@@ -62,7 +62,7 @@ public class CrazyPlayerDataPluginCommandPlayerInfo<T extends PlayerDataInterfac
 	}
 
 	@Override
-	@Permission({ "$CRAZYPLAYERDATAPLUGIN$.player.info.self", "$CRAZYPLAYERDATAPLUGIN$.player.info.other" })
+	@Permission({ "{CRAZYPLAYERDATAPLUGIN}.player.info.self", "{CRAZYPLAYERDATAPLUGIN}.player.info.other" })
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
 		return sender.hasPermission(owner.getName() + ".player.info.self") || sender.hasPermission(owner.getName() + ".player.info.other");

@@ -23,7 +23,7 @@ public class CommandLanguageRemovePreloaded extends CommandExecutor
 	}
 
 	@Override
-	@Localized("CRAZYCORE.COMMAND.LANGUAGE.PRELOADED.REMOVED $LanguageName$ $Language$")
+	@Localized("CRAZYCORE.COMMAND.LANGUAGE.PRELOADED.REMOVED {LanguageName} {Language}")
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		if (args.length != 1)

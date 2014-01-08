@@ -31,7 +31,7 @@ public class CrazyCommandPermissionProtectedPlayerException extends CrazyCommand
 	}
 
 	@Override
-	@Localized("CRAZYEXCEPTION.COMMAND.PERMISSION.PROTECTEDPLAYER $Command$ $Player$")
+	@Localized("CRAZYEXCEPTION.COMMAND.PERMISSION.PROTECTEDPLAYER {Command} {Player}")
 	public void print(final CommandSender sender, final String header)
 	{
 		ChatHelper.sendMessage(sender, header, locale, command, player);

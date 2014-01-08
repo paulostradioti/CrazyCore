@@ -49,7 +49,7 @@ public class CrazyCommandNoSuchException extends CrazyCommandException
 	}
 
 	@Override
-	@Localized({ "CRAZYEXCEPTION.COMMAND.NOSUCH $Command$ $Type$ $Searched$", "CRAZYEXCEPTION.COMMAND.NOSUCH.ALTERNATIVES $Alternatives$" })
+	@Localized({ "CRAZYEXCEPTION.COMMAND.NOSUCH {Command} {Type} {Searched}", "CRAZYEXCEPTION.COMMAND.NOSUCH.ALTERNATIVES {Alternatives}" })
 	public void print(final CommandSender sender, final String header)
 	{
 		ChatHelper.sendMessage(sender, header, locale, command, type, searched);

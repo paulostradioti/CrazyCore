@@ -14,7 +14,7 @@ public class CrazyPluginCommandMainSave extends CrazyCommandSave<CrazyPluginInte
 	}
 
 	@Override
-	@Permission("$CRAZYPLUGIN$.save")
+	@Permission("{CRAZYPLUGIN}.save")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
 		return sender.hasPermission(owner.getName() + ".save");

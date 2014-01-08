@@ -58,7 +58,7 @@ public class PseudoPlayerData extends PlayerData<PseudoPlayerData>
 	}
 
 	@Override
-	@Localized({ "CRAZYCORE.PLAYERINFO.LANGUAGE $Language$", "CRAZYCORE.PLAYERINFO.ASSOCIATES $Associates$", "CRAZYCORE.PLAYERINFO.GROUPS $Groups$", "CRAZYCORE.PLAYERINFO.PROTECTEDPLAYER $Protected$" })
+	@Localized({ "CRAZYCORE.PLAYERINFO.LANGUAGE {Language}", "CRAZYCORE.PLAYERINFO.ASSOCIATES {Associates}", "CRAZYCORE.PLAYERINFO.GROUPS {Groups}", "CRAZYCORE.PLAYERINFO.PROTECTEDPLAYER {Protected}" })
 	public void showDetailed(final CommandSender target, final String chatHeader)
 	{
 		final CrazyCore plugin = CrazyCore.getPlugin();

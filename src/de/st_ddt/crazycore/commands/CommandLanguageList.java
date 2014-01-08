@@ -19,7 +19,7 @@ public class CommandLanguageList extends CommandExecutor
 	}
 
 	@Override
-	@Localized({ "CRAZYCORE.COMMAND.LANGUAGE.CURRENT $LanguageName$ $LanguageSelection$", "CRAZYCORE.COMMAND.LANGUAGE.DEFAULT $DefaultLanguageName$ $DefaultLanguageSelection$", "CRAZYCORE.COMMAND.LANGUAGE.LIST.HEADER $CurrentPage$ $MaxPage$ $ChatHeader$ $DateTime$", "CRAZYCORE.COMMAND.LANGUAGE.LIST.LISTFORMAT $Index$ $Entry$ $ChatHeader$" })
+	@Localized({ "CRAZYCORE.COMMAND.LANGUAGE.CURRENT {LanguageName} {LanguageSelection}", "CRAZYCORE.COMMAND.LANGUAGE.DEFAULT {DefaultLanguageName} {DefaultLanguageSelection}", "CRAZYCORE.COMMAND.LANGUAGE.LIST.HEADER {CurrentPage} {MaxPage} {ChatHeader} {DateTime}", "CRAZYCORE.COMMAND.LANGUAGE.LIST.LISTFORMAT {Index} {Entry} {ChatHeader}" })
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		if (args.length > 0)

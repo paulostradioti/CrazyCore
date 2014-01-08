@@ -23,8 +23,8 @@ public class CrazyPlayerDataPluginCommandPlayerDelete<T extends PlayerDataInterf
 	}
 
 	@Override
-	@Permission("$CRAZYPLAYERDATAPLUGIN$.player.delete.protected")
-	@Localized("$CRAZYPLAYERDATAPLUGIN$.COMMAND.PLAYER.DELETE.SUCCESS $Name$")
+	@Permission("{CRAZYPLAYERDATAPLUGIN}.player.delete.protected")
+	@Localized("{CRAZYPLAYERDATAPLUGIN}.COMMAND.PLAYER.DELETE.SUCCESS {Name}")
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		final String name = ChatHelper.listingString(" ", args);
@@ -44,7 +44,7 @@ public class CrazyPlayerDataPluginCommandPlayerDelete<T extends PlayerDataInterf
 	}
 
 	@Override
-	@Permission("$CRAZYPLAYERDATAPLUGIN$.player.delete")
+	@Permission("{CRAZYPLAYERDATAPLUGIN}.player.delete")
 	public boolean hasAccessPermission(final CommandSender sender)
 	{
 		return sender.hasPermission(owner.getName() + ".player.delete");

@@ -34,7 +34,7 @@ public class CrazyCommandCircumstanceException extends CrazyCommandException
 	}
 
 	@Override
-	@Localized({ "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE $Command$", "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE.MUSTBE $MustBe$", "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE.NOW $Now$", "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE.ERROR" })
+	@Localized({ "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE {Command}", "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE.MUSTBE {MustBe}", "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE.NOW {Now}", "CRAZYEXCEPTION.COMMAND.CIRCUMSTANCE.ERROR" })
 	public void print(final CommandSender sender, final String header)
 	{
 		super.print(sender, header);

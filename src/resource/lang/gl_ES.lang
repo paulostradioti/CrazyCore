@@ -1,5 +1,5 @@
 ﻿CRAZYCORE=CrazyCore
-LANGUAGE.NAME=Spanish (Galician) - Galego
+LANGUAGE.NAME=Galician (Spain) - Galego 
 CRAZYPLUGIN.COMMAND.CONFIG.LOGGER={0} : Ruta=&E{1} &FConsola=&E{2}
 CRAZYPLUGIN.COMMAND.CONFIG.NOLOGGERS=Non ten canales de log!
 CRAZYPLUGIN.COMMAND.CONFIG.RELOADED=Recargouse a configuración!

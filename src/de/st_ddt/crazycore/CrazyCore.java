@@ -101,7 +101,7 @@ public final class CrazyCore extends CrazyPlugin
 						list.add(player.getName());
 				return list;
 			}
-		};
+		}.register();
 		new PreSetList("core_protectedPlayers")
 		{
 
@@ -110,7 +110,7 @@ public final class CrazyCore extends CrazyPlugin
 			{
 				return new ArrayList<String>(protectedPlayers);
 			}
-		};
+		}.register();
 		new PreSetList("core_unprotectedPlayersOnline")
 		{
 
@@ -123,7 +123,7 @@ public final class CrazyCore extends CrazyPlugin
 						list.add(player.getName());
 				return list;
 			}
-		};
+		}.register();
 		new PreSetList("core_unprotectedPlayers")
 		{
 
@@ -136,7 +136,7 @@ public final class CrazyCore extends CrazyPlugin
 						list.add(player.getName());
 				return list;
 			}
-		};
+		}.register();
 	}
 
 	private void registerModes()

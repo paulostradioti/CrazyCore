@@ -54,6 +54,7 @@ public class MySQLDatabase<S extends MySQLDatabaseEntry> extends SQLDatabase<S>
 		final Connection connection = connectionPool.getConnection();
 		if (connection == null)
 			throw new Exception("Database not accessible!");
+		@SuppressWarnings("resource")
 		Statement query = null;
 		String sql = null;
 		try
@@ -120,10 +121,8 @@ public class MySQLDatabase<S extends MySQLDatabaseEntry> extends SQLDatabase<S>
 		final Connection connection = connectionPool.getConnection();
 		if (connection == null)
 			return;
-		Statement query = null;
-		try
+		try (Statement query = connection.createStatement())
 		{
-			query = connection.createStatement();
 			query.executeUpdate(sql);
 		}
 		catch (final SQLException e)
@@ -133,13 +132,6 @@ public class MySQLDatabase<S extends MySQLDatabaseEntry> extends SQLDatabase<S>
 		}
 		finally
 		{
-			if (query != null)
-				try
-				{
-					query.close();
-				}
-				catch (final SQLException e)
-				{}
 			connectionPool.releaseConnection(connection);
 		}
 	}

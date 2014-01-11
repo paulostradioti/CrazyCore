@@ -138,12 +138,12 @@ public abstract class SQLDatabase<S extends SQLDatabaseEntry> extends BasicDatab
 		final Connection connection = getConnectionpool().getConnection();
 		if (connection == null)
 			return false;
-		Statement query = null;
-		try
+		try (Statement query = connection.createStatement())
 		{
-			query = connection.createStatement();
-			final ResultSet result = query.executeQuery("SELECT `" + columnNames[0] + "` FROM `" + tableName + "` WHERE " + columnNames[0] + "='" + key + "' LIMIT 1");
-			return result.next();
+			try (final ResultSet result = query.executeQuery("SELECT `" + columnNames[0] + "` FROM `" + tableName + "` WHERE " + columnNames[0] + "='" + key + "' LIMIT 1"))
+			{
+				return result.next();
+			}
 		}
 		catch (final SQLException e)
 		{
@@ -151,13 +151,6 @@ public abstract class SQLDatabase<S extends SQLDatabaseEntry> extends BasicDatab
 		}
 		finally
 		{
-			if (query != null)
-				try
-				{
-					query.close();
-				}
-				catch (final Exception e)
-				{}
 			getConnectionpool().releaseConnection(connection);
 		}
 	}
@@ -177,31 +170,30 @@ public abstract class SQLDatabase<S extends SQLDatabaseEntry> extends BasicDatab
 		final Connection connection = getConnectionpool().getConnection();
 		if (connection == null)
 			return null;
-		Statement query = null;
-		try
+		try (Statement query = connection.createStatement())
 		{
-			query = connection.createStatement();
-			final ResultSet result = query.executeQuery("SELECT * FROM `" + tableName + "` WHERE " + columnNames[0] + "='" + key + "' LIMIT 1");
-			if (result.next())
-				try
-				{
-					final S data = constructor.newInstance(result, columnNames);
-					datas.put(data.getName().toLowerCase(), data);
-					result.close();
-					return data;
-				}
-				catch (final InvocationTargetException e)
-				{
-					System.err.println("Error occured while trying to load entry: " + key);
-					shortPrintStackTrace(e, e.getCause());
-				}
-				catch (final Exception e)
-				{
-					System.err.println("Error occured while trying to load entry: " + key);
-					e.printStackTrace();
-				}
-			result.close();
-			return null;
+			try (final ResultSet result = query.executeQuery("SELECT * FROM `" + tableName + "` WHERE " + columnNames[0] + "='" + key + "' LIMIT 1"))
+			{
+				if (result.next())
+					try
+					{
+						final S data = constructor.newInstance(result, columnNames);
+						datas.put(data.getName().toLowerCase(), data);
+						result.close();
+						return data;
+					}
+					catch (final InvocationTargetException e)
+					{
+						System.err.println("Error occured while trying to load entry: " + key);
+						shortPrintStackTrace(e, e.getCause());
+					}
+					catch (final Exception e)
+					{
+						System.err.println("Error occured while trying to load entry: " + key);
+						e.printStackTrace();
+					}
+				return null;
+			}
 		}
 		catch (final SQLException e)
 		{
@@ -209,13 +201,6 @@ public abstract class SQLDatabase<S extends SQLDatabaseEntry> extends BasicDatab
 		}
 		finally
 		{
-			if (query != null)
-				try
-				{
-					query.close();
-				}
-				catch (final Exception e)
-				{}
 			getConnectionpool().releaseConnection(connection);
 		}
 	}
@@ -226,38 +211,30 @@ public abstract class SQLDatabase<S extends SQLDatabaseEntry> extends BasicDatab
 		final Connection connection = getConnectionpool().getConnection();
 		if (connection == null)
 			return;
-		Statement query = null;
-		try
+		try (Statement query = connection.createStatement())
 		{
-			query = connection.createStatement();
-			final ResultSet result = query.executeQuery("SELECT * FROM `" + tableName + "` WHERE 1=1");
-			while (result.next())
-				try
-				{
-					final S data = constructor.newInstance(result, columnNames);
-					datas.put(data.getName().toLowerCase(), data);
-				}
-				catch (final InvocationTargetException e)
-				{
-					shortPrintStackTrace(e, e.getCause());
-				}
-				catch (final Exception e)
-				{
-					e.printStackTrace();
-				}
-			result.close();
+			try (final ResultSet result = query.executeQuery("SELECT * FROM `" + tableName + "` WHERE 1=1"))
+			{
+				while (result.next())
+					try
+					{
+						final S data = constructor.newInstance(result, columnNames);
+						datas.put(data.getName().toLowerCase(), data);
+					}
+					catch (final InvocationTargetException e)
+					{
+						shortPrintStackTrace(e, e.getCause());
+					}
+					catch (final Exception e)
+					{
+						e.printStackTrace();
+					}
+			}
 		}
 		catch (final SQLException e)
 		{}
 		finally
 		{
-			if (query != null)
-				try
-				{
-					query.close();
-				}
-				catch (final Exception e)
-				{}
 			getConnectionpool().releaseConnection(connection);
 		}
 	}
@@ -268,23 +245,14 @@ public abstract class SQLDatabase<S extends SQLDatabaseEntry> extends BasicDatab
 		final Connection connection = getConnectionpool().getConnection();
 		if (connection == null)
 			return false;
-		Statement query = null;
-		try
+		try (Statement query = connection.createStatement())
 		{
-			query = connection.createStatement();
 			query.executeUpdate("DELETE FROM `" + tableName + "` WHERE " + columnNames[0] + "='" + key + "'");
 		}
 		catch (final SQLException e)
 		{}
 		finally
 		{
-			if (query != null)
-				try
-				{
-					query.close();
-				}
-				catch (final SQLException e)
-				{}
 			getConnectionpool().releaseConnection(connection);
 		}
 		return super.deleteEntry(key);
@@ -296,23 +264,14 @@ public abstract class SQLDatabase<S extends SQLDatabaseEntry> extends BasicDatab
 		final Connection connection = getConnectionpool().getConnection();
 		if (connection == null)
 			return;
-		Statement query = null;
-		try
+		try (Statement query = connection.createStatement())
 		{
-			query = connection.createStatement();
 			query.executeUpdate("DELETE FROM `" + tableName + "`");
 		}
 		catch (final SQLException e)
 		{}
 		finally
 		{
-			if (query != null)
-				try
-				{
-					query.close();
-				}
-				catch (final SQLException e)
-				{}
 			getConnectionpool().releaseConnection(connection);
 		}
 		super.purgeDatabase();

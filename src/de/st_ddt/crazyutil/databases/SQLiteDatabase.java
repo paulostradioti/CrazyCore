@@ -54,6 +54,7 @@ public class SQLiteDatabase<S extends SQLiteDatabaseEntry> extends SQLDatabase<S
 		final Connection connection = connectionPool.getConnection();
 		if (connection == null)
 			throw new Exception("Database not accessible!");
+		@SuppressWarnings("resource")
 		Statement query = null;
 		try
 		{
@@ -115,23 +116,14 @@ public class SQLiteDatabase<S extends SQLiteDatabaseEntry> extends SQLDatabase<S
 		final Connection connection = connectionPool.getConnection();
 		if (connection == null)
 			return;
-		Statement query = null;
-		try
+		try (Statement query = connection.createStatement())
 		{
-			query = connection.createStatement();
 			query.executeUpdate(sql);
 		}
 		catch (final SQLException e)
 		{}
 		finally
 		{
-			if (query != null)
-				try
-				{
-					query.close();
-				}
-				catch (final SQLException e)
-				{}
 			connectionPool.releaseConnection(connection);
 		}
 	}

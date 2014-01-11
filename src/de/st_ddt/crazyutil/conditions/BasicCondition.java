@@ -2,7 +2,10 @@ package de.st_ddt.crazyutil.conditions;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -37,6 +40,42 @@ public abstract class BasicCondition implements Condition
 			System.err.println("WARNING: Serious bug detected, please report this issue!");
 			throw e;
 		}
+	}
+
+	public static Map<String, Integer> fastParameterIndexes(final String... parameterNames)
+	{
+		final Map<String, Integer> res = new HashMap<>(parameterNames.length);
+		for (int i = 0; i < parameterNames.length; i++)
+			res.put(parameterNames[i], i);
+		return res;
+	}
+
+	public static Map<Integer, String> fastParameterNames(final String... parameterNames)
+	{
+		final Map<Integer, String> res = new HashMap<>(parameterNames.length);
+		for (int i = 0; i < parameterNames.length; i++)
+			res.put(i, parameterNames[i]);
+		return res;
+	}
+
+	public static Map<Integer, Set<Class<?>>> fastParameterClasses(final Class<?>... classes)
+	{
+		final Map<Integer, Set<Class<?>>> res = new HashMap<>(classes.length);
+		for (int i = 0; i < classes.length; i++)
+		{
+			final Set<Class<?>> set = new HashSet<>(1);
+			set.add(classes[i]);
+			res.put(i, set);
+		}
+		return res;
+	}
+
+	public static Map<Integer, Object> fastParameters(final Object... objects)
+	{
+		final Map<Integer, Object> res = new HashMap<>(objects.length);
+		for (int i = 0; i < objects.length; i++)
+			res.put(i, objects[i]);
+		return res;
 	}
 
 	public BasicCondition()

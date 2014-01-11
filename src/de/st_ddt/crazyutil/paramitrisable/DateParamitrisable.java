@@ -114,6 +114,8 @@ public class DateParamitrisable extends TypedParamitrisable<Date>
 					res.add(part + "30");
 					res.add(part + "31");
 					break;
+				default:
+					break;
 			}
 			return res;
 		}
@@ -144,6 +146,8 @@ public class DateParamitrisable extends TypedParamitrisable<Date>
 				case 7:
 					for (int i = 0; i <= 59; i++)
 						res.add(part + Integer.toString(i));
+					break;
+				default:
 					break;
 			}
 			return res;

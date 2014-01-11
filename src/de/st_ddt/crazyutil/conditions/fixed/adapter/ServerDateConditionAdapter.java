@@ -1,48 +1,41 @@
 package de.st_ddt.crazyutil.conditions.fixed.adapter;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 
 import de.st_ddt.crazyutil.conditions.Condition;
-import de.st_ddt.crazyutil.conditions.SubConditionedCondition;
-import de.st_ddt.crazyutil.conditions.checker.ConditionChecker;
-import de.st_ddt.crazyutil.conditions.checker.DateConditionChecker;
-import de.st_ddt.crazyutil.conditions.checker.DateConditionChecker.SimpleDateConditionChecker;
+import de.st_ddt.crazyutil.conditions.SimpleParameterExtendingCondition;
 
-public class ServerDateConditionAdapter extends SubConditionedCondition
+public class ServerDateConditionAdapter extends SimpleParameterExtendingCondition
 {
 
-	public ServerDateConditionAdapter()
+	public ServerDateConditionAdapter(final String parameterName, final int index)
 	{
-		super();
+		super(parameterName, index, Date.class);
 	}
 
-	public ServerDateConditionAdapter(final Condition condition)
+	public ServerDateConditionAdapter(final Condition condition, final String parameterName, final int index)
 	{
-		super(condition);
+		super(condition, parameterName, index, Date.class);
 	}
 
-	public ServerDateConditionAdapter(final ConfigurationSection config) throws Exception
+	public ServerDateConditionAdapter(final ConfigurationSection config, final Map<String, Integer> parameterIndexes) throws Exception
 	{
-		super(config);
-	}
-
-	@Override
-	public String getType()
-	{
-		return "SERVERDATEADAPTER";
+		super(config, parameterIndexes, Date.class);
 	}
 
 	@Override
-	public boolean isApplicable(final Class<? extends ConditionChecker> clazz)
+	protected Object getValue()
 	{
-		return condition.isApplicable(DateConditionChecker.class);
+		return new Date();
 	}
 
 	@Override
-	public boolean check(final ConditionChecker checker)
+	public Condition secure(final Map<Integer, ? extends Collection<Class<?>>> classes)
 	{
-		return condition.check(new SimpleDateConditionChecker(new Date()));
+		return new ServerDateConditionAdapter(condition.secure(getParameterClasses(classes)), parameterName, index);
 	}
 }

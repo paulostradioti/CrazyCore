@@ -1,10 +1,9 @@
 package de.st_ddt.crazyutil.conditions;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
-
-import de.st_ddt.crazyutil.conditions.checker.ConditionChecker;
 
 public class Condition_OR extends ConditionList
 {
@@ -14,27 +13,32 @@ public class Condition_OR extends ConditionList
 		super();
 	}
 
-	public Condition_OR(final List<Condition> conditions)
+	public Condition_OR(final Condition... conditions)
 	{
 		super(conditions);
 	}
 
-	public Condition_OR(final ConfigurationSection config) throws Exception
+	public Condition_OR(final Collection<Condition> conditions)
 	{
-		super(config);
+		super(conditions);
+	}
+
+	public Condition_OR(final ConfigurationSection config, final Map<String, Integer> parameterIndexes) throws Exception
+	{
+		super(config, parameterIndexes);
 	}
 
 	@Override
-	public String getType()
+	ConditionList newInstance()
 	{
-		return "OR";
+		return new Condition_OR();
 	}
 
 	@Override
-	public boolean check(final ConditionChecker checker)
+	public boolean check(final Map<Integer, ? extends Object> parameters)
 	{
 		for (final Condition condition : conditions)
-			if (condition.check(checker))
+			if (condition.check(parameters))
 				return true;
 		return false;
 	}

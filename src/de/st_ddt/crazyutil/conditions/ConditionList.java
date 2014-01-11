@@ -1,11 +1,11 @@
 package de.st_ddt.crazyutil.conditions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
-
-import de.st_ddt.crazyutil.conditions.checker.ConditionChecker;
 
 public abstract class ConditionList extends BasicCondition
 {
@@ -17,37 +17,49 @@ public abstract class ConditionList extends BasicCondition
 		super();
 	}
 
-	public ConditionList(final List<Condition> conditions)
+	public ConditionList(final Condition... conditions)
+	{
+		super();
+		for (final Condition condition : conditions)
+			this.conditions.add(condition);
+	}
+
+	public ConditionList(final Collection<Condition> conditions)
 	{
 		super();
 		this.conditions.addAll(conditions);
 	}
 
-	public ConditionList(final ConfigurationSection config) throws Exception
+	public ConditionList(final ConfigurationSection config, final Map<String, Integer> parameterIndexes) throws Exception
 	{
-		super(config);
+		super(config, parameterIndexes);
 		final ConfigurationSection entryConfig = config.getConfigurationSection("conditions");
 		for (final String key : entryConfig.getKeys(false))
-			conditions.add(BasicCondition.load(entryConfig.getConfigurationSection(key)));
+			conditions.add(BasicCondition.load(entryConfig.getConfigurationSection(key), parameterIndexes));
 	}
 
+	abstract ConditionList newInstance();
+
 	@Override
-	public boolean isApplicable(final Class<? extends ConditionChecker> clazz)
+	public Condition secure(final Map<Integer, ? extends Collection<Class<?>>> classes)
 	{
+		final ConditionList newInstance = newInstance();
 		for (final Condition condition : conditions)
-			if (!condition.isApplicable(clazz))
-				return false;
-		return true;
+			newInstance.conditions.add(condition.secure(classes));
+		return newInstance;
 	}
 
 	@Override
-	public final void save(final ConfigurationSection config, final String path)
+	public abstract boolean check(Map<Integer, ? extends Object> parameter);
+
+	@Override
+	public final void save(final ConfigurationSection config, final String path, final Map<Integer, String> parameterNames)
 	{
-		super.save(config, path);
+		super.save(config, path, parameterNames);
 		int a = 0;
 		config.set(path + "conditions", null);
 		for (final Condition condition : conditions)
-			condition.save(config, path + "conditions." + condition.getType() + (a++) + ".");
+			condition.save(config, path + "conditions." + condition.getClass().getSimpleName().replace("Condition_", "") + (a++) + ".", parameterNames);
 	}
 
 	public final List<Condition> getConditions()

@@ -1,8 +1,9 @@
 package de.st_ddt.crazyutil.conditions;
 
-import org.bukkit.configuration.ConfigurationSection;
+import java.util.Collection;
+import java.util.Map;
 
-import de.st_ddt.crazyutil.conditions.checker.ConditionChecker;
+import org.bukkit.configuration.ConfigurationSection;
 
 public class Condition_NOT extends SubConditionedCondition
 {
@@ -17,20 +18,20 @@ public class Condition_NOT extends SubConditionedCondition
 		super(condition);
 	}
 
-	public Condition_NOT(final ConfigurationSection config) throws Exception
+	public Condition_NOT(final ConfigurationSection config, final Map<String, Integer> parameterIndexes) throws Exception
 	{
-		super(config);
+		super(config, parameterIndexes);
 	}
 
 	@Override
-	public String getType()
+	public Condition secure(final Map<Integer, ? extends Collection<Class<?>>> classes)
 	{
-		return "NOT";
+		return new Condition_NOT(condition.secure(classes));
 	}
 
 	@Override
-	public boolean check(final ConditionChecker checker)
+	public boolean check(final Map<Integer, ? extends Object> parameters)
 	{
-		return !condition.check(checker);
+		return !condition.check(parameters);
 	}
 }

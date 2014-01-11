@@ -1,68 +1,62 @@
 package de.st_ddt.crazyutil.conditions.fixed.adapter;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
 import de.st_ddt.crazyutil.conditions.Condition;
-import de.st_ddt.crazyutil.conditions.SubConditionedCondition;
-import de.st_ddt.crazyutil.conditions.checker.ConditionChecker;
-import de.st_ddt.crazyutil.conditions.checker.WorldConditionChecker;
-import de.st_ddt.crazyutil.conditions.checker.WorldConditionChecker.SimpleWorldConditionChecker;
+import de.st_ddt.crazyutil.conditions.SimpleParameterExtendingCondition;
 
-public class FixedWorldConditionAdapter extends SubConditionedCondition
+public class FixedWorldConditionAdapter extends SimpleParameterExtendingCondition
 {
 
-	protected final World world;
+	protected final String worldName;
 
-	public FixedWorldConditionAdapter()
+	public FixedWorldConditionAdapter(final Condition condition, final String parameterName, final int index, final World world)
 	{
-		super();
-		this.world = getFirstWorld();
+		this(condition, parameterName, index, world.getName());
 	}
 
-	public FixedWorldConditionAdapter(final Condition condition, final World world)
+	public FixedWorldConditionAdapter(final Condition condition, final String parameterName, final int index, final String world)
 	{
-		super(condition);
-		this.world = world;
+		super(condition, parameterName, index, World.class);
+		this.worldName = world;
 	}
 
-	public FixedWorldConditionAdapter(final ConfigurationSection config) throws Exception
+	public FixedWorldConditionAdapter(final ConfigurationSection config, final Map<String, Integer> parameterIndexes) throws Exception
 	{
-		super(config);
+		super(config, parameterIndexes, World.class);
 		final String worldName = config.getString("world", null);
 		if (worldName == null)
-			this.world = getFirstWorld();
+			this.worldName = getFirstWorld();
 		else
-		{
-			final World world = Bukkit.getWorld(worldName);
-			if (world == null)
-				this.world = getFirstWorld();
-			else
-				this.world = world;
-		}
+			this.worldName = worldName;
 	}
 
-	private World getFirstWorld()
+	private String getFirstWorld()
 	{
-		return Bukkit.getWorlds().get(0);
+		return Bukkit.getWorlds().get(0).getName();
 	}
 
 	@Override
-	public String getType()
+	protected World getValue()
 	{
-		return "FixedWorldConditionAdapter";
+		return Bukkit.getWorld(worldName);
 	}
 
 	@Override
-	public boolean isApplicable(final Class<? extends ConditionChecker> clazz)
+	public Condition secure(final Map<Integer, ? extends Collection<Class<?>>> classes)
 	{
-		return condition.isApplicable(WorldConditionChecker.class);
+		return new FixedWorldConditionAdapter(condition.secure(getParameterClasses(classes)), parameterName, index, worldName);
 	}
 
 	@Override
-	public boolean check(final ConditionChecker checker)
+	public void save(final ConfigurationSection config, final String path, final Map<Integer, String> parameterNames)
 	{
-		return condition.check(new SimpleWorldConditionChecker(world));
+		super.save(config, path, parameterNames);
+		config.set("world", worldName);
 	}
 }

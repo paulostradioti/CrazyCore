@@ -1,8 +1,9 @@
 package de.st_ddt.crazyutil.conditions;
 
-import org.bukkit.configuration.ConfigurationSection;
+import java.util.Collection;
+import java.util.Map;
 
-import de.st_ddt.crazyutil.conditions.checker.ConditionChecker;
+import org.bukkit.configuration.ConfigurationSection;
 
 public abstract class SubConditionedCondition extends BasicCondition
 {
@@ -11,8 +12,7 @@ public abstract class SubConditionedCondition extends BasicCondition
 
 	public SubConditionedCondition()
 	{
-		super();
-		condition = new Condition_TRUE();
+		this(new Condition_TRUE());
 	}
 
 	public SubConditionedCondition(final Condition condition)
@@ -21,31 +21,33 @@ public abstract class SubConditionedCondition extends BasicCondition
 		this.condition = condition;
 	}
 
-	public SubConditionedCondition(final ConfigurationSection config) throws Exception
+	public SubConditionedCondition(final ConfigurationSection config, final Map<String, Integer> parameterIndexes) throws Exception
 	{
-		super(config);
-		condition = BasicCondition.load(config.getConfigurationSection("condition"));
+		super(config, parameterIndexes);
+		this.condition = BasicCondition.load(config.getConfigurationSection("condition"), getParameterIndexes(parameterIndexes));
+	}
+
+	protected Map<String, Integer> getParameterIndexes(final Map<String, Integer> parameterIndexes)
+	{
+		return parameterIndexes;
 	}
 
 	@Override
-	public abstract String getType();
+	public abstract Condition secure(Map<Integer, ? extends Collection<Class<?>>> classes);
 
 	@Override
-	public boolean isApplicable(final Class<? extends ConditionChecker> clazz)
+	public abstract boolean check(final Map<Integer, ? extends Object> parameters);
+
+	@Override
+	public void save(final ConfigurationSection config, final String path, final Map<Integer, String> parameterNames)
 	{
-		return condition.isApplicable(clazz);
+		super.save(config, path, parameterNames);
+		condition.save(config, path + "condition", parameterNames);
 	}
 
 	@Override
-	public boolean check(final ConditionChecker checker)
+	public String toString()
 	{
-		return !condition.check(checker);
-	}
-
-	@Override
-	public void save(final ConfigurationSection config, final String path)
-	{
-		super.save(config, path);
-		condition.save(config, path + "condition.");
+		return getClass().getSimpleName() + "{condition: " + condition + "}";
 	}
 }

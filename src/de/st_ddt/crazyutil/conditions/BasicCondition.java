@@ -1,43 +1,36 @@
 package de.st_ddt.crazyutil.conditions;
 
 import java.lang.reflect.Constructor;
+import java.util.Collection;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
-
-import de.st_ddt.crazyutil.conditions.checker.ConditionChecker;
-import de.st_ddt.crazyutil.conditions.player.Condition_Player_Group;
-import de.st_ddt.crazyutil.conditions.player.Condition_Player_Money;
-import de.st_ddt.crazyutil.conditions.player.Condition_Player_Permission;
 
 public abstract class BasicCondition implements Condition
 {
 
-	static
-	{
-		CONDITIONCLASSES.put("TRUE", Condition_TRUE.class);
-		CONDITIONCLASSES.put("FALSE", Condition_FALSE.class);
-		CONDITIONCLASSES.put("NOT", Condition_NOT.class);
-		CONDITIONCLASSES.put("AND", Condition_AND.class);
-		CONDITIONCLASSES.put("OR", Condition_OR.class);
-		CONDITIONCLASSES.put("PLAYER_GROUP", Condition_Player_Group.class);
-		CONDITIONCLASSES.put("PLAYER_MONEY", Condition_Player_Money.class);
-		CONDITIONCLASSES.put("PLAYER_PERMISSION", Condition_Player_Permission.class);
-	}
-
-	public static Condition load(final ConfigurationSection config) throws Exception
+	public static Condition load(final ConfigurationSection config, final Map<String, Integer> parameterIndexes) throws Exception
 	{
 		if (config == null)
 			throw new IllegalArgumentException("ConfigurationSection cannot be NULL!");
 		final String type = config.getString("type");
 		if (type == null)
 			throw new IllegalArgumentException("ConditionType cannot be NULL!");
-		final Class<? extends Condition> clazz = CONDITIONCLASSES.get(type);
-		if (clazz == null)
-			throw new IllegalArgumentException("ConditionClass cannot be NULL! The ConditionType is corruped, please check that!");
+		Class<?> clazz;
 		try
 		{
-			final Constructor<? extends Condition> constructor = clazz.getConstructor(ConfigurationSection.class);
-			return constructor.newInstance(config);
+			clazz = Class.forName(type);
+		}
+		catch (final ClassNotFoundException e1)
+		{
+			throw new IllegalArgumentException("The Condition's Class " + type + " was not found! Please fix your configuration!");
+		}
+		if (!Condition.class.isAssignableFrom(clazz))
+			throw new IllegalArgumentException("The Condition's Class " + clazz.getSimpleName() + " is no supported Condition! Please fix your configuration!");
+		try
+		{
+			final Constructor<? extends Condition> constructor = clazz.asSubclass(Condition.class).getConstructor(ConfigurationSection.class, Map.class);
+			return constructor.newInstance(config, parameterIndexes);
 		}
 		catch (final Exception e)
 		{
@@ -48,26 +41,30 @@ public abstract class BasicCondition implements Condition
 
 	public BasicCondition()
 	{
-		super();
 	}
 
-	public BasicCondition(final ConfigurationSection config)
+	public BasicCondition(final ConfigurationSection config, final Map<String, Integer> parameterIndexes)
 	{
-		super();
 	}
 
 	@Override
-	public abstract String getType();
-
-	@Override
-	public abstract boolean isApplicable(Class<? extends ConditionChecker> clazz);
-
-	@Override
-	public abstract boolean check(ConditionChecker checker);
-
-	@Override
-	public void save(final ConfigurationSection config, final String path)
+	public Condition secure(final Map<Integer, ? extends Collection<Class<?>>> classes)
 	{
-		config.set(path + "type", getType());
+		return this;
+	}
+
+	@Override
+	public abstract boolean check(Map<Integer, ? extends Object> parameters);
+
+	@Override
+	public void save(final ConfigurationSection config, final String path, final Map<Integer, String> parameterNames)
+	{
+		config.set("type", getClass().getName());
+	}
+
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName();
 	}
 }

@@ -1,49 +1,45 @@
 package de.st_ddt.crazyutil.conditions.player;
 
-import org.bukkit.configuration.ConfigurationSection;
+import java.util.Map;
 
-import de.st_ddt.crazyutil.conditions.checker.PlayerConditionChecker;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+
 import de.st_ddt.crazyutil.modules.economy.EconomyModule;
 
-public class Condition_Player_Money extends BasicPlayerCondition
+public class Condition_Player_Money extends SimplePlayerCondition
 {
 
 	private final double money;
 
-	public Condition_Player_Money()
+	public Condition_Player_Money(final int index)
 	{
-		super();
+		super(index);
 		this.money = 0;
 	}
 
-	public Condition_Player_Money(final double money)
+	public Condition_Player_Money(final int index, final double money)
 	{
-		super();
+		super(index);
 		this.money = 0;
 	}
 
-	public Condition_Player_Money(final ConfigurationSection config)
+	public Condition_Player_Money(final ConfigurationSection config, final Map<String, Integer> parameterIndexes)
 	{
-		super(config);
+		super(config, parameterIndexes);
 		this.money = config.getDouble("money", 0);
 	}
 
 	@Override
-	public String getType()
+	protected boolean check(final Player parameter)
 	{
-		return "PLAYER_MONEY";
+		return EconomyModule.getMoney(parameter) >= money;
 	}
 
 	@Override
-	public boolean check(final PlayerConditionChecker checker)
+	public void save(final ConfigurationSection config, final String path, final Map<Integer, String> parameterNames)
 	{
-		return EconomyModule.getMoney(checker.getEntity()) >= money;
-	}
-
-	@Override
-	public void save(final ConfigurationSection config, final String path)
-	{
-		super.save(config, path);
+		super.save(config, path, parameterNames);
 		config.set(path + "money", money);
 	}
 }

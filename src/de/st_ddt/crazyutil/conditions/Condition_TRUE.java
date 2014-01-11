@@ -1,10 +1,10 @@
 package de.st_ddt.crazyutil.conditions;
 
+import java.util.Map;
+
 import org.bukkit.configuration.ConfigurationSection;
 
-import de.st_ddt.crazyutil.conditions.checker.ConditionChecker;
-
-public class Condition_TRUE extends BasicCondition
+public final class Condition_TRUE extends BasicCondition
 {
 
 	public Condition_TRUE()
@@ -12,25 +12,13 @@ public class Condition_TRUE extends BasicCondition
 		super();
 	}
 
-	public Condition_TRUE(final ConfigurationSection config)
+	public Condition_TRUE(final ConfigurationSection config, final Map<String, Integer> parameterIndexes)
 	{
-		super(config);
+		super(config, parameterIndexes);
 	}
 
 	@Override
-	public String getType()
-	{
-		return "TRUE";
-	}
-
-	@Override
-	public boolean isApplicable(final Class<? extends ConditionChecker> clazz)
-	{
-		return true;
-	}
-
-	@Override
-	public boolean check(final ConditionChecker checker)
+	public boolean check(final Map<Integer, ? extends Object> parameter)
 	{
 		return true;
 	}

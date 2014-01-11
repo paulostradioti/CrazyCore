@@ -291,12 +291,10 @@ public class FlatDatabase<S extends FlatDatabaseEntry> extends BasicDatabase<S>
 	private void loadFile()
 	{
 		lock.lock();
-		BufferedReader reader = null;
-		try
+		if (!file.exists())
+			return;
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))))
 		{
-			if (!file.exists())
-				return;
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 			// ErsteZeile Skippen
 			String zeile = reader.readLine();
 			while ((zeile = reader.readLine()) != null)
@@ -316,13 +314,6 @@ public class FlatDatabase<S extends FlatDatabaseEntry> extends BasicDatabase<S>
 		}
 		catch (final IOException e)
 		{
-			if (reader != null)
-				try
-				{
-					reader.close();
-				}
-				catch (final IOException e1)
-				{}
 			e.printStackTrace();
 		}
 		finally
@@ -335,12 +326,10 @@ public class FlatDatabase<S extends FlatDatabaseEntry> extends BasicDatabase<S>
 
 	private void loadBackupFile()
 	{
-		BufferedReader reader = null;
-		try
+		if (!backupFile.exists())
+			return;
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(backupFile))))
 		{
-			if (!backupFile.exists())
-				return;
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(backupFile)));
 			// ErsteZeile Skippen
 			String zeile = reader.readLine();
 			while ((zeile = reader.readLine()) != null)
@@ -358,13 +347,6 @@ public class FlatDatabase<S extends FlatDatabaseEntry> extends BasicDatabase<S>
 		}
 		catch (final IOException e)
 		{
-			if (reader != null)
-				try
-				{
-					reader.close();
-				}
-				catch (final IOException e1)
-				{}
 			e.printStackTrace();
 		}
 	}
@@ -381,10 +363,8 @@ public class FlatDatabase<S extends FlatDatabaseEntry> extends BasicDatabase<S>
 		{
 			e.printStackTrace();
 		}
-		Writer writer = null;
-		try
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file))))
 		{
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
 			writer.write(ChatHelper.listingString(DATASEPARATOR, defaultColumnNames));
 			writer.write(LINESEPERATOR);
 			synchronized (entries)
@@ -398,13 +378,6 @@ public class FlatDatabase<S extends FlatDatabaseEntry> extends BasicDatabase<S>
 		}
 		catch (final IOException e)
 		{
-			if (writer != null)
-				try
-				{
-					writer.close();
-				}
-				catch (final IOException e1)
-				{}
 			e.printStackTrace();
 		}
 		finally

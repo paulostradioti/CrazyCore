@@ -28,7 +28,7 @@ public class ServerDateAppender extends SimpleParameterExtendingCondition
 	}
 
 	@Override
-	protected Object getValue()
+	protected Date getValue(final Map<Integer, ? extends Object> parameters)
 	{
 		return new Date();
 	}
@@ -36,6 +36,6 @@ public class ServerDateAppender extends SimpleParameterExtendingCondition
 	@Override
 	public Condition secure(final Map<Integer, ? extends Collection<Class<?>>> classes)
 	{
-		return new ServerDateAppender(condition.secure(getParameterClasses(classes)), parameterName, index);
+		return new ServerDateAppender(condition.secure(getParameterClasses(classes)), targetName, targetIndex);
 	}
 }

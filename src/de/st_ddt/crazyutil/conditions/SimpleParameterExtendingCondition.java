@@ -11,39 +11,39 @@ import org.bukkit.configuration.ConfigurationSection;
 public abstract class SimpleParameterExtendingCondition extends ParameterExtendingCondition
 {
 
-	protected final String parameterName;
-	protected final int index;
-	protected final Class<?> clazz;
+	protected final String targetName;
+	protected final int targetIndex;
+	protected final Class<?> targetClass;
 
-	public SimpleParameterExtendingCondition(final String parameterName, final int index, final Class<?> clazz)
+	public SimpleParameterExtendingCondition(final String targetName, final int targetIndex, final Class<?> targetClass)
 	{
 		super();
-		this.parameterName = parameterName;
-		this.index = index;
-		this.clazz = clazz;
+		this.targetName = targetName;
+		this.targetIndex = targetIndex;
+		this.targetClass = targetClass;
 	}
 
-	public SimpleParameterExtendingCondition(final Condition condition, final String parameterName, final int index, final Class<?> clazz)
+	public SimpleParameterExtendingCondition(final Condition condition, final String targetName, final int targetIndex, final Class<?> targetClass)
 	{
 		super(condition);
-		this.parameterName = parameterName;
-		this.index = index;
-		this.clazz = clazz;
+		this.targetName = targetName;
+		this.targetIndex = targetIndex;
+		this.targetClass = targetClass;
 	}
 
-	public SimpleParameterExtendingCondition(final ConfigurationSection config, final Map<String, Integer> parameterIndexes, final Class<?> clazz) throws Exception
+	public SimpleParameterExtendingCondition(final ConfigurationSection config, final Map<String, Integer> parameterIndexes, final Class<?> targetClass) throws Exception
 	{
 		super(config, parameterIndexes);
-		this.parameterName = config.getString("parameterName", clazz.getSimpleName());
-		this.index = parameterIndexes.size();
-		this.clazz = clazz;
+		this.targetName = config.getString("target", targetClass.getSimpleName());
+		this.targetIndex = parameterIndexes.size();
+		this.targetClass = targetClass;
 	}
 
 	@Override
 	protected Map<String, Integer> getParameterIndexes(final Map<String, Integer> parameterIndexes)
 	{
 		final Map<String, Integer> res = new HashMap<>(parameterIndexes);
-		res.put(parameterName, index);
+		res.put(targetName, targetIndex);
 		return res;
 	}
 
@@ -51,12 +51,12 @@ public abstract class SimpleParameterExtendingCondition extends ParameterExtendi
 	{
 		final Map<Integer, Collection<Class<?>>> res = new HashMap<>(classes);
 		final Set<Class<?>> set = new HashSet<>();
-		set.add(clazz);
-		res.put(index, set);
+		set.add(targetClass);
+		res.put(targetIndex, set);
 		return res;
 	}
 
-	protected abstract Object getValue();
+	protected abstract Object getValue(final Map<Integer, ? extends Object> parameters);
 
 	@Override
 	public abstract Condition secure(final Map<Integer, ? extends Collection<Class<?>>> classes);
@@ -65,7 +65,7 @@ public abstract class SimpleParameterExtendingCondition extends ParameterExtendi
 	protected Map<Integer, ? extends Object> getParameters(final Map<Integer, ? extends Object> parameters)
 	{
 		final Map<Integer, Object> res = new HashMap<>();
-		res.put(index, getValue());
+		res.put(targetIndex, getValue(parameters));
 		return res;
 	}
 
@@ -73,7 +73,7 @@ public abstract class SimpleParameterExtendingCondition extends ParameterExtendi
 	protected Map<Integer, String> getParameterNames(final Map<Integer, String> parameterNames)
 	{
 		final Map<Integer, String> res = new HashMap<>(parameterNames);
-		res.put(index, parameterName);
+		res.put(targetIndex, targetName);
 		return res;
 	}
 
@@ -81,6 +81,6 @@ public abstract class SimpleParameterExtendingCondition extends ParameterExtendi
 	public void save(final ConfigurationSection config, final String path, final Map<Integer, String> parameterNames)
 	{
 		super.save(config, path, parameterNames);
-		config.set("parameterName", parameterName);
+		config.set("target", targetName);
 	}
 }

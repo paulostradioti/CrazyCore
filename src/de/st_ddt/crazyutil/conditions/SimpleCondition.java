@@ -21,7 +21,7 @@ public abstract class SimpleCondition extends BasicCondition
 	public SimpleCondition(final ConfigurationSection config, final Map<String, Integer> parameterIndexes, final Class<?> clazz)
 	{
 		super(config, parameterIndexes);
-		this.index = parameterIndexes.get(config.getString("parameterName", "default"));
+		this.index = parameterIndexes.get(config.getString("checked", clazz.getSimpleName()));
 		this.clazz = clazz;
 	}
 
@@ -41,5 +41,12 @@ public abstract class SimpleCondition extends BasicCondition
 	public final boolean check(final Map<Integer, ? extends Object> parameters)
 	{
 		return check(parameters.get(index));
+	}
+
+	@Override
+	public void save(final ConfigurationSection config, final String path, final Map<Integer, String> parameterNames)
+	{
+		super.save(config, path, parameterNames);
+		config.set(path + "checked", parameterNames.get(index));
 	}
 }

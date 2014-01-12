@@ -42,7 +42,7 @@ public class FixedWorldAppender extends SimpleParameterExtendingCondition
 	}
 
 	@Override
-	protected World getValue()
+	protected World getValue(final Map<Integer, ? extends Object> parameters)
 	{
 		return Bukkit.getWorld(worldName);
 	}
@@ -50,7 +50,7 @@ public class FixedWorldAppender extends SimpleParameterExtendingCondition
 	@Override
 	public Condition secure(final Map<Integer, ? extends Collection<Class<?>>> classes)
 	{
-		return new FixedWorldAppender(condition.secure(getParameterClasses(classes)), parameterName, index, worldName);
+		return new FixedWorldAppender(condition.secure(getParameterClasses(classes)), targetName, targetIndex, worldName);
 	}
 
 	@Override

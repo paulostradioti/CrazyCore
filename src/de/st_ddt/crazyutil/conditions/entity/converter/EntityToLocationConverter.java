@@ -28,7 +28,7 @@ public class EntityToLocationConverter extends SimpleParameterConverter
 	}
 
 	@Override
-	protected Object getValue(final Object parameter)
+	protected Location getValue(final Object parameter)
 	{
 		return ((Entity) parameter).getLocation();
 	}

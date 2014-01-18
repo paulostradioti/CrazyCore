@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
-			<version>1.2.30</version>
+			<version>LATEST</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -111,10 +111,18 @@
 		<resources>
 			<resource>
 				<targetPath>.</targetPath>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>plugin.yml</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<targetPath>.</targetPath>
 				<filtering>true</filtering>
-				<directory>${basedir}</directory>
+				<directory>src/main/resources</directory>
 				<includes>
-					<include>*.yml</include>
+					<include>plugin.yml</include>
 				</includes>
 			</resource>
 		</resources>

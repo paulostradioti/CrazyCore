@@ -150,8 +150,6 @@
 				</executions>
 				<configuration>
 					<createDependencyReducedPom>false</createDependencyReducedPom>
-					<outputDirectory>${basedir}</outputDirectory>
-					<outputFile>${project.name}.jar</outputFile>
 					<artifactSet>
 						<includes>
 							<include>de.st_ddt.crazy:Crazy_API</include>

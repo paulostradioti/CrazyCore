@@ -3,7 +3,7 @@ main: de.st_ddt.crazycore.CrazyCore
 author: ST-DDT
 version: ${project.version}
 website: ${project.url}
-softdepend: [Vault]
+softdepend: [PermissionsEx,GroupManager,PermissionsBukkit,bPermissions,Vault]
 description: ${project.description}
 commands:
   crazylist:

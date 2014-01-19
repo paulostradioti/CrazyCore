@@ -29,6 +29,11 @@ public final class EconomyModule
 		Bukkit.getConsoleSender().sendMessage(CrazyCore.getPlugin().getChatHeader() + ChatColor.GREEN + "Activated " + INSTANCE.getName() + "-EconomySystem-Module!");
 	}
 
+	public void clear()
+	{
+		INSTANCE = null;
+	}
+
 	public static String getName()
 	{
 		if (INSTANCE == null)

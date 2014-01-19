@@ -49,6 +49,11 @@ public final class PermissionModule
 		Bukkit.getConsoleSender().sendMessage(CrazyCore.getPlugin().getChatHeader() + ChatColor.GREEN + "Activated " + INSTANCE.getName() + "-PermissionSystem-Module!");
 	}
 
+	public static void clear()
+	{
+		INSTANCE = null;
+	}
+
 	public static boolean hasGroup(final Player player, final String group)
 	{
 		if (INSTANCE == null)

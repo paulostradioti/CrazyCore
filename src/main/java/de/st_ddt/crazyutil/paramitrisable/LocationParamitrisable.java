@@ -32,12 +32,6 @@ public class LocationParamitrisable extends TypedParamitrisable<Location>
 		super(defaultValue == null ? new Location(null, 0, 0, 0) : defaultValue);
 	}
 
-	@Deprecated
-	public LocationParamitrisable(final Location defaultValue, final CommandSender sender)
-	{
-		this(defaultValue);
-	}
-
 	@Override
 	public void setParameter(final String parameter) throws CrazyException
 	{

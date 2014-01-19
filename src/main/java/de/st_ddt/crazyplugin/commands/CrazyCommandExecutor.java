@@ -15,17 +15,11 @@ public abstract class CrazyCommandExecutor<S extends ChatHeaderProvider> impleme
 {
 
 	protected final S owner;
-	/**
-	 * {@link #owner} should be used instead.
-	 */
-	@Deprecated
-	protected final S plugin;
 
 	public CrazyCommandExecutor(final S owner)
 	{
 		super();
 		this.owner = owner;
-		this.plugin = owner;
 	}
 
 	public final S getOwner()

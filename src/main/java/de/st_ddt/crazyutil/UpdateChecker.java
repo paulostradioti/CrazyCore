@@ -10,6 +10,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import de.st_ddt.crazyutil.comparators.VersionComparator;
+
 /**
  * This class is based on an example from: <br>
  * <a href=https://github.com/h31ix/ServerModsAPI-Example/blob/master/Update.java> ServerModsAPI-Example / Update.java by h31ix</a>

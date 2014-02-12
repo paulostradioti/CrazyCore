@@ -28,11 +28,7 @@ public abstract class SimpleCondition extends BasicCondition
 	@Override
 	public final Condition secure(final Map<Integer, ? extends Collection<Class<?>>> classes)
 	{
-		final Collection<Class<?>> givenClasses = classes.get(index);
-		for (final Class<?> givenClass : givenClasses)
-			if (clazz.isAssignableFrom(givenClass))
-				return this;
-		return new Condition_Class(index, clazz, this);
+		return ExtendedConditionHelper.secure(this, index, clazz, classes);
 	}
 
 	protected abstract boolean check(Object parameter);

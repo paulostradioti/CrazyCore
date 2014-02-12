@@ -35,7 +35,7 @@ public abstract class ConditionList extends BasicCondition
 		super(config, parameterIndexes);
 		final ConfigurationSection entryConfig = config.getConfigurationSection("conditions");
 		for (final String key : entryConfig.getKeys(false))
-			conditions.add(BasicCondition.load(entryConfig.getConfigurationSection(key), parameterIndexes));
+			conditions.add(ConditionHelper.load(entryConfig.getConfigurationSection(key), parameterIndexes));
 	}
 
 	abstract ConditionList newInstance();

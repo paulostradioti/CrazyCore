@@ -24,7 +24,7 @@ public abstract class SubConditionedCondition extends BasicCondition
 	public SubConditionedCondition(final ConfigurationSection config, final Map<String, Integer> parameterIndexes) throws Exception
 	{
 		super(config, parameterIndexes);
-		this.condition = BasicCondition.load(config.getConfigurationSection("condition"), getParameterIndexes(parameterIndexes));
+		this.condition = ConditionHelper.load(config.getConfigurationSection("condition"), getParameterIndexes(parameterIndexes));
 	}
 
 	protected Map<String, Integer> getParameterIndexes(final Map<String, Integer> parameterIndexes)

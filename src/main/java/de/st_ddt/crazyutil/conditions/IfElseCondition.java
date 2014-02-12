@@ -29,7 +29,7 @@ public abstract class IfElseCondition extends SubConditionedCondition
 	public IfElseCondition(final ConfigurationSection config, final Map<String, Integer> parameterIndexes) throws Exception
 	{
 		super(config, parameterIndexes);
-		this.failCondition = BasicCondition.load(config.getConfigurationSection("failCondition"), parameterIndexes);
+		this.failCondition = ConditionHelper.load(config.getConfigurationSection("failCondition"), parameterIndexes);
 	}
 
 	@Override

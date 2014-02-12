@@ -17,10 +17,10 @@ public class ExtendedConditionHelper extends ConditionHelper
 		return new Condition_Class(index, clazz, condition);
 	}
 
-	public static Condition fastSecure(final Condition condition, final Class<?>... classes)
+	public static Condition simpleSecure(final Condition condition, final Class<?>... classes)
 	{
 		if (condition == null)
 			return new Condition_TRUE();
-		return condition.secure(fastParameterClasses(classes));
+		return condition.secure(simpleParameterClasses(classes));
 	}
 }

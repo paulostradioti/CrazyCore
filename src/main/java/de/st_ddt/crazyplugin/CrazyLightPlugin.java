@@ -1,5 +1,6 @@
 package de.st_ddt.crazyplugin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -16,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.ChatHelper;
+import de.st_ddt.crazyutil.config.CrazyYamlConfiguration;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
 import de.st_ddt.crazyutil.modes.Mode;
 import de.st_ddt.crazyutil.source.Localized;
@@ -200,5 +202,24 @@ public abstract class CrazyLightPlugin extends JavaPlugin implements CrazyLightP
 			};
 		else
 			return null;
+	}
+
+	@Override
+	public void reloadConfig()
+	{
+		final CrazyYamlConfiguration config = new CrazyYamlConfiguration();
+		final File file = new File(getDataFolder(), "config.yml");
+		try
+		{
+			// load or create backup
+			config.load(file);
+		}
+		catch (final Throwable e)
+		{
+			// Only show error if file has been deleted, otherwise the error is shown twice.
+			if (file.delete())
+				e.printStackTrace();
+		}
+		super.reloadConfig();
 	}
 }

@@ -8,10 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+
+import de.st_ddt.crazyutil.config.CrazyYamlConfiguration;
 
 /**
  * PlayerSaver shall be used to temporarily backup player datas and restore them later.
@@ -33,7 +34,7 @@ public class PlayerSaver implements Named
 	protected float saturation;
 	protected boolean backup = false;
 	protected File file;
-	protected final YamlConfiguration config = new YamlConfiguration();
+	protected final CrazyYamlConfiguration config = new CrazyYamlConfiguration();
 
 	/**
 	 * Create PlayerSaver, you have to create a backup first to use it.

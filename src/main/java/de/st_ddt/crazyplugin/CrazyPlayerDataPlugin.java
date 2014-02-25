@@ -56,7 +56,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 		}
 
 		@Override
-		@Localized("CRAZYPLUGIN.COMMAND.PLAYER.LIST.ENTRYFORMAT {Name} $...$")
+		@Localized("CRAZYPLUGIN.COMMAND.PLAYER.LIST.ENTRYFORMAT {Name} {...}")
 		public String entryFormat(final CommandSender sender)
 		{
 			return getLocale().getLanguageEntry("COMMAND.PLAYER.LIST.ENTRYFORMAT").getLanguageText(sender);
@@ -287,7 +287,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 			}
 
 			@Override
-			@Localized("$CRAZYPLAYERDATAPLUGIN$.COMMAND.DATABASE.SAVED")
+			@Localized("{CRAZYPLAYERDATAPLUGIN}.COMMAND.DATABASE.SAVED")
 			public void save(final CommandSender sender)
 			{
 				saveDatabase();
@@ -295,7 +295,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 			}
 
 			@Override
-			@Permission("$CRAZYPLAYERDATAPLUGIN$.save.database")
+			@Permission("{CRAZYPLAYERDATAPLUGIN}.save.database")
 			public boolean hasSavePermission(final CommandSender sender)
 			{
 				return sender.hasPermission(getName() + ".save.database") || sender.hasPermission(getName() + ".save.*");

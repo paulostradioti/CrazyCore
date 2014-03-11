@@ -480,13 +480,13 @@ public final class CrazyCore extends CrazyPlugin
 				event.callEvent();
 				if (event.isCancelled())
 					throw new CrazyCommandPermissionException();
-				logger.log("ProtectedPlayer", accessingPlayer.getName() + " @ " + accessingPlayerIP + "accessed a protected player (" + accessedPlayer + ")", plugin + " Task: " + task);
+				logger.log("ProtectedPlayer", accessingPlayer.getName() + " @ " + accessingPlayerIP + " accessed a protected player (" + accessedPlayer + ")", plugin + " Task: " + task);
 				broadcastLocaleMessage(true, "crazycore.protectedplayer.accesswarn", "PROTECTEDPLAYER.ACCESSWARN", args);
 			}
 			else
 			{
 				new CrazyProtectedPlayerIllegalAccessEvent(accessedPlayer, accessingPlayer, plugin, task).callEvent();
-				logger.log("ProtectedPlayer", "WARNING: " + accessingPlayer.getName() + " @ " + accessingPlayerIP + "tried to access a protected player (" + accessedPlayer + ")", plugin + " Task: " + task);
+				logger.log("ProtectedPlayer", "WARNING: " + accessingPlayer.getName() + " @ " + accessingPlayerIP + " tried to access a protected player (" + accessedPlayer + ")", plugin + " Task: " + task);
 				broadcastLocaleMessage(false, "crazycore.protectedplayer.illegalaccesswarn.user", "PROTECTEDPLAYER.ILLEGALACCESSWARN.USER", args);
 				broadcastLocaleMessage(true, "crazycore.protectedplayer.illegalaccesswarn.staff", "PROTECTEDPLAYER.ILLEGALACCESSWARN.STAFF", args);
 				final ConsoleCommandSender console = Bukkit.getConsoleSender();

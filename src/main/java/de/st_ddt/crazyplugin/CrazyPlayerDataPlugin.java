@@ -255,17 +255,17 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	}
 
 	@Override
-	public void onLoad()
+	protected void initialize()
 	{
 		playerDataPlugins.put(this.getClass(), this);
 		PROVIDERS.add(this);
-		super.onLoad();
+		super.initialize();
 	}
 
 	@Override
-	public void onEnable()
+	protected void enable()
 	{
-		super.onEnable();
+		super.enable();
 		mainCommand.addSubCommand(playerCommand, "p", "plr", "player", "players");
 		final Reloadable reloadable = new Reloadable()
 		{
@@ -307,11 +307,10 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	}
 
 	@Override
-	public void onDisable()
+	protected void disable()
 	{
 		if (saveDatabaseOnShutdown)
 			saveDatabase();
-		saveConfiguration();
 	}
 
 	@Override
@@ -323,14 +322,20 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 
 	@Override
 	@Localized({ "{CRAZYPLAYERDATAPLUGIN}.DATABASE.ACCESSWARN {SaveType}", "{CRAZYPLAYERDATAPLUGIN}.DATABASE.LOADED {EntryCount}" })
-	public void loadDatabase()
+	public final void loadDatabase()
+	{
+		loadDatabase(getConfig());
+	}
+
+	public void loadDatabase(final ConfigurationSection config)
 	{
 	}
 
 	@Override
-	public void loadConfiguration()
+	protected void loadConfiguration(final ConfigurationSection config)
 	{
-		saveDatabaseOnShutdown = getConfig().getBoolean("database.saveOnShutdown", true);
+		super.loadConfiguration(config);
+		saveDatabaseOnShutdown = config.getBoolean("database.saveOnShutdown", true);
 	}
 
 	@Override
@@ -341,9 +346,13 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	}
 
 	@Override
-	public void saveDatabase()
+	public final void saveDatabase()
 	{
-		final ConfigurationSection config = getConfig();
+		saveDatabase(getConfig());
+	}
+
+	public void saveDatabase(final ConfigurationSection config)
+	{
 		if (database != null)
 		{
 			database.save(config, "database.");
@@ -352,13 +361,12 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	}
 
 	@Override
-	public void saveConfiguration()
+	protected void saveConfiguration(final ConfigurationSection config)
 	{
-		final ConfigurationSection config = getConfig();
 		if (database != null)
 			database.save(config, "database.");
 		config.set("database.saveOnShutdown", saveDatabaseOnShutdown);
-		super.saveConfiguration();
+		super.saveConfiguration(config);
 	}
 
 	@Override

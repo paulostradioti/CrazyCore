@@ -60,7 +60,7 @@ public abstract class CrazyLightPlugin extends JavaPlugin implements CrazyLightP
 	}
 
 	@Override
-	public void onLoad()
+	public final void onLoad()
 	{
 		lightplugins.put(this.getClass(), this);
 		final ConfigurationSection config = getConfig();
@@ -68,16 +68,34 @@ public abstract class CrazyLightPlugin extends JavaPlugin implements CrazyLightP
 		config.set("chatHeader", ChatHelper.decolorise(chatHeader));
 	}
 
-	@Override
-	public void onEnable()
+	protected void initialize()
 	{
-		consoleLog("Version " + getDescription().getVersion() + " enabled");
 	}
 
 	@Override
-	public void onDisable()
+	public final void onEnable()
 	{
-		consoleLog("disabled");
+		final long now = System.currentTimeMillis();
+		enable();
+		final long duration = System.currentTimeMillis() - now;
+		consoleLog("Version " + getDescription().getVersion() + " enabled (Took " + duration + " ms)");
+	}
+
+	protected void enable()
+	{
+	}
+
+	@Override
+	public final void onDisable()
+	{
+		final long now = System.currentTimeMillis();
+		disable();
+		final long duration = System.currentTimeMillis() - now;
+		consoleLog("disabled (Took " + duration + " ms)");
+	}
+
+	protected void disable()
+	{
 	}
 
 	public boolean showMetrics()
@@ -88,7 +106,9 @@ public abstract class CrazyLightPlugin extends JavaPlugin implements CrazyLightP
 	public final void consoleLog(final String message)
 	{
 		final ConsoleCommandSender console = Bukkit.getConsoleSender();
-		if (console != null)
+		if (console == null)
+			System.out.println(getChatHeader() + message);
+		else
 			console.sendMessage(getChatHeader() + message);
 	}
 
@@ -132,7 +152,7 @@ public abstract class CrazyLightPlugin extends JavaPlugin implements CrazyLightP
 	}
 
 	@Override
-	@Localized({ "CRAZYPLUGIN.PLUGININFO.HEAD", "CRAZYPLUGIN.PLUGININFO.NAME", "CRAZYPLUGIN.PLUGININFO.DESCRIPTION", "CRAZYPLUGIN.PLUGININFO.VERSION", "CRAZYPLUGIN.PLUGININFO.AUTHORS", "CRAZYPLUGIN.PLUGININFO.DEPENCIES", "CRAZYPLUGIN.PLUGININFO.URL" })
+	@Localized({ "CRAZYPLUGIN.PLUGININFO.HEAD {DateTime}", "CRAZYPLUGIN.PLUGININFO.NAME {Name}", "CRAZYPLUGIN.PLUGININFO.DESCRIPTION {Description}", "CRAZYPLUGIN.PLUGININFO.VERSION {Version}", "CRAZYPLUGIN.PLUGININFO.AUTHORS {Version}", "CRAZYPLUGIN.PLUGININFO.DEPENCIES {Dependencies}", "CRAZYPLUGIN.PLUGININFO.URL {URL}" })
 	public void show(final CommandSender target, final String chatHeader, final boolean showDetailed)
 	{
 		final CrazyLocale locale = CrazyLocale.getLocaleHead().getSecureLanguageEntry("CRAZYPLUGIN.PLUGININFO");
@@ -147,7 +167,9 @@ public abstract class CrazyLightPlugin extends JavaPlugin implements CrazyLightP
 		{
 			if (getDescription().getDepend() != null)
 				ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("DEPENCIES"), ChatHelper.listingString(getDescription().getDepend()));
-			ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("URL"), getBukkitURL());
+			final String url = getBukkitURL();
+			if (url != null)
+				ChatHelper.sendMessage(target, chatHeader, locale.getLanguageEntry("URL"), getBukkitURL());
 		}
 	}
 
@@ -205,21 +227,22 @@ public abstract class CrazyLightPlugin extends JavaPlugin implements CrazyLightP
 	}
 
 	@Override
-	public void reloadConfig()
+	public final void reloadConfig()
 	{
 		final CrazyYamlConfiguration config = new CrazyYamlConfiguration();
 		final File file = new File(getDataFolder(), "config.yml");
-		try
-		{
-			// load or create backup
-			config.load(file);
-		}
-		catch (final Throwable e)
-		{
-			// Only show error if file has been deleted, otherwise the error is shown twice.
-			if (file.delete())
-				e.printStackTrace();
-		}
+		if (file.exists())
+			try
+			{
+				// load or create backup
+				config.load(file);
+			}
+			catch (final Throwable e)
+			{
+				// Only show error if file has been deleted, otherwise the error is shown twice.
+				if (file.delete())
+					e.printStackTrace();
+			}
 		super.reloadConfig();
 	}
 }

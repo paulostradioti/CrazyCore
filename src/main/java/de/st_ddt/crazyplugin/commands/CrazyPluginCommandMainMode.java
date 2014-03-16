@@ -3,6 +3,7 @@ package de.st_ddt.crazyplugin.commands;
 import org.bukkit.command.CommandSender;
 
 import de.st_ddt.crazyplugin.CrazyPluginInterface;
+import de.st_ddt.crazyplugin.exceptions.CrazyException;
 import de.st_ddt.crazyutil.modes.Mode;
 import de.st_ddt.crazyutil.source.Permission;
 
@@ -32,5 +33,12 @@ public class CrazyPluginCommandMainMode extends CrazyCommandModeEditor<CrazyPlug
 	public boolean hasAccessPermission(final CommandSender sender, final Mode<?> mode)
 	{
 		return sender.hasPermission(owner.getName() + ".mode.*") || sender.hasPermission(owner.getName() + ".mode." + mode.getName());
+	}
+
+	@Override
+	public void update(final CommandSender sender, final Mode<?> mode, final String[] args) throws CrazyException
+	{
+		super.update(sender, mode, args);
+		owner.saveConfiguration();
 	}
 }

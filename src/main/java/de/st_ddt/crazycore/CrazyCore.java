@@ -211,7 +211,8 @@ public final class CrazyCore extends CrazyPlugin
 		});
 	}
 
-	private void registerCommands()
+	@Override
+	protected void registerCommands()
 	{
 		final CrazyCommandTreeExecutor<CrazyCore> players = new CrazyCommandTreeExecutor<CrazyCore>(this);
 		mainCommand.addSubCommand(players, "p", "plr", "player", "players");
@@ -224,13 +225,14 @@ public final class CrazyCore extends CrazyPlugin
 		players.addSubCommand(new CommandPlayerIPSearch(this), "ip", "ipsearch");
 		players.addSubCommand(new CommandPlayerDelete(this), "delete", "remove");
 		final CrazyCommandTreeExecutor<CrazyCore> languages = new CommandLanguageTree(this);
-		getCommand("language").setExecutor(languages);
+		registerCommand("language", languages);
 		mainCommand.addSubCommand(languages, "language");
-		getCommand("crazylist").setExecutor(new CommandList(this));
-		getCommand("crazypage").setExecutor(new CommandPager(this));
-		getCommand("crazypipe").setExecutor(new CommandPipe(this));
+		registerCommand("crazylist", new CommandList(this));
+		registerCommand("crazypage", new CommandPager(this));
+		registerCommand("crazypipe", new CommandPipe(this));
 	}
 
+	@Override
 	protected void registerHooks()
 	{
 		final PluginManager pm = Bukkit.getPluginManager();
@@ -295,7 +297,7 @@ public final class CrazyCore extends CrazyPlugin
 	}
 
 	@Override
-	public void onLoad()
+	protected void initialize()
 	{
 		plugin = this;
 		final ConfigurationSection config = getConfig();
@@ -308,22 +310,19 @@ public final class CrazyCore extends CrazyPlugin
 	}
 
 	@Override
-	public void onEnable()
+	protected void enable()
 	{
-		registerHooks();
-		Bukkit.getScheduler().runTaskLaterAsynchronously(this, new ScheduledPermissionAllTask(), 20);
 		super.onEnable();
+		Bukkit.getScheduler().runTaskLaterAsynchronously(this, new ScheduledPermissionAllTask(), 20);
 		if (checkForUpdates)
 			Bukkit.getScheduler().runTaskTimerAsynchronously(this, new PluginUpdateCheckTask(), 1200, 432000);
-		registerCommands();
 		registerMetrics();
 	}
 
 	@Override
-	public void loadConfiguration()
+	protected void loadConfiguration(final ConfigurationSection config)
 	{
-		super.loadConfiguration();
-		final ConfigurationSection config = getConfig();
+		super.loadConfiguration(config);
 		checkForUpdates = config.getBoolean("checkForUpdates", true);
 		// PlayerWipe
 		wipePlayerWorldFiles = config.getBoolean("wipePlayerWorldFiles", config.getBoolean("wipePlayerFiles", true));
@@ -374,6 +373,12 @@ public final class CrazyCore extends CrazyPlugin
 		logger.createLogChannels(config.getConfigurationSection("logs"), "ProtectedPlayer");
 	}
 
+	@Override
+	protected String[] getLogChannels()
+	{
+		return new String[] { "ProtectedPlayer" };
+	}
+
 	public void loadLanguageFiles(final String language, final boolean forceUpdate)
 	{
 		if (!loadedLanguages.add(language))
@@ -387,9 +392,8 @@ public final class CrazyCore extends CrazyPlugin
 	}
 
 	@Override
-	public void saveConfiguration()
+	protected void saveConfiguration(final ConfigurationSection config)
 	{
-		final ConfigurationSection config = getConfig();
 		config.set("checkForUpdates", checkForUpdates);
 		// Player Wipe
 		config.set("wipePlayerWorldFiles", wipePlayerWorldFiles);
@@ -410,7 +414,7 @@ public final class CrazyCore extends CrazyPlugin
 		config.set("preloadedLanguages", new ArrayList<String>(preloadedLanguages));
 		config.set("players", null);
 		CrazyLocale.save(config, "players.");
-		super.saveConfiguration();
+		super.saveConfiguration(config);
 	}
 
 	@Override

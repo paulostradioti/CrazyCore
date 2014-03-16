@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,8 +29,8 @@ import de.st_ddt.crazyutil.CrazyLogger;
 import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.UpdateChecker;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
-import de.st_ddt.crazyutil.resources.ResourceHelper;
 import de.st_ddt.crazyutil.reloadable.Reloadable;
+import de.st_ddt.crazyutil.resources.ResourceHelper;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.LocalizedVariable;
 import de.st_ddt.crazyutil.source.Permission;
@@ -80,17 +81,8 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		return mainCommand;
 	}
 
-	private void registerCommands()
-	{
-		final PluginCommand command = getCommand(getName());
-		if (command != null)
-			command.setExecutor(mainCommand);
-		mainCommand.addSubCommand(modeCommand, "mode");
-		modeCommand.addMode(getChatHeaderMode());
-	}
-
 	@Override
-	public void onLoad()
+	protected void initialize()
 	{
 		plugins.put(this.getClass(), this);
 		getDataFolder().mkdir();
@@ -104,27 +96,37 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		final Integer bukkitProjectId = getBukkitProjectId();
 		if (bukkitProjectId != null)
 			this.updateChecker = new UpdateChecker(getName(), getVersion(), bukkitProjectId);
-		super.onLoad();
 	}
 
 	@Override
 	@Localized("CRAZYPLUGIN.UPDATED {Name} {Version}")
-	public void onEnable()
+	protected void enable()
 	{
 		if (isUpdated)
 			broadcastLocaleMessage("UPDATED", getName(), getDescription().getVersion());
 		load();
-		if (isUpdated)
-			save();
-		super.onEnable();
+		saveConfiguration();
+		super.enable();
+		registerHooks();
 		registerCommands();
 	}
 
-	@Override
-	public void onDisable()
+	protected void registerHooks()
 	{
-		save();
-		super.onDisable();
+	}
+
+	protected void registerCommands()
+	{
+		registerCommand(getName(), mainCommand);
+		mainCommand.addSubCommand(modeCommand, "mode");
+		modeCommand.addMode(getChatHeaderMode());
+	}
+
+	public final void registerCommand(final String commandName, final CommandExecutor commandExecutor)
+	{
+		final PluginCommand command = getCommand(commandName);
+		if (command != null)
+			command.setExecutor(commandExecutor);
 	}
 
 	@Override
@@ -134,8 +136,19 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	}
 
 	@Override
-	public void loadConfiguration()
+	public final void loadConfiguration()
 	{
+		loadConfiguration(getConfig());
+	}
+
+	protected void loadConfiguration(final ConfigurationSection config)
+	{
+		logger.createLogChannels(config.getConfigurationSection("logs"), getLogChannels());
+	}
+
+	protected String[] getLogChannels()
+	{
+		return new String[0];
 	}
 
 	@Override
@@ -145,10 +158,15 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	}
 
 	@Override
-	public void saveConfiguration()
+	public final void saveConfiguration()
+	{
+		saveConfiguration(getConfig());
+		saveConfig();
+	}
+
+	protected void saveConfiguration(final ConfigurationSection config)
 	{
 		logger.save(getConfig(), "logs.");
-		saveConfig();
 	}
 
 	@Override

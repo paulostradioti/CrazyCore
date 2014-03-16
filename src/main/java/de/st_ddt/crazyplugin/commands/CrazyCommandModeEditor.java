@@ -43,7 +43,7 @@ public class CrazyCommandModeEditor<S extends ChatHeaderProvider> extends CrazyC
 			final Pattern pattern = Pattern.compile(StringUtils.replace(name, "*", ".*"));
 			for (final Entry<String, Mode<?>> temp : modes.entrySet())
 				if (pattern.matcher(temp.getKey()).matches())
-					temp.getValue().showValue(sender);
+					show(sender, temp.getValue());
 			return;
 		}
 		final Mode<?> mode = modes.get(name);
@@ -59,11 +59,11 @@ public class CrazyCommandModeEditor<S extends ChatHeaderProvider> extends CrazyC
 		}
 		else if (hasAccessPermission(sender, mode))
 			if (args.length == 1)
-				mode.showValue(sender);
+				show(sender, mode);
 			else
 				try
 				{
-					mode.setValue(sender, ChatHelperExtended.shiftArray(args, 1));
+					update(sender, mode, ChatHelperExtended.shiftArray(args, 1));
 				}
 				catch (final CrazyCommandException e)
 				{
@@ -103,6 +103,16 @@ public class CrazyCommandModeEditor<S extends ChatHeaderProvider> extends CrazyC
 	public void addMode(final Mode<?> mode)
 	{
 		modes.put(mode.getName().toLowerCase(), mode);
+	}
+
+	public void show(final CommandSender sender, final Mode<?> mode)
+	{
+		mode.showValue(sender);
+	}
+
+	public void update(final CommandSender sender, final Mode<?> mode, final String[] args) throws CrazyException
+	{
+		mode.setValue(sender, ChatHelperExtended.shiftArray(args, 1));
 	}
 
 	public boolean hasAccessPermission(final CommandSender sender, final Mode<?> mode)

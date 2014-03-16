@@ -327,7 +327,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 		loadDatabase(getConfig());
 	}
 
-	public void loadDatabase(final ConfigurationSection config)
+	protected void loadDatabase(final ConfigurationSection config)
 	{
 	}
 
@@ -351,7 +351,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 		saveDatabase(getConfig());
 	}
 
-	public void saveDatabase(final ConfigurationSection config)
+	protected void saveDatabase(final ConfigurationSection config)
 	{
 		if (database != null)
 		{
@@ -363,10 +363,10 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	@Override
 	protected void saveConfiguration(final ConfigurationSection config)
 	{
+		super.saveConfiguration(config);
 		if (database != null)
 			database.save(config, "database.");
 		config.set("database.saveOnShutdown", saveDatabaseOnShutdown);
-		super.saveConfiguration(config);
 	}
 
 	@Override

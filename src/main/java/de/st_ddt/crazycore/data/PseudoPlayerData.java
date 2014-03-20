@@ -10,8 +10,6 @@ import de.st_ddt.crazycore.CrazyCore;
 import de.st_ddt.crazyplugin.data.PlayerData;
 import de.st_ddt.crazyplugin.events.CrazyPlayerAssociatesEvent;
 import de.st_ddt.crazyutil.ChatHelper;
-import de.st_ddt.crazyutil.databases.Database;
-import de.st_ddt.crazyutil.databases.DatabaseEntry;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
 import de.st_ddt.crazyutil.modules.permissiongroups.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
@@ -87,7 +85,7 @@ public class PseudoPlayerData extends PlayerData<PseudoPlayerData>
 	@Override
 	public boolean reload()
 	{
-		return false;
+		return true;
 	}
 
 	@Override
@@ -98,11 +96,5 @@ public class PseudoPlayerData extends PlayerData<PseudoPlayerData>
 	@Override
 	public void delete()
 	{
-	}
-
-	@Override
-	public Database<? extends DatabaseEntry> getDatabase()
-	{
-		return null;
 	}
 }

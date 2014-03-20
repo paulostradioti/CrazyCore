@@ -14,24 +14,14 @@ public abstract class BasicDatabase<S extends DatabaseEntry> implements Database
 {
 
 	protected final Map<String, S> datas = Collections.synchronizedMap(new HashMap<String, S>());
-	protected final DatabaseType type;
 	protected final Class<S> clazz;
 	protected final Constructor<S> constructor;
-	protected final String[] defaultColumnNames;
 
-	public BasicDatabase(final DatabaseType type, final Class<S> clazz, final String[] defaultColumnNames)
+	public BasicDatabase(final Class<S> clazz)
 	{
 		super();
-		this.type = type;
 		this.clazz = clazz;
 		this.constructor = getConstructor(clazz);
-		this.defaultColumnNames = defaultColumnNames;
-	}
-
-	@Override
-	public final DatabaseType getType()
-	{
-		return type;
 	}
 
 	@Override
@@ -43,18 +33,10 @@ public abstract class BasicDatabase<S extends DatabaseEntry> implements Database
 	protected abstract Constructor<S> getConstructor(final Class<S> clazz);
 
 	@Override
+	public abstract S createEntry(String entry);
+
+	@Override
 	public abstract void initialize() throws Exception;
-
-	@Override
-	public void checkTable() throws Exception
-	{
-	}
-
-	@Override
-	public abstract boolean isStaticDatabase();
-
-	@Override
-	public abstract boolean isCachedDatabase();
 
 	@Override
 	public boolean hasEntry(final String key)
@@ -66,18 +48,6 @@ public abstract class BasicDatabase<S extends DatabaseEntry> implements Database
 	public final S getEntry(final String key)
 	{
 		return datas.get(key.toLowerCase());
-	}
-
-	@Override
-	public final S getOrLoadEntry(final String key)
-	{
-		final S data = getEntry(key);
-		if (isStaticDatabase())
-			return data;
-		else if (data == null)
-			return loadEntry(key);
-		else
-			return data;
 	}
 
 	@Override
@@ -99,9 +69,6 @@ public abstract class BasicDatabase<S extends DatabaseEntry> implements Database
 	}
 
 	@Override
-	public abstract S updateEntry(final String key);
-
-	@Override
 	public abstract S loadEntry(String key);
 
 	@Override
@@ -110,8 +77,14 @@ public abstract class BasicDatabase<S extends DatabaseEntry> implements Database
 	@Override
 	public boolean unloadEntry(final String key)
 	{
-		save(key);
-		return datas.remove(key.toLowerCase()) != null;
+		final S data = datas.remove(key.toLowerCase());
+		if (data == null)
+			return false;
+		else
+		{
+			data.flush();
+			return true;
+		}
 	}
 
 	@Override
@@ -119,31 +92,10 @@ public abstract class BasicDatabase<S extends DatabaseEntry> implements Database
 	{
 		synchronized (datas)
 		{
-			saveAll(getAllEntries());
+			for (final S data : datas.values())
+				data.flush();
+			datas.clear();
 		}
-		datas.clear();
-	}
-
-	@Override
-	public void save(final String key)
-	{
-		final S entry = datas.get(key.toLowerCase());
-		if (entry != null)
-			save(entry);
-	}
-
-	@Override
-	public void save(final S entry)
-	{
-		datas.put(entry.getName().toLowerCase(), entry);
-	}
-
-	@Override
-	public void saveAll(final Collection<S> entries)
-	{
-		for (final S entry : entries)
-			save(entry);
-		saveDatabase();
 	}
 
 	@Override
@@ -156,16 +108,12 @@ public abstract class BasicDatabase<S extends DatabaseEntry> implements Database
 	public void purgeDatabase()
 	{
 		datas.clear();
-		saveDatabase();
 	}
-
-	@Override
-	public abstract void saveDatabase();
 
 	@Override
 	public void save(final ConfigurationSection config, final String path)
 	{
-		config.set(path + "saveType", type.toString());
+		config.set(path + "saveType", getDatabaseType());
 	}
 
 	protected final void shortPrintStackTrace(final Throwable main, final Throwable throwable)

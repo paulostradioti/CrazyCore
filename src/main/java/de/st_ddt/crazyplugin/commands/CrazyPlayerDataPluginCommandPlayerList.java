@@ -17,6 +17,7 @@ import de.st_ddt.crazyutil.ChatHelperExtended;
 import de.st_ddt.crazyutil.Filter;
 import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.Tabbed;
+import de.st_ddt.crazyutil.databases.PlayerDataDatabase;
 import de.st_ddt.crazyutil.source.Permission;
 
 public class CrazyPlayerDataPluginCommandPlayerList<T extends PlayerDataInterface> extends CrazyPlayerDataPluginCommandExecutor<T, CrazyPlayerDataPluginInterface<T, ? extends T>>
@@ -40,10 +41,14 @@ public class CrazyPlayerDataPluginCommandPlayerList<T extends PlayerDataInterfac
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		final List<T> list;
-		synchronized (owner.getPlayerDataLock())
-		{
-			list = new ArrayList<T>(owner.getPlayerData());
-		}
+		final PlayerDataDatabase<? extends T> database = owner.getCrazyDatabase();
+		if (database == null)
+			list = new ArrayList<T>();
+		else
+			synchronized (database.getDatabaseLock())
+			{
+				list = new ArrayList<T>(database.getAllEntries());
+			}
 		ChatHelperExtended.processFullListCommand(sender, args, owner.getChatHeader(), format, Filter.getFilterInstances(availableFilters), availableSorters, defaultSort, owner.getPlayerDataListModder(), list);
 	}
 

@@ -29,7 +29,7 @@ public class CrazyPlayerDataPluginCommandPlayerDelete<T extends PlayerDataInterf
 	{
 		final String name = ChatHelper.listingString(" ", args);
 		CrazyCore.getPlugin().checkProtectedPlayer(name, sender, owner.getName() + ".player.delete.protected", owner.getName(), "deleting plugin's player data");
-		if (!owner.deletePlayerData(name))
+		if (!owner.getCrazyDatabase().deleteEntry(name))
 			throw new CrazyCommandNoSuchException("PlayerData", name);
 		owner.sendLocaleMessage("COMMAND.PLAYER.DELETE.SUCCESS", sender, name);
 	}

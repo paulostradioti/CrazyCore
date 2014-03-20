@@ -10,6 +10,8 @@ import de.st_ddt.crazycore.CrazyCore;
 import de.st_ddt.crazyplugin.data.PlayerData;
 import de.st_ddt.crazyplugin.events.CrazyPlayerAssociatesEvent;
 import de.st_ddt.crazyutil.ChatHelper;
+import de.st_ddt.crazyutil.databases.Database;
+import de.st_ddt.crazyutil.databases.DatabaseEntry;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
 import de.st_ddt.crazyutil.modules.permissiongroups.PermissionModule;
 import de.st_ddt.crazyutil.source.Localized;
@@ -80,5 +82,27 @@ public class PseudoPlayerData extends PlayerData<PseudoPlayerData>
 				plugin.sendLocaleMessage("PLAYERINFO.GROUPS", target, ChatHelper.listingString(groups));
 		}
 		plugin.sendLocaleMessage("PLAYERINFO.PROTECTEDPLAYER", target, plugin.isProtectedPlayer(name) ? "True" : "False");
+	}
+
+	@Override
+	public boolean reload()
+	{
+		return false;
+	}
+
+	@Override
+	public void flush()
+	{
+	}
+
+	@Override
+	public void delete()
+	{
+	}
+
+	@Override
+	public Database<? extends DatabaseEntry> getDatabase()
+	{
+		return null;
 	}
 }

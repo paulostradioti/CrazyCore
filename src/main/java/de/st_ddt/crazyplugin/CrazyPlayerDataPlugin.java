@@ -3,16 +3,12 @@ package de.st_ddt.crazyplugin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 import de.st_ddt.crazyplugin.commands.CrazyPlayerDataPluginCommandPlayerTree;
 import de.st_ddt.crazyplugin.comparator.PlayerDataComparator;
@@ -106,25 +102,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	}
 
 	@Override
-	public final boolean hasPlayerData(final String name)
-	{
-		if (database == null)
-			return false;
-		else
-			return database.hasEntry(name);
-	}
-
-	@Override
-	public final boolean hasPlayerData(final OfflinePlayer player)
-	{
-		if (database == null)
-			return false;
-		else
-			return database.hasEntry(player);
-	}
-
-	@Override
-	public final S getPlayerData(final String name)
+	public T getAvailablePlayerData(final String name)
 	{
 		if (database == null)
 			return null;
@@ -133,116 +111,9 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	}
 
 	@Override
-	public final S getPlayerData(final OfflinePlayer player)
-	{
-		if (database == null)
-			return null;
-		else
-			return database.getEntry(player);
-	}
-
-	@Override
-	public final Object getPlayerDataLock()
-	{
-		if (database == null)
-			return new Object();
-		else
-			return database.getDatabaseLock();
-	}
-
-	@Override
-	public final Collection<S> getPlayerData()
-	{
-		if (database == null)
-			return new HashSet<S>();
-		else
-			return database.getAllEntries();
-	}
-
-	@Override
-	public T getAvailablePlayerData(final String name)
-	{
-		return getPlayerData(name);
-	}
-
-	@Override
 	public final T getAvailablePlayerData(final OfflinePlayer player)
 	{
 		return getAvailablePlayerData(player.getName());
-	}
-
-	@Override
-	public final Set<T> getAvailablePlayerData(final boolean includeOnline, final boolean includeAllEntries)
-	{
-		final Set<T> result = new HashSet<T>();
-		if (includeAllEntries)
-			if (database != null)
-				synchronized (database.getDatabaseLock())
-				{
-					result.addAll(database.getAllEntries());
-				}
-		if (includeOnline)
-			for (final Player player : Bukkit.getOnlinePlayers())
-				result.add(getAvailablePlayerData(player));
-		result.remove(null);
-		return result;
-	}
-
-	@Override
-	public final <E extends OfflinePlayer> Set<S> getPlayerData(final Collection<E> players)
-	{
-		final HashSet<S> datas = new HashSet<S>();
-		for (final OfflinePlayer player : players)
-			datas.add(getPlayerData(player));
-		return datas;
-	}
-
-	@Override
-	public final boolean deletePlayerData(final String name)
-	{
-		if (database == null)
-			return false;
-		else
-			return database.deleteEntry(name);
-	}
-
-	@Override
-	public final boolean deletePlayerData(final OfflinePlayer player)
-	{
-		if (database == null)
-			return false;
-		else
-			return database.deleteEntry(player);
-	}
-
-	@Override
-	public final Set<S> getOnlinePlayerDatas()
-	{
-		final Set<S> res = new HashSet<S>();
-		for (final Player player : Bukkit.getOnlinePlayers())
-			res.add(getPlayerData(player));
-		res.remove(null);
-		return res;
-	}
-
-	@Override
-	public final Set<Player> getOnlinePlayersPerIP(final String IP)
-	{
-		final Set<Player> res = new HashSet<Player>();
-		for (final Player player : Bukkit.getOnlinePlayers())
-			if (player.getAddress().getAddress().getHostAddress().equals(IP))
-				res.add(player);
-		return res;
-	}
-
-	@Override
-	public final Set<S> getOnlinePlayerDatasPerIP(final String IP)
-	{
-		final Set<S> res = new HashSet<S>();
-		for (final Player player : getOnlinePlayersPerIP(IP))
-			res.add(getPlayerData(player));
-		res.remove(null);
-		return res;
 	}
 
 	@Override
@@ -354,10 +225,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	protected void saveDatabase(final ConfigurationSection config)
 	{
 		if (database != null)
-		{
 			database.save(config, "database.");
-			database.saveDatabase();
-		}
 	}
 
 	@Override

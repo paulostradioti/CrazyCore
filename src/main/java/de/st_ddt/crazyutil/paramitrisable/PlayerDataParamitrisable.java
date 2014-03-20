@@ -10,9 +10,28 @@ import de.st_ddt.crazyplugin.CrazyPlayerDataPluginInterface;
 import de.st_ddt.crazyplugin.data.PlayerDataInterface;
 import de.st_ddt.crazyplugin.exceptions.CrazyCommandNoSuchException;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
+import de.st_ddt.crazyutil.databases.PlayerDataDatabase;
 
 public class PlayerDataParamitrisable<S extends PlayerDataInterface> extends TypedParamitrisable<S>
 {
+
+	private static <S extends PlayerDataInterface> S getPlayerData(final CrazyPlayerDataPlugin<S, ? extends S> plugin, final String defaultName)
+	{
+		final PlayerDataDatabase<? extends S> database = plugin.getCrazyDatabase();
+		if (database == null)
+			return null;
+		else
+			return database.getEntry(defaultName);
+	}
+
+	private static <S extends PlayerDataInterface> S getPlayerData(final CrazyPlayerDataPlugin<S, ? extends S> plugin, final OfflinePlayer defaultName)
+	{
+		final PlayerDataDatabase<? extends S> database = plugin.getCrazyDatabase();
+		if (database == null)
+			return null;
+		else
+			return database.getEntry(defaultName);
+	}
 
 	private final CrazyPlayerDataPlugin<S, ? extends S> plugin;
 
@@ -24,20 +43,20 @@ public class PlayerDataParamitrisable<S extends PlayerDataInterface> extends Typ
 
 	public PlayerDataParamitrisable(final CrazyPlayerDataPlugin<S, ? extends S> plugin, final String defaultName)
 	{
-		super(plugin.getPlayerData(defaultName));
+		super(getPlayerData(plugin, defaultName));
 		this.plugin = plugin;
 	}
 
 	public PlayerDataParamitrisable(final CrazyPlayerDataPlugin<S, ? extends S> plugin, final OfflinePlayer defaultPlayer)
 	{
-		super(plugin.getPlayerData(defaultPlayer));
+		super(getPlayerData(plugin, defaultPlayer));
 		this.plugin = plugin;
 	}
 
 	@Override
 	public void setParameter(final String parameter) throws CrazyException
 	{
-		value = plugin.getPlayerData(parameter);
+		value = getPlayerData(plugin, parameter);
 		if (value == null)
 			throw new CrazyCommandNoSuchException("PlayerData", parameter);
 	}
@@ -53,16 +72,18 @@ public class PlayerDataParamitrisable<S extends PlayerDataInterface> extends Typ
 		parameter = parameter.toLowerCase();
 		final List<String> res = new LinkedList<String>();
 		int max = 20;
-		synchronized (plugin.getPlayerDataLock())
-		{
-			for (final PlayerDataInterface entry : plugin.getPlayerData())
-				if (entry.getName().toLowerCase().startsWith(parameter))
-				{
-					res.add(entry.getName());
-					if (--max < 1)
-						break;
-				}
-		}
+		final PlayerDataDatabase<?> database = plugin.getCrazyDatabase();
+		if (database != null)
+			synchronized (database.getDatabaseLock())
+			{
+				for (final PlayerDataInterface entry : database)
+					if (entry.getName().toLowerCase().startsWith(parameter))
+					{
+						res.add(entry.getName());
+						if (--max < 1)
+							break;
+					}
+			}
 		return res;
 	}
 }

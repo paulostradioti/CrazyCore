@@ -40,7 +40,7 @@ public class CrazyPlayerDataPluginCommandPlayerInfo<T extends PlayerDataInterfac
 	{
 		if (!sender.hasPermission(owner.getName() + ".player.info." + (sender.getName().equals(name) ? "self" : "other")))
 			throw new CrazyCommandPermissionException();
-		final T data = owner.getPlayerData(name);
+		final T data = owner.getCrazyDatabase().getEntry(name);
 		if (data == null)
 			throw new CrazyCommandNoSuchException("PlayerData", name);
 		data.show(sender, owner.getChatHeader(), detailed);

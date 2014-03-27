@@ -8,7 +8,7 @@
 
 	<groupId>de.st_ddt.crazy</groupId>
 	<artifactId>CrazyCore</artifactId>
-	<version>10.8-SNAPSHOT</version>
+	<version>11.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>CrazyCore</name>
@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>de.st_ddt.crazy</groupId>
 			<artifactId>CrazyAPI</artifactId>
-			<version>LATEST</version>
+			<version>11.0-SNAPSHOT</version>
 		</dependency>
 		<!-- Other Plugins -->
 		<dependency>

@@ -66,6 +66,7 @@ public abstract class CrazyLightPlugin extends JavaPlugin implements CrazyLightP
 		final ConfigurationSection config = getConfig();
 		chatHeader = ChatHelper.colorise(config.getString("chatHeader", getDefaultChatHeader()));
 		config.set("chatHeader", ChatHelper.decolorise(chatHeader));
+		initialize();
 	}
 
 	protected void initialize()

@@ -52,6 +52,7 @@ import de.st_ddt.crazyutil.metrics.Metrics;
 import de.st_ddt.crazyutil.metrics.Metrics.Graph;
 import de.st_ddt.crazyutil.metrics.Metrics.Plotter;
 import de.st_ddt.crazyutil.modes.BooleanFalseMode;
+import de.st_ddt.crazyutil.resources.ResourceHelper;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.LocalizedVariable;
 import de.st_ddt.crazyutil.source.Permission;
@@ -303,6 +304,7 @@ public final class CrazyCore extends CrazyPlugin
 		plugin = this;
 		final ConfigurationSection config = getConfig();
 		CrazyLocale.setDefaultLanguage(config.getString("defaultLanguage", "en_en"));
+		ResourceHelper.setLogResourceAccessEnabled(config.getBoolean("logResourceAccess", true));
 		final String bukkitServerAPIKey = config.getString("bukkitServerAPIKey", "none");
 		config.set("bukkitServerAPIKey", bukkitServerAPIKey);
 		if (!bukkitServerAPIKey.equalsIgnoreCase("none"))

@@ -155,7 +155,7 @@ public final class ResourceHelper
 	static void logLocalResourceAccess(final Plugin plugin, final String resolvedResourcePath)
 	{
 		if (logResourceAccess)
-			ChatHelper.consoleLog(plugin, false, "Accessing local resource from \"{0}\"", resolvedResourcePath);
+			ChatHelper.consoleLog(plugin, false, "Accessing local resource from: \"{0}\"", resolvedResourcePath);
 	}
 
 	static void logLocalResourceSave(final Plugin plugin, final String targetPath)

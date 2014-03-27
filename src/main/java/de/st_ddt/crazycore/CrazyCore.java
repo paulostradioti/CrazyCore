@@ -299,6 +299,7 @@ public final class CrazyCore extends CrazyPlugin
 	@Override
 	protected void initialize()
 	{
+		super.initialize();
 		plugin = this;
 		final ConfigurationSection config = getConfig();
 		CrazyLocale.setDefaultLanguage(config.getString("defaultLanguage", "en_en"));
@@ -306,13 +307,12 @@ public final class CrazyCore extends CrazyPlugin
 		config.set("bukkitServerAPIKey", bukkitServerAPIKey);
 		if (!bukkitServerAPIKey.equalsIgnoreCase("none"))
 			UpdateChecker.setApiKey(bukkitServerAPIKey);
-		super.onLoad();
 	}
 
 	@Override
 	protected void enable()
 	{
-		super.onEnable();
+		super.enable();
 		Bukkit.getScheduler().runTaskLaterAsynchronously(this, new ScheduledPermissionAllTask(), 20);
 		if (checkForUpdates)
 			Bukkit.getScheduler().runTaskTimerAsynchronously(this, new PluginUpdateCheckTask(), 1200, 432000);

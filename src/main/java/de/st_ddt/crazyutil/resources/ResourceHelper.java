@@ -156,6 +156,12 @@ public final class ResourceHelper
 			System.err.println("[" + plugin.getName() + "] Accessing local resource from \"" + resolvedResourcePath + "\"");
 	}
 
+	static void logLocalResourceSave(final Plugin plugin, final String targetPath)
+	{
+		if (logResourceAccess)
+			System.out.println("[" + plugin.getName() + "]  Saved resource to: \"" + targetPath + "\"");
+	}
+
 	protected ResourceHelper()
 	{
 	}

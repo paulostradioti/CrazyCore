@@ -11,6 +11,8 @@ import java.util.List;
 
 import org.bukkit.plugin.Plugin;
 
+import de.st_ddt.crazyutil.ChatHelper;
+
 public final class ResourceHelper
 {
 
@@ -147,19 +149,19 @@ public final class ResourceHelper
 	static void logResourceNotFound(final Plugin plugin, final String resourcePath)
 	{
 		if (logResourceAccess)
-			System.err.println("[" + plugin.getName() + "] Resource \"" + resourcePath + "\" not found!");
+			ChatHelper.consoleLog(plugin, true, "Resource \"{0}\" not found!", resourcePath);
 	}
 
 	static void logLocalResourceAccess(final Plugin plugin, final String resolvedResourcePath)
 	{
 		if (logResourceAccess)
-			System.err.println("[" + plugin.getName() + "] Accessing local resource from \"" + resolvedResourcePath + "\"");
+			ChatHelper.consoleLog(plugin, false, "Accessing local resource from \"{0}\"", resolvedResourcePath);
 	}
 
 	static void logLocalResourceSave(final Plugin plugin, final String targetPath)
 	{
 		if (logResourceAccess)
-			System.out.println("[" + plugin.getName() + "]  Saved resource to: \"" + targetPath + "\"");
+			ChatHelper.consoleLog(plugin, false, " Saved resource to: \"{0}\"", targetPath);
 	}
 
 	protected ResourceHelper()

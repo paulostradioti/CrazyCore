@@ -217,11 +217,6 @@ public class ChatHelperExtended extends ChatHelper
 		CrazyPages.storePages(sender, chatHeader, headFormat, listFormat, entryFormat, amount, page, datas).show(sender);
 	}
 
-	public static <S> String[] readParameters(final String[] args, final Map<String, ? extends Paramitrisable> params) throws CrazyException
-	{
-		return readParameters(args, params, new Paramitrisable[0]);
-	}
-
 	public static <S> String[] readParameters(final String[] args, final Map<String, ? extends Paramitrisable> params, final Paramitrisable... indexedParams) throws CrazyException
 	{
 		final int length = args.length;

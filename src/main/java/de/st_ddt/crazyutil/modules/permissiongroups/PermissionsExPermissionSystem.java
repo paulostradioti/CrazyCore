@@ -1,10 +1,12 @@
 package de.st_ddt.crazyutil.modules.permissiongroups;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.entity.Player;
 
+import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -34,11 +36,11 @@ class PermissionsExPermissionSystem implements PermissionSystem
 		final PermissionUser user = getUser(player);
 		if (user == null)
 			return false;
-		for (final String group : user.getGroupsNames())
-			if (name.equals(group))
+		for (final PermissionGroup group : user.getParents())
+			if (name.equals(group.getName()))
 				return true;
-		for (final String group : user.getGroupsNames(player.getWorld().getName()))
-			if (name.equals(group))
+		for (final PermissionGroup group : user.getParents(player.getWorld().getName()))
+			if (name.equals(group.getName()))
 				return true;
 		return false;
 	}
@@ -49,13 +51,20 @@ class PermissionsExPermissionSystem implements PermissionSystem
 		final PermissionUser user = getUser(player);
 		if (user == null)
 			return null;
-		else if (user.getGroups().length == 0)
-			if (user.getGroups(player.getWorld().getName()).length == 0)
-				return null;
-			else
-				return user.getGroupsNames(player.getWorld().getName())[0];
 		else
-			return user.getGroupsNames()[0];
+		{
+			final List<PermissionGroup> globalGroups = user.getParents();
+			if (globalGroups.size() == 0)
+			{
+				final List<PermissionGroup> worldGroups = user.getParents(player.getWorld().getName());
+				if (worldGroups.size() == 0)
+					return null;
+				else
+					return worldGroups.get(0).getName();
+			}
+			else
+				return globalGroups.get(0).getName();
+		}
 	}
 
 	@Override
@@ -91,10 +100,10 @@ class PermissionsExPermissionSystem implements PermissionSystem
 		if (user == null)
 			return null;
 		final Set<String> groups = new LinkedHashSet<String>();
-		for (final String group : user.getGroupsNames())
-			groups.add(group);
-		for (final String group : user.getGroupsNames(player.getWorld().getName()))
-			groups.add(group);
+		for (final PermissionGroup group : user.getParents())
+			groups.add(group.getName());
+		for (final PermissionGroup group : user.getParents(player.getWorld().getName()))
+			groups.add(group.getName());
 		return groups;
 	}
 

@@ -1,7 +1,7 @@
 name: ${project.name}
 main: de.st_ddt.crazycore.CrazyCore
 author: ST-DDT
-version: ${project.version}
+version: ${project.version}.${timestamp}
 website: ${project.url}
 softdepend: [PermissionsEx,GroupManager,PermissionsBukkit,bPermissions,Vault]
 description: ${project.description}

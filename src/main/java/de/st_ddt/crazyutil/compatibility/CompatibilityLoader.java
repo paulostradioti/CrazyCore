@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 
+import de.st_ddt.crazyplugin.CrazyPluginInterface;
 import de.st_ddt.crazyutil.resources.ResourceHelper;
 
 public class CompatibilityLoader
@@ -61,9 +62,20 @@ public class CompatibilityLoader
 	{
 		if (implementation == null || version == null)
 			return false;
-		final File target = new File(plugin.getDataFolder(), "/compatibility/" + implementation + "/" + version + fileSuffix + ".jar");
+		if (checkUpdated(plugin))
+			deleteCompatibilityProviders(plugin, fileSuffix);
+		final String compatibilityPath = getCompatibilityPath(fileSuffix);
+		final File target = new File(plugin.getDataFolder(), compatibilityPath);
 		if (!target.exists())
-			ResourceHelper.saveResource(plugin, "/compatibility/" + implementation + "/" + version + fileSuffix + ".jar", target);
+			if (!ResourceHelper.saveResource(plugin, '/' + compatibilityPath, target))
+			{
+				System.err.println("[" + plugin.getName() + "] Could not find matching compatibility package!");
+				System.err.println("[" + plugin.getName() + "] Please wait for it to become available!");
+				final String websiteURL = plugin.getDescription().getWebsite();
+				if (websiteURL != null)
+					System.err.println("[" + plugin.getName() + "] Website: " + websiteURL);
+				return false;
+			}
 		final String className = packagePrefix + implementation + "." + version + packageSuffix + ".CompatibilityProvider";
 		try
 		{
@@ -75,6 +87,9 @@ public class CompatibilityLoader
 		catch (final ClassNotFoundException e)
 		{
 			System.err.println("[" + plugin.getName() + "] Could not find matching compatibility provider!");
+			System.err.println("[" + plugin.getName() + "] WARNING: Serious Bug detected, please report this!");
+			System.err.println("CompatibilityProvider: " + className);
+			deleteCompatibilityProviders(plugin, fileSuffix);
 			return false;
 		}
 		catch (final Throwable t)
@@ -83,8 +98,45 @@ public class CompatibilityLoader
 			System.err.println("[" + plugin.getName() + "] WARNING: Serious Bug detected, please report this!");
 			System.err.println("CompatibilityProvider: " + className);
 			t.printStackTrace();
+			deleteCompatibilityProviders(plugin, fileSuffix);
 			return false;
 		}
+	}
+
+	/**
+	 * Removes all compatibility providers. Moves all files to the backup folder.<br>
+	 * Should be called after plugin has been updated.
+	 * 
+	 * @param plugin
+	 *            The plugin which compatibility folder should be cleared.
+	 */
+	public static void deleteCompatibilityProviders(final Plugin plugin, final String fileSuffix)
+	{
+		System.out.println("[" + plugin.getName() + "] Trying to remove the old/incompatible compatibility provider.");
+		final File target = new File(plugin.getDataFolder(), getCompatibilityPath(fileSuffix));
+		if (!target.exists() || target.delete())
+			System.out.println("[" + plugin.getName() + "] Compatibility provider cleaned/removed.");
+		else
+			logDeleteRequest(plugin);
+	}
+
+	private static boolean checkUpdated(final Plugin plugin)
+	{
+		if (plugin instanceof CrazyPluginInterface)
+			return ((CrazyPluginInterface) plugin).isUpdated();
+		else
+			return false;
+	}
+
+	private static String getCompatibilityPath(final String fileSuffix)
+	{
+		return "compatibility/" + implementation + "/" + version + fileSuffix + ".jar";
+	}
+
+	private static void logDeleteRequest(final Plugin plugin)
+	{
+		System.err.println("[" + plugin.getName() + "] Compatibility providers could not be cleaned/removed.");
+		System.err.println("[" + plugin.getName() + "] Please delete your /plugins/" + plugin.getName() + "/compatiblity folder");
 	}
 
 	protected static void attachClassContainer(final Plugin plugin, final File file) throws Exception

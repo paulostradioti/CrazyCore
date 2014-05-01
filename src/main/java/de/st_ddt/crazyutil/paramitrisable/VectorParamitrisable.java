@@ -23,7 +23,7 @@ public class VectorParamitrisable extends TypedParamitrisable<Vector>
 	{
 		value = ChatConverter.stringToVector(PATTERN_SPACE.split(parameter));
 	}
-	
+
 	/**
 	 * Converts the given Spherical coordinates to Cartesian coordinates.
 	 * 

@@ -28,8 +28,8 @@ public class CommandLanguageRemovePreloaded extends CommandExecutor
 	{
 		if (args.length != 1)
 			throw new CrazyCommandUsageException("<Language>");
-		final String language = args[0].toLowerCase();
-		if (!CrazyLocale.PATTERN_LANGUAGE.matcher(language).matches())
+		final String language = CrazyLocale.fixLanguage(args[0]);
+		if (language == null)
 			throw new CrazyCommandNoSuchException("Language", args[0], CrazyLocale.getActiveLanguagesNames(true));
 		owner.getPreloadedLanguages().remove(language);
 		owner.sendLocaleMessage("COMMAND.LANGUAGE.PRELOADED.REMOVED", sender, CrazyLocale.getSaveLanguageName(language), language);

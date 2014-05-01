@@ -16,49 +16,49 @@ import de.st_ddt.crazyutil.locales.CrazyLocale;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.Permission;
 
-public class CommandLanguageReload extends CommandExecutor
+public class CommandLanguageUpdate extends CommandExecutor
 {
 
-	public CommandLanguageReload(final CrazyCore plugin)
+	public CommandLanguageUpdate(final CrazyCore plugin)
 	{
 		super(plugin);
 	}
 
 	@Override
-	@Localized({ "CRAZYCORE.COMMAND.LANGUAGE.RELOADED {Language}", "CRAZYPLUGIN.COMMAND.LANGUAGE.RELOADED.PLUGIN {Language} {Plugin}" })
+	@Localized({ "CRAZYCORE.COMMAND.LANGUAGE.UPDATED {Language}", "CRAZYPLUGIN.COMMAND.LANGUAGE.UPDATED.PLUGIN {Language} {Plugin}" })
 	public void command(final CommandSender sender, final String[] args) throws CrazyException
 	{
 		if (args.length != 1)
 			throw new CrazyCommandUsageException("<Language>", "<Plugin>", "*");
 		final String name = args[0];
-		// Reload all
+		// Update all
 		if (name.equals("*"))
 		{
 			for (final String loaded : CrazyLocale.getLoadedLanguages())
 			{
 				for (final CrazyPlugin plugin : CrazyPlugin.getCrazyPlugins())
-					plugin.loadLanguage(loaded, sender);
-				owner.sendLocaleMessage("COMMAND.LANGUAGE.RELOADED", sender, loaded);
+					plugin.updateLanguage(loaded, sender, true);
+				owner.sendLocaleMessage("COMMAND.LANGUAGE.UPDATED", sender, loaded, sender);
 			}
 			return;
 		}
-		// Reload language
+		// Update language
 		final String language = CrazyLocale.fixLanguage(name);
 		if (language != null)
 		{
 			for (final CrazyPlugin plugin : CrazyPlugin.getCrazyPlugins())
-				plugin.loadLanguage(language, sender);
-			owner.sendLocaleMessage("COMMAND.LANGUAGE.RELOADED", sender, language);
+				plugin.updateLanguage(language, sender, true);
+			owner.sendLocaleMessage("COMMAND.LANGUAGE.UPDATED", sender, language);
 			return;
 		}
-		// Reload plugin languages
+		// Update plugin languages
 		final CrazyPlugin plugin = CrazyPlugin.getPlugin(name);
 		if (plugin != null)
 		{
 			for (final String loaded : CrazyLocale.getLoadedLanguages())
 			{
-				plugin.loadLanguage(loaded, sender);
-				plugin.sendLocaleMessage("COMMAND.LANGUAGE.RELOADED.PLUGIN", sender, loaded, plugin.getName());
+				plugin.updateLanguage(loaded, sender, true);
+				plugin.sendLocaleMessage("COMMAND.LANGUAGE.UPDATED.PLUGIN", sender, loaded, plugin.getName());
 			}
 			return;
 		}

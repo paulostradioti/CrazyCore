@@ -30,46 +30,44 @@ public class CommandLanguageExtract extends CommandExecutor
 	{
 		if (args.length != 1)
 			throw new CrazyCommandUsageException("<Language>", "<Plugin>", "*");
-		final String name = args[0].toLowerCase();
-		if (name.equalsIgnoreCase("*"))
+		final String name = args[0];
+		// Extract all
+		if (name.equals("*"))
 		{
-			for (final String language : CrazyLocale.getLoadedLanguages())
+			for (final String loaded : CrazyLocale.getLoadedLanguages())
 			{
 				for (final CrazyPlugin plugin : CrazyPlugin.getCrazyPlugins())
-				{
-					plugin.unpackLanguage(language);
-					plugin.loadLanguage(language, sender);
-				}
-				owner.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED", sender, language);
+					plugin.unpackLanguage(loaded, sender, true);
+				owner.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED", sender, loaded, sender);
 			}
 			return;
 		}
-		if (CrazyLocale.PATTERN_LANGUAGE.matcher(name).matches())
+		// Extract language
+		final String language = CrazyLocale.fixLanguage(name);
+		if (language != null)
 		{
 			for (final CrazyPlugin plugin : CrazyPlugin.getCrazyPlugins())
-			{
-				plugin.unpackLanguage(name, sender);
-				plugin.loadLanguage(name, sender);
-			}
-			owner.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED", sender, name);
+				plugin.unpackLanguage(language, sender, true);
+			owner.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED", sender, language);
 			return;
 		}
+		// Extract plugin languages
 		final CrazyPlugin plugin = CrazyPlugin.getPlugin(name);
-		if (plugin == null)
+		if (plugin != null)
 		{
-			final LinkedHashSet<String> alternatives = new LinkedHashSet<String>();
-			alternatives.addAll(CrazyLocale.getLoadedLanguages());
-			for (final CrazyPlugin temp : CrazyPlugin.getCrazyPlugins())
-				alternatives.add(temp.getName());
-			throw new CrazyCommandNoSuchException("Languages/Plugins", name, alternatives);
-		}
-		else
-			for (final String language : CrazyLocale.getLoadedLanguages())
+			for (final String loaded : CrazyLocale.getLoadedLanguages())
 			{
-				plugin.unpackLanguage(language, sender);
-				plugin.loadLanguage(language, sender);
-				plugin.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED.PLUGIN", sender, language, plugin.getName());
+				plugin.unpackLanguage(loaded, sender, true);
+				plugin.sendLocaleMessage("COMMAND.LANGUAGE.EXTRACTED.PLUGIN", sender, loaded, plugin.getName());
 			}
+			return;
+		}
+		// Nothing found
+		final LinkedHashSet<String> alternatives = new LinkedHashSet<String>();
+		alternatives.addAll(CrazyLocale.getLoadedLanguages());
+		for (final CrazyPlugin temp : CrazyPlugin.getCrazyPlugins())
+			alternatives.add(temp.getName());
+		throw new CrazyCommandNoSuchException("Languages/Plugins", name, alternatives);
 	}
 
 	@Override

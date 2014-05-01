@@ -25,6 +25,7 @@ public final class CommandLanguageTree extends CrazyCommandTreeExecutor<CrazyCor
 		addSubCommand(new CommandLanguageRemovePreloaded(plugin), "removepreloaded");
 		addSubCommand(new CommandLanguageReload(plugin), "reload");
 		addSubCommand(new CommandLanguageExtract(plugin), "extract");
+		addSubCommand(new CommandLanguageUpdate(plugin), "update");
 	}
 
 	private class CrazyCoreCommandLanguageDefault extends CommandExecutor

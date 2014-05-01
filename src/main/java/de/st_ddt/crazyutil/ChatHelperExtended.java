@@ -39,49 +39,39 @@ public class ChatHelperExtended extends ChatHelper
 	{
 	}
 
-	public static <S extends ParameterData, T extends S> void processFullListCommand(final CommandSender sender, final String[] args, final String chatHeader, ListFormat format, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<S>> sorters, final Comparator<S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas) throws CrazyException
+	public static <S extends ParameterData, T extends S> void processFullListCommand(final CommandSender sender, final String[] args, final String chatHeader, ListFormat format, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<? super S>> sorters, final Comparator<? super S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas) throws CrazyException
 	{
 		if (format == null)
 			format = ListFormat.DEFAULTFORMAT;
 		processFullListCommand(sender, args, chatHeader, format.headFormat(sender), format.listFormat(sender), format.entryFormat(sender), filters, sorters, defaultSort, modder, datas);
 	}
 
-	public static <S extends ParameterData, T extends S> void processFullListCommand(final CommandSender sender, final String[] args, final String chatHeader, ListFormat format, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<S>> sorters, final Comparator<S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas, final Object... headArgs) throws CrazyException
+	public static <S extends ParameterData, T extends S> void processFullListCommand(final CommandSender sender, final String[] args, final String chatHeader, ListFormat format, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<? super S>> sorters, final Comparator<? super S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas, final Object... headArgs) throws CrazyException
 	{
 		if (format == null)
 			format = ListFormat.DEFAULTFORMAT;
 		processFullListCommand(sender, args, chatHeader, format.headFormat(sender), format.listFormat(sender), format.entryFormat(sender), filters, sorters, defaultSort, modder, datas, headArgs);
 	}
 
-	public static <S extends ParameterData, T extends S> void processFullListCommand(final CommandSender sender, final String[] args, final String chatHeader, final String headFormat, final String listFormat, final String entryFormat, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<S>> sorters, final Comparator<S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas) throws CrazyException
+	public static <S extends ParameterData, T extends S> void processFullListCommand(final CommandSender sender, final String[] args, final String chatHeader, final String headFormat, final String listFormat, final String entryFormat, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<? super S>> sorters, final Comparator<? super S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas) throws CrazyException
 	{
 		final String[] pipe = processListCommand(sender, args, chatHeader, headFormat, listFormat, entryFormat, filters, sorters, defaultSort, modder, datas);
 		if (pipe != null)
 			CrazyPipe.pipe(sender, datas, pipe);
 	}
 
-	public static <S extends ParameterData, T extends S> void processFullListCommand(final CommandSender sender, final String[] args, final String chatHeader, final String headFormat, final String listFormat, final String entryFormat, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<S>> sorters, final Comparator<S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas, final Object... headArgs) throws CrazyException
+	public static <S extends ParameterData, T extends S> void processFullListCommand(final CommandSender sender, final String[] args, final String chatHeader, final String headFormat, final String listFormat, final String entryFormat, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<? super S>> sorters, final Comparator<? super S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas, final Object... headArgs) throws CrazyException
 	{
 		final String[] pipe = processListCommand(sender, args, chatHeader, headFormat, listFormat, entryFormat, filters, sorters, defaultSort, modder, datas, headArgs);
 		if (pipe != null)
 			CrazyPipe.pipe(sender, datas, pipe);
 	}
 
-	public static <S, T extends S> String[] processListCommand(final CommandSender sender, final String[] args, final String chatHeader, final ListFormat format, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<S>> sorters, final Comparator<S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas) throws CrazyException
-	{
-		return processListCommand(sender, args, chatHeader, format, filters, sorters, defaultSort, modder, datas, new Object[0]);
-	}
-
-	public static <S, T extends S> String[] processListCommand(final CommandSender sender, final String[] args, final String chatHeader, ListFormat format, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<S>> sorters, final Comparator<S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas, final Object... headArgs) throws CrazyException
+	public static <S, T extends S> String[] processListCommand(final CommandSender sender, final String[] args, final String chatHeader, ListFormat format, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<? super S>> sorters, final Comparator<? super S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas, final Object... headArgs) throws CrazyException
 	{
 		if (format == null)
 			format = ListFormat.DEFAULTFORMAT;
 		return processListCommand(sender, args, chatHeader, format.headFormat(sender), format.listFormat(sender), format.entryFormat(sender), filters, sorters, defaultSort, modder, datas, headArgs);
-	}
-
-	public static <S, T extends S> String[] processListCommand(final CommandSender sender, final String[] args, final String defaultChatHeader, final String defaultHeadFormat, final String defaultListFormat, final String defaultEntryFormat, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<S>> sorters, final Comparator<S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas) throws CrazyException
-	{
-		return processListCommand(sender, args, defaultChatHeader, defaultHeadFormat, defaultListFormat, defaultEntryFormat, filters, sorters, defaultSort, modder, datas, new Object[0]);
 	}
 
 	/**
@@ -116,7 +106,7 @@ public class ChatHelperExtended extends ChatHelper
 	 *             Caused by readParameters
 	 * @see de.st_ddt.crazyutil.CrazyPages
 	 */
-	public static <S, T extends S> String[] processListCommand(final CommandSender sender, final String[] args, final String defaultChatHeader, String defaultHeadFormat, String defaultListFormat, String defaultEntryFormat, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<S>> sorters, final Comparator<S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas, final Object... headArgs) throws CrazyException
+	public static <S, T extends S> String[] processListCommand(final CommandSender sender, final String[] args, final String defaultChatHeader, String defaultHeadFormat, String defaultListFormat, String defaultEntryFormat, final Collection<FilterInstanceInterface<S>> filters, final Map<String, ? extends Comparator<? super S>> sorters, final Comparator<? super S> defaultSort, final ListOptionsModder<T> modder, final List<T> datas, final Object... headArgs) throws CrazyException
 	{
 		final Map<String, Paramitrisable> params = new TreeMap<String, Paramitrisable>();
 		final BooleanParamitrisable reverse = new BooleanParamitrisable(false);
@@ -561,7 +551,7 @@ public class ChatHelperExtended extends ChatHelper
 		return res;
 	}
 
-	public static <S> Tabbed listTabHelp(final Map<String, Tabbed> params, final CommandSender sender, final Collection<? extends FilterInterface<S>> filters, final Map<String, ? extends Comparator<S>> sorters)
+	public static <S> Tabbed listTabHelp(final Map<String, Tabbed> params, final CommandSender sender, final Collection<? extends FilterInterface<S>> filters, final Map<String, ? extends Comparator<? super S>> sorters)
 	{
 		final BooleanParamitrisable reverse = new BooleanParamitrisable(false);
 		params.put("reverse", reverse);

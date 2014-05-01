@@ -303,7 +303,7 @@ public final class CrazyCore extends CrazyPlugin
 		super.initialize();
 		plugin = this;
 		final ConfigurationSection config = getConfig();
-		CrazyLocale.setDefaultLanguage(config.getString("defaultLanguage", "en_en"));
+		CrazyLocale.setDefaultLanguage(config.getString("defaultLanguage", "en_GB"));
 		ResourceHelper.setLogResourceAccessEnabled(config.getBoolean("logResourceAccess", true));
 		final String bukkitServerAPIKey = config.getString("bukkitServerAPIKey", "none");
 		config.set("bukkitServerAPIKey", bukkitServerAPIKey);
@@ -348,31 +348,24 @@ public final class CrazyCore extends CrazyPlugin
 		ChatHelper.setShowChatHeaders(config.getBoolean("showChatHeaders", true));
 		// Language
 		consoleLog("Loading languages...");
-		loadUserLanguages = config.getBoolean("loadUserLanguages", true);
-		final String systemLanguage = System.getProperty("user.language").toLowerCase();
-		String defaultLanguage = config.getString("defaultLanguage", systemLanguage + "_" + systemLanguage);
-		if (defaultLanguage.startsWith("custom_"))
-			defaultLanguage = defaultLanguage.substring(7);
-		if (defaultLanguage.endsWith(".lang"))
-			defaultLanguage = defaultLanguage.substring(0, defaultLanguage.length() - 5);
+		final String defaultLanguage = config.getString("defaultLanguage", CrazyLocale.getSystemLanguage());
 		CrazyLocale.setDefaultLanguage(defaultLanguage);
 		preloadedLanguages.add(defaultLanguage);
 		if (isInstalled)
-			preloadedLanguages.add("en_en");
+			preloadedLanguages.add(CrazyLocale.FALLBACKLANGUAGE);
 		final List<String> preloadedLanguagesList = config.getStringList("preloadedLanguages");
 		for (final String language : preloadedLanguagesList)
-			if (CrazyLocale.PATTERN_LANGUAGE.matcher(language).matches())
-				preloadedLanguages.add(language);
+			preloadedLanguages.add(CrazyLocale.fixLanguage(language));
+		preloadedLanguages.remove(null);
 		if (preloadedLanguages.size() == 0)
-			preloadedLanguages.add("en_en");
+			preloadedLanguages.add(CrazyLocale.FALLBACKLANGUAGE);
 		for (final String language : preloadedLanguages)
 			loadLanguageFiles(language, false);
-		final Set<String> userLanguages = CrazyLocale.load(config.getConfigurationSection("players"));
+		loadUserLanguages = config.getBoolean("loadUserLanguages", true);
+		final Set<String> userLanguages = CrazyLocale.loadUserLanguages(config.getConfigurationSection("players"));
 		if (loadUserLanguages)
 			for (final String language : userLanguages)
 				loadLanguageFiles(language, false);
-		// Logger
-		logger.createLogChannels(config.getConfigurationSection("logs"), "ProtectedPlayer");
 	}
 
 	@Override
@@ -415,7 +408,7 @@ public final class CrazyCore extends CrazyPlugin
 		config.set("defaultLanguage", CrazyLocale.getDefaultLanguage());
 		config.set("preloadedLanguages", new ArrayList<String>(preloadedLanguages));
 		config.set("players", null);
-		CrazyLocale.save(config, "players.");
+		CrazyLocale.saveUserLanguages(config, "players.");
 		super.saveConfiguration(config);
 	}
 

@@ -1,10 +1,7 @@
 package de.st_ddt.crazyplugin;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -348,9 +345,12 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	}
 
 	@Localized({ "CRAZYPLUGIN.LANGUAGE.ERROR.AVAILABLE {Language} CRAZYPLUGIN.LANGUAGE", "CRAZYPLUGIN.LANGUAGE.ERROR.READ {Language} {Plugin}" })
-	public void loadLanguage(final String language, final CommandSender sender)
+	public void loadLanguage(String language, final CommandSender sender)
 	{
 		if (!isSupportingLanguages())
+			return;
+		language = CrazyLocale.fixLanguage(language);
+		if (language == null)
 			return;
 		// default files
 		File file = new File(getDataFolder(), "lang/" + language + ".lang");
@@ -395,7 +395,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	{
 		if (!isSupportingLanguages())
 			return;
-		final File file = new File(getDataFolder().getPath() + "/lang/" + language + ".lang");
+		final File file = new File(getDataFolder(), "lang/" + language + ".lang");
 		if (!ResourceHelper.saveResource(this, "/lang/" + language + ".lang", file))
 		{
 			sendLocaleMessage("LANGUAGE.ERROR.AVAILABLE", sender, language, getName());
@@ -438,11 +438,7 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 
 	public final void loadLanguageFile(final String language, final File file) throws IOException
 	{
-		try (InputStream stream = new FileInputStream(file);
-				InputStreamReader reader = new InputStreamReader(stream, "UTF-8"))
-		{
-			CrazyLocale.readFile(language, reader);
-		}
+		CrazyLocale.readFile(language, file);
 	}
 
 	public Integer getBukkitProjectId()

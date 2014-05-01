@@ -1,6 +1,7 @@
-package de.st_ddt.crazyplugin.comparator;
+package de.st_ddt.crazyplugin.comparators;
 
 import de.st_ddt.crazyplugin.CrazyPluginInterface;
+import de.st_ddt.crazyplugin.comparators.CrazyPluginComparator;
 import de.st_ddt.crazyutil.comparators.VersionComparator;
 
 public class CrazyPluginVersionComparator implements CrazyPluginComparator

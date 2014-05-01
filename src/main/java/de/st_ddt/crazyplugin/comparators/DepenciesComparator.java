@@ -1,4 +1,4 @@
-package de.st_ddt.crazyplugin.comparator;
+package de.st_ddt.crazyplugin.comparators;
 
 import java.util.Comparator;
 

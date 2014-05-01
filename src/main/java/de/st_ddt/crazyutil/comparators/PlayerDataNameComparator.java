@@ -1,6 +1,5 @@
 package de.st_ddt.crazyutil.comparators;
 
-import de.st_ddt.crazyutil.comparators.PlayerDataComparator;
 import de.st_ddt.crazyutil.datas.PlayerData;
 
 public class PlayerDataNameComparator<S extends PlayerData> implements PlayerDataComparator<S>

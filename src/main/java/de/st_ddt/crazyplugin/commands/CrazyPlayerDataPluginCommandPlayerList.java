@@ -9,7 +9,6 @@ import java.util.Map;
 import org.bukkit.command.CommandSender;
 
 import de.st_ddt.crazyplugin.CrazyPlayerDataPluginInterface;
-import de.st_ddt.crazyplugin.comparator.PlayerDataComparator;
 import de.st_ddt.crazyplugin.data.PlayerDataFilterInterface;
 import de.st_ddt.crazyplugin.data.PlayerDataInterface;
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
@@ -17,6 +16,7 @@ import de.st_ddt.crazyutil.ChatHelperExtended;
 import de.st_ddt.crazyutil.Filter;
 import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.Tabbed;
+import de.st_ddt.crazyutil.comparators.PlayerDataComparator;
 import de.st_ddt.crazyutil.databases.PlayerDataDatabase;
 import de.st_ddt.crazyutil.source.Permission;
 

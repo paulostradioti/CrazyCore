@@ -11,13 +11,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
 import de.st_ddt.crazyplugin.commands.CrazyPlayerDataPluginCommandPlayerTree;
-import de.st_ddt.crazyplugin.comparator.PlayerDataComparator;
-import de.st_ddt.crazyplugin.comparator.PlayerDataNameComparator;
 import de.st_ddt.crazyplugin.data.PlayerDataFilter;
 import de.st_ddt.crazyplugin.data.PlayerDataInterface;
 import de.st_ddt.crazyutil.ChatHelper;
 import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.ListOptionsModder;
+import de.st_ddt.crazyutil.comparators.PlayerDataComparator;
+import de.st_ddt.crazyutil.comparators.PlayerDataNameComparator;
 import de.st_ddt.crazyutil.databases.PlayerDataDatabase;
 import de.st_ddt.crazyutil.reloadable.Reloadable;
 import de.st_ddt.crazyutil.source.Localized;

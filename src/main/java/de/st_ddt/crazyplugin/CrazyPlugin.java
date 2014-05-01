@@ -345,64 +345,61 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 	}
 
 	@Localized({ "CRAZYPLUGIN.LANGUAGE.ERROR.AVAILABLE {Language} CRAZYPLUGIN.LANGUAGE", "CRAZYPLUGIN.LANGUAGE.ERROR.READ {Language} {Plugin}" })
-	public void loadLanguage(String language, final CommandSender sender)
+	public final boolean loadLanguage(final String language, final CommandSender sender)
 	{
 		if (!isSupportingLanguages())
-			return;
-		language = CrazyLocale.fixLanguage(language);
-		if (language == null)
-			return;
-		// default files
-		File file = new File(getDataFolder(), "lang/" + language + ".lang");
-		if (!file.exists())
-			if (!ResourceHelper.saveResource(this, "/lang/" + language + ".lang", file))
-			{
-				sendLocaleMessage("LANGUAGE.ERROR.AVAILABLE", sender, language, getName());
-				return;
-			}
-		try
-		{
-			loadLanguageFile(language, file);
-		}
-		catch (final IOException e)
-		{
-			sendLocaleMessage("LANGUAGE.ERROR.READ", sender, language, getName());
-		}
-		// Custom files:
-		file = new File(getDataFolder(), "lang/custom_" + language + ".lang");
+			return true;
+		final File file = new File(getDataFolder(), "lang/" + language + ".lang");
 		if (file.exists())
-			try
-			{
-				loadLanguageFile(language, file);
-			}
-			catch (final IOException e)
-			{
-				sendLocaleMessage("LANGUAGE.ERROR.READ", sender, language + " (Custom)", getName());
-			}
+		{
+			reloadLanguage(language, sender);
+			return true;
+		}
+		else
+			return updateLanguage(language, sender, true);
 	}
 
-	// public String getMainDownloadLocation()
-	// {
-	// return "https://raw.github.com/ST-DDT/Crazy/master/" + getName() + "/src/resource";
-	// }
-	public final void updateLanguage(final String language, final boolean reload)
+	public final boolean updateLanguage(final String language, final boolean reload)
 	{
-		updateLanguage(language, Bukkit.getConsoleSender(), reload);
+		return updateLanguage(language, Bukkit.getConsoleSender(), reload);
 	}
 
 	@Localized({ "CRAZYPLUGIN.LANGUAGE.ERROR.AVAILABLE {Language} {Plugin}", "CRAZYPLUGIN.LANGUAGE.ERROR.READ {Language} {Plugin}" })
-	public void updateLanguage(final String language, final CommandSender sender, final boolean reload)
+	public final boolean updateLanguage(final String language, final CommandSender sender, final boolean reload)
 	{
 		if (!isSupportingLanguages())
-			return;
-		final File file = new File(getDataFolder(), "lang/" + language + ".lang");
-		if (!ResourceHelper.saveResource(this, "/lang/" + language + ".lang", file))
-		{
+			return true;
+		final boolean success = ResourceHelper.saveResource(this, "/lang/" + language + ".lang", "lang/" + language + ".lang");
+		if (!success)
 			sendLocaleMessage("LANGUAGE.ERROR.AVAILABLE", sender, language, getName());
-			return;
-		}
 		if (reload)
-		{
+			reloadLanguage(language, sender);
+		return success;
+	}
+
+	public final boolean unpackLanguage(final String language, final boolean reload)
+	{
+		return unpackLanguage(language, Bukkit.getConsoleSender(), reload);
+	}
+
+	@Localized("CRAZYPLUGIN.LANGUAGE.ERROR.EXTRACT {Language} {Plugin}")
+	public final boolean unpackLanguage(final String language, final CommandSender sender, final boolean reload)
+	{
+		if (!isSupportingLanguages())
+			return true;
+		final boolean success = ResourceHelper.unpackResource(this, "/lang/" + language + ".lang", "lang/" + language + ".lang");
+		if (!success)
+			sendLocaleMessage("LANGUAGE.ERROR.EXTRACT", sender, language, getName());
+		if (reload)
+			reloadLanguage(language, sender);
+		return success;
+	}
+
+	private final void reloadLanguage(final String language, final CommandSender sender)
+	{
+		// Default file
+		final File file = new File(getDataFolder(), "lang/" + language + ".lang");
+		if (file.exists())
 			try
 			{
 				loadLanguageFile(language, file);
@@ -411,29 +408,17 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 			{
 				sendLocaleMessage("LANGUAGE.ERROR.READ", sender, language, getName());
 			}
-			final File customFile = new File(getDataFolder(), "lang/custom_" + language + ".lang");
-			if (customFile.exists())
-				try
-				{
-					loadLanguageFile(language, customFile);
-				}
-				catch (final IOException e)
-				{
-					sendLocaleMessage("LANGUAGE.ERROR.READ", sender, language + " (Custom)", getName());
-				}
-		}
-	}
-
-	public final void unpackLanguage(final String language)
-	{
-		unpackLanguage(language, Bukkit.getConsoleSender());
-	}
-
-	@Localized("CRAZYPLUGIN.LANGUAGE.ERROR.EXTRACT {Language} {Plugin}")
-	public void unpackLanguage(final String language, final CommandSender sender)
-	{
-		if (!ResourceHelper.unpackResource(this, "/lang/" + language + ".lang", "lang/" + language + ".lang"))
-			sendLocaleMessage("LANGUAGE.ERROR.EXTRACT", sender, language, getName());
+		// Custom file
+		final File customFile = new File(getDataFolder(), "lang/custom_" + language + ".lang");
+		if (customFile.exists())
+			try
+			{
+				loadLanguageFile(language, customFile);
+			}
+			catch (final IOException e)
+			{
+				sendLocaleMessage("LANGUAGE.ERROR.READ", sender, language + " (Custom)", getName());
+			}
 	}
 
 	public final void loadLanguageFile(final String language, final File file) throws IOException

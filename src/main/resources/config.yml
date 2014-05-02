@@ -36,14 +36,14 @@ showChatHeaders: true
 # when enabled every language selected by users will be loaded
 loadUserLanguages: true
 # the servers default language
-defaultLanguage: en_en
+defaultLanguage: en_GB
 # the languages which are loaded on startup 
 # (this languages will be updated when a plugin has been updated)
 preloadedLanguages:
-- en_en
-# - de_de
-# - fr_fr
-# - es_es
+- en_GB
+# - de_DE
+# - fr_GR
+# - es_ES
 # the language selection for each player & console
 players:
-  console: en_en
+  console: en_GB

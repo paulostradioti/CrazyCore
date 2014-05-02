@@ -215,6 +215,7 @@ public final class CrazyCore extends CrazyPlugin
 	@Override
 	protected void registerCommands()
 	{
+		super.registerCommands();
 		final CrazyCommandTreeExecutor<CrazyCore> players = new CrazyCommandTreeExecutor<CrazyCore>(this);
 		mainCommand.addSubCommand(players, "p", "plr", "player", "players");
 		mainCommand.addSubCommand(new CommandPlayerWipeFilePaths(plugin), "wipefilepaths", "wipepaths");

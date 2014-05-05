@@ -18,12 +18,12 @@ public class CrazyPlayerDataPluginDatabaseReloadable implements Reloadable
 	}
 
 	@Override
-	@Localized("{CRAZYPLAYERDATAPLUGIN}.COMMAND.DATABASE.RELOADED")
+	@Localized("{CRAZYPLAYERDATAPLUGIN}.DATABASE.RELOADED")
 	public void reload(final CommandSender sender)
 	{
 		plugin.loadDatabase();
 		plugin.saveDatabase();
-		plugin.sendLocaleMessage("COMMAND.DATABASE.RELOADED", sender);
+		plugin.sendLocaleMessage("DATABASE.RELOADED", sender);
 	}
 
 	@Override
@@ -34,11 +34,11 @@ public class CrazyPlayerDataPluginDatabaseReloadable implements Reloadable
 	}
 
 	@Override
-	@Localized("{CRAZYPLAYERDATAPLUGIN}.COMMAND.DATABASE.SAVED")
+	@Localized("{CRAZYPLAYERDATAPLUGIN}.DATABASE.SAVED")
 	public void save(final CommandSender sender)
 	{
 		plugin.saveDatabase();
-		plugin.sendLocaleMessage("COMMAND.DATABASE.SAVED", sender);
+		plugin.sendLocaleMessage("DATABASE.SAVED", sender);
 	}
 
 	@Override

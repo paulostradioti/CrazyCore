@@ -17,13 +17,13 @@ public class CrazyPluginConfigReloadable implements Reloadable
 	}
 
 	@Override
-	@Localized("{CRAZYPLUGIN}.RELOAD.CONFIG")
+	@Localized("{CRAZYPLUGIN}.CONFIG.RELOADED")
 	public void reload(final CommandSender sender)
 	{
 		plugin.reloadConfig();
 		plugin.loadConfiguration();
 		plugin.saveConfiguration();
-		plugin.sendLocaleMessage("RELOAD.CONFIG", sender);
+		plugin.sendLocaleMessage("CONFIG.RELOADED", sender);
 	}
 
 	@Override
@@ -33,11 +33,11 @@ public class CrazyPluginConfigReloadable implements Reloadable
 	}
 
 	@Override
-	@Localized("{CRAZYPLUGIN}.SAVE.CONFIG")
+	@Localized("{CRAZYPLUGIN}.CONFIG.SAVED")
 	public void save(final CommandSender sender)
 	{
 		plugin.saveConfiguration();
-		plugin.sendLocaleMessage("SAVE.CONFIG", sender);
+		plugin.sendLocaleMessage("CONFIG.SAVED", sender);
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import de.st_ddt.crazyutil.CrazyLogger;
 import de.st_ddt.crazyutil.ListFormat;
 import de.st_ddt.crazyutil.UpdateChecker;
 import de.st_ddt.crazyutil.locales.CrazyLocale;
+import de.st_ddt.crazyutil.reloadable.CrazyPluginConfigReloadable;
 import de.st_ddt.crazyutil.reloadable.Reloadable;
 import de.st_ddt.crazyutil.resources.ResourceHelper;
 import de.st_ddt.crazyutil.source.Localized;
@@ -104,6 +105,10 @@ public abstract class CrazyPlugin extends CrazyLightPlugin implements CrazyPlugi
 		load();
 		saveConfiguration();
 		super.enable();
+		final Reloadable reloadable = new CrazyPluginConfigReloadable(this);
+		reloadables.put("c", reloadable);
+		reloadables.put("cfg", reloadable);
+		reloadables.put("config", reloadable);
 		registerHooks();
 		registerCommands();
 	}

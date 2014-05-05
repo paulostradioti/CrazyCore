@@ -3,6 +3,7 @@ package de.st_ddt.crazyutil.reloadable;
 import org.bukkit.command.CommandSender;
 
 import de.st_ddt.crazyplugin.CrazyPlugin;
+import de.st_ddt.crazyutil.source.Localized;
 
 public class CrazyPluginConfigReloadable implements Reloadable
 {
@@ -16,10 +17,12 @@ public class CrazyPluginConfigReloadable implements Reloadable
 	}
 
 	@Override
+	@Localized("{CRAZYPLUGIN}.RELOAD.CONFIG")
 	public void reload(final CommandSender sender)
 	{
 		plugin.reloadConfig();
 		plugin.loadConfiguration();
+		plugin.saveConfiguration();
 		plugin.sendLocaleMessage("RELOAD.CONFIG", sender);
 	}
 
@@ -30,6 +33,7 @@ public class CrazyPluginConfigReloadable implements Reloadable
 	}
 
 	@Override
+	@Localized("{CRAZYPLUGIN}.SAVE.CONFIG")
 	public void save(final CommandSender sender)
 	{
 		plugin.saveConfiguration();

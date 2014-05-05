@@ -19,6 +19,7 @@ import de.st_ddt.crazyutil.ListOptionsModder;
 import de.st_ddt.crazyutil.comparators.PlayerDataComparator;
 import de.st_ddt.crazyutil.comparators.PlayerDataNameComparator;
 import de.st_ddt.crazyutil.databases.PlayerDataDatabase;
+import de.st_ddt.crazyutil.reloadable.CrazyPlayerDataPluginDatabaseReloadable;
 import de.st_ddt.crazyutil.reloadable.Reloadable;
 import de.st_ddt.crazyutil.source.Localized;
 import de.st_ddt.crazyutil.source.LocalizedVariable;
@@ -138,40 +139,7 @@ public abstract class CrazyPlayerDataPlugin<T extends PlayerDataInterface, S ext
 	{
 		super.enable();
 		mainCommand.addSubCommand(playerCommand, "p", "plr", "player", "players");
-		final Reloadable reloadable = new Reloadable()
-		{
-
-			@Override
-			@Localized("{CRAZYPLAYERDATAPLUGIN}.COMMAND.DATABASE.RELOADED")
-			public void reload(final CommandSender sender)
-			{
-				loadDatabase();
-				saveDatabase();
-				sendLocaleMessage("COMMAND.DATABASE.RELOADED", sender);
-			}
-
-			@Override
-			@Permission("{CRAZYPLAYERDATAPLUGIN}.reload.database")
-			public boolean hasReloadPermission(final CommandSender sender)
-			{
-				return sender.hasPermission(getName() + ".reload.database") || sender.hasPermission(getName() + ".reload.*");
-			}
-
-			@Override
-			@Localized("{CRAZYPLAYERDATAPLUGIN}.COMMAND.DATABASE.SAVED")
-			public void save(final CommandSender sender)
-			{
-				saveDatabase();
-				sendLocaleMessage("COMMAND.DATABASE.SAVED", sender);
-			}
-
-			@Override
-			@Permission("{CRAZYPLAYERDATAPLUGIN}.save.database")
-			public boolean hasSavePermission(final CommandSender sender)
-			{
-				return sender.hasPermission(getName() + ".save.database") || sender.hasPermission(getName() + ".save.*");
-			}
-		};
+		final Reloadable reloadable = new CrazyPlayerDataPluginDatabaseReloadable(this);
 		reloadables.put("d", reloadable);
 		reloadables.put("db", reloadable);
 		reloadables.put("database", reloadable);

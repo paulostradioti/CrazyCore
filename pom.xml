@@ -133,6 +133,24 @@
 		</resources>
 		<plugins>
 			<plugin>
+				<groupId>de.st_ddt.crazy.maven</groupId>
+				<artifactId>CrazyLocalesUpdater</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>update</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includeArtifacts>
+						<includeArtifact>CrazyAPI</includeArtifact>
+					</includeArtifacts>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>

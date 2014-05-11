@@ -2,6 +2,7 @@ package de.st_ddt.crazyutil.paramitrisable;
 
 import java.util.regex.Pattern;
 
+import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
 
 import de.st_ddt.crazyplugin.exceptions.CrazyException;
@@ -25,6 +26,18 @@ public class VectorParamitrisable extends TypedParamitrisable<Vector>
 	}
 
 	/**
+	 * Converts the given BlockFace to Cartesian coordinates.
+	 * 
+	 * @param direction
+	 *            The direction of the {@link BlockFace}.
+	 * @return The unit vector representing the given {@link BlockFace} direction as Cartesian coordinates.
+	 */
+	public static Vector getVector(final BlockFace direction)
+	{
+		return new Vector(direction.getModX(), direction.getModY(), direction.getModZ()).normalize();
+	}
+
+	/**
 	 * Converts the given Spherical coordinates to Cartesian coordinates.
 	 * 
 	 * @param radius
@@ -33,12 +46,13 @@ public class VectorParamitrisable extends TypedParamitrisable<Vector>
 	 *            The yaw rotation in radians.
 	 * @param pitch
 	 *            The pitch rotation in radians.
-	 * @return The vector representing the given Spherical coordinates as Cartesian coordinates
+	 * @return The vector representing the given Spherical coordinates as Cartesian coordinates.
 	 */
 	public static Vector getVector(final double radius, final double yaw, final double pitch)
 	{
-		final double x = -Math.sin(yaw) * Math.cos(pitch) * radius;
-		final double z = Math.cos(yaw) * Math.cos(pitch) * radius;
+		final double cosPitch = Math.cos(pitch);
+		final double x = -Math.sin(yaw) * cosPitch * radius;
+		final double z = Math.cos(yaw) * cosPitch * radius;
 		final double y = Math.sin(pitch) * radius;
 		return new Vector(x, y, z);
 	}

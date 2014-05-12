@@ -1,11 +1,14 @@
 package de.st_ddt.crazyutil.paramitrisable;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -193,5 +196,117 @@ public class LocationParamitrisable extends TypedParamitrisable<Location>
 			location.setPitch(Math.round(location.getPitch() / trimAngles) * trimAngles);
 		}
 		return location;
+	}
+
+	/**
+	 * Returns all chunks that are partially or totally covered by a circle centered at the given location with the given range.
+	 * 
+	 * @param location
+	 * @param range
+	 * @return
+	 */
+	public static Set<Chunk> getChunkWithinSoftRange(final Location location, final double range)
+	{
+		final LinkedList<Chunk> newChunks = new LinkedList<Chunk>();
+		newChunks.add(location.getChunk());
+		final World world = location.getWorld();
+		final Set<Chunk> visited = new HashSet<Chunk>();
+		final Set<Chunk> res = new HashSet<>();
+		Chunk chunk;
+		while ((chunk = newChunks.poll()) != null)
+			if (getNearestChunkLocation(chunk, location).distance(location) <= range)
+			{
+				res.add(chunk);
+				final int cX = chunk.getX();
+				final int cZ = chunk.getZ();
+				final Chunk cXP = world.getChunkAt(cX + 1, cZ);
+				if (visited.add(cXP))
+					newChunks.add(cXP);
+				final Chunk cXM = world.getChunkAt(cX - 1, cZ);
+				if (visited.add(cXM))
+					newChunks.add(cXM);
+				final Chunk cZP = world.getChunkAt(cX, cZ + 1);
+				if (visited.add(cZP))
+					newChunks.add(cZP);
+				final Chunk cZM = world.getChunkAt(cX, cZ - 1);
+				if (visited.add(cZM))
+					newChunks.add(cZM);
+			}
+		return res;
+	}
+
+	/**
+	 * Returns all chunks that are totally covered by a circle centered at the given location with the given range.
+	 * 
+	 * @param location
+	 * @param range
+	 * @return
+	 */
+	public static Set<Chunk> getChunkWithinStrictRange(final Location location, final double range)
+	{
+		final LinkedList<Chunk> newChunks = new LinkedList<Chunk>();
+		newChunks.add(location.getChunk());
+		final World world = location.getWorld();
+		final Set<Chunk> visited = new HashSet<Chunk>();
+		final Set<Chunk> res = new HashSet<>();
+		Chunk chunk;
+		while ((chunk = newChunks.poll()) != null)
+			if (getFarestXZChunkLocation(chunk, location).distance(location) <= range)
+			{
+				res.add(chunk);
+				final int cX = chunk.getX();
+				final int cZ = chunk.getZ();
+				final Chunk cXP = world.getChunkAt(cX + 1, cZ);
+				if (visited.add(cXP))
+					newChunks.add(cXP);
+				final Chunk cXM = world.getChunkAt(cX - 1, cZ);
+				if (visited.add(cXM))
+					newChunks.add(cXM);
+				final Chunk cZP = world.getChunkAt(cX, cZ + 1);
+				if (visited.add(cZP))
+					newChunks.add(cZP);
+				final Chunk cZM = world.getChunkAt(cX, cZ - 1);
+				if (visited.add(cZM))
+					newChunks.add(cZM);
+			}
+		return res;
+	}
+
+	public static Location getNearestChunkLocation(final Chunk chunk, final Location location)
+	{
+		final long cXMin = chunk.getX() * 16L;
+		final long cZMin = chunk.getZ() * 16L;
+		final double nearX = getNearest(location.getX(), cXMin, cXMin + 16);
+		final double nearY = getNearest(location.getZ(), cZMin, cZMin + 16);
+		return new Location(location.getWorld(), nearX, location.getY(), nearY);
+	}
+
+	private static double getNearest(final double origin, final double lowerLimit, final double upperLimit)
+	{
+		if (lowerLimit > origin)
+			return lowerLimit;
+		else if (origin > upperLimit)
+			return upperLimit;
+		else
+			return origin;
+	}
+
+	public static Location getFarestXZChunkLocation(final Chunk chunk, final Location location)
+	{
+		final long cXMin = chunk.getX() * 16L;
+		final long cZMin = chunk.getZ() * 16L;
+		final double farX = getFarest(location.getX(), cXMin, cXMin + 16);
+		final double farZ = getFarest(location.getZ(), cZMin, cZMin + 16);
+		return new Location(location.getWorld(), farX, location.getY(), farZ);
+	}
+
+	private static double getFarest(final double origin, final double lowerLimit, final double upperLimit)
+	{
+		final double dLow = Math.abs(origin - lowerLimit);
+		final double dUp = Math.abs(origin - upperLimit);
+		if (dLow > dUp)
+			return lowerLimit;
+		else
+			return upperLimit;
 	}
 }

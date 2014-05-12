@@ -149,16 +149,21 @@ public final class ResourceHelper
 	static void logResourceNotFound(final Plugin plugin, final String resourcePath)
 	{
 		if (logResourceAccess)
-			ChatHelper.consoleLog(plugin, true, "Resource \"{0}\" not found!", resourcePath);
+			ChatHelper.consoleLog(plugin, true, "&EResource \"{0}\" not found!", resourcePath);
 	}
 
 	static void logLocalResourceAccess(final Plugin plugin, final String resolvedResourcePath)
 	{
-		if (logResourceAccess)
-			ChatHelper.consoleLog(plugin, false, "Accessing local resource from: \"{0}\"", resolvedResourcePath);
+		logResourceAccess(plugin, "local", resolvedResourcePath);
 	}
 
-	static void logLocalResourceSave(final Plugin plugin, final String targetPath)
+	protected static void logResourceAccess(final Plugin plugin, final String resourceType, final String resolvedResourcePath)
+	{
+		if (logResourceAccess)
+			ChatHelper.consoleLog(plugin, false, "Trying to access {0} resource from: \"{1}\"", resourceType, resolvedResourcePath);
+	}
+
+	static void logResourceSave(final Plugin plugin, final String targetPath)
 	{
 		if (logResourceAccess)
 			ChatHelper.consoleLog(plugin, false, "Saved resource to: \"{0}\"", targetPath);

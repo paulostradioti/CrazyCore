@@ -16,7 +16,7 @@ public abstract class AbstractResourceSource implements ResourceSource
 			if (stream == null)
 				return false;
 			ResourceHelper.streamCopy(stream, target);
-			ResourceHelper.logLocalResourceSave(plugin, target.getPath());
+			ResourceHelper.logResourceSave(plugin, target.getPath());
 			return true;
 		}
 		catch (final Throwable t)

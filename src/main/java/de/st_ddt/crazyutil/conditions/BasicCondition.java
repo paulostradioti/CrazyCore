@@ -30,7 +30,7 @@ public abstract class BasicCondition implements Condition
 	@Override
 	public void save(final ConfigurationSection config, final String path, final Map<Integer, String> parameterNames)
 	{
-		config.set("type", getClass().getName());
+		config.set(path + "type", getClass().getName());
 	}
 
 	@Override

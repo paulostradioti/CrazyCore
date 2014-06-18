@@ -1,5 +1,6 @@
 package de.st_ddt.crazyplugin.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
@@ -54,6 +55,9 @@ public class CrazyCommandReload<S extends ChatHeaderProvider> extends CrazyComma
 	@Override
 	public List<String> tab(final CommandSender sender, final String[] args)
 	{
-		return MapParamitrisable.tabHelp(reloadableProvider.getReloadables(), args[args.length - 1]);
+		if (args.length == 0)
+			return new ArrayList<String>(reloadableProvider.getReloadables().keySet());
+		else
+			return MapParamitrisable.tabHelp(reloadableProvider.getReloadables(), args[args.length - 1]);
 	}
 }

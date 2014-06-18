@@ -24,7 +24,7 @@ public class CrazyCommandTreeExecutor<S extends ChatHeaderProvider> extends Craz
 	public CrazyCommandTreeExecutor(final S owner)
 	{
 		super(owner);
-		defaultExecutor = new CrazyCommandTreeDefaultExecutor(owner);
+		this.defaultExecutor = new CrazyCommandTreeDefaultExecutor(owner);
 	}
 
 	public CrazyCommandTreeExecutor(final S owner, final CrazyCommandExecutor<?> defaultExecutor)
@@ -88,6 +88,11 @@ public class CrazyCommandTreeExecutor<S extends ChatHeaderProvider> extends Craz
 				final CrazyCommandExecutorInterface executor = subExecutor.get(args[0].toLowerCase());
 				if (executor != null)
 				{
+					if (!isExecutable(sender))
+					{
+						handleNotExecutable(sender);
+						return;
+					}
 					if (!executor.hasAccessPermission(sender))
 						throw new CrazyCommandPermissionException();
 					executor.command(sender, ChatHelperExtended.shiftArray(args, 1));
@@ -113,7 +118,7 @@ public class CrazyCommandTreeExecutor<S extends ChatHeaderProvider> extends Craz
 		if (executor == null)
 		{
 			List<String> res = null;
-			if (defaultExecutor.isAccessible(sender))
+			if (defaultExecutor.isExecutable(sender) && defaultExecutor.hasAccessPermission(sender))
 				res = defaultExecutor.tab(sender, args);
 			if (defaultExecutor instanceof CrazyCommandTreeDefaultExecutorInterface || args.length > 1)
 				return res;
@@ -122,7 +127,7 @@ public class CrazyCommandTreeExecutor<S extends ChatHeaderProvider> extends Craz
 			final String arg = args[0].toLowerCase();
 			for (final Entry<String, CrazyCommandExecutorInterface> subCommand : subExecutor.entrySet())
 				if (subCommand.getKey().toLowerCase().startsWith(arg))
-					if (subCommand.getValue().isAccessible(sender))
+					if (subCommand.getValue().isExecutable(sender) && subCommand.getValue().hasAccessPermission(sender))
 						res.add(subCommand.getKey());
 			return res;
 		}
@@ -132,11 +137,11 @@ public class CrazyCommandTreeExecutor<S extends ChatHeaderProvider> extends Craz
 			final String arg = args[0].toLowerCase();
 			for (final Entry<String, CrazyCommandExecutorInterface> subCommand : subExecutor.entrySet())
 				if (subCommand.getKey().toLowerCase().startsWith(arg))
-					if (subCommand.getValue().isAccessible(sender))
+					if (subCommand.getValue().isExecutable(sender) && subCommand.getValue().hasAccessPermission(sender))
 						res.add(subCommand.getKey());
 			return res;
 		}
-		else if (executor.isAccessible(sender))
+		else if (executor.isExecutable(sender) && executor.hasAccessPermission(sender))
 			return executor.tab(sender, ChatHelperExtended.shiftArray(args, 1));
 		else
 			return null;
@@ -152,10 +157,10 @@ public class CrazyCommandTreeExecutor<S extends ChatHeaderProvider> extends Craz
 	}
 
 	@Override
-	public boolean isAccessible(final CommandSender sender)
+	public boolean isExecutable(final CommandSender sender)
 	{
 		for (final Entry<String, CrazyCommandExecutorInterface> subCommand : subExecutor.entrySet())
-			if (subCommand.getValue().isAccessible(sender))
+			if (subCommand.getValue().isExecutable(sender))
 				return true;
 		return false;
 	}
@@ -188,7 +193,7 @@ public class CrazyCommandTreeExecutor<S extends ChatHeaderProvider> extends Craz
 			{
 				final List<String> res = new ArrayList<String>();
 				for (final Entry<String, CrazyCommandExecutorInterface> subCommand : subExecutor.entrySet())
-					if (subCommand.getValue().isAccessible(sender))
+					if (subCommand.getValue().isExecutable(sender) && subCommand.getValue().hasAccessPermission(sender))
 						res.add(subCommand.getKey());
 				return res;
 			}
@@ -198,7 +203,7 @@ public class CrazyCommandTreeExecutor<S extends ChatHeaderProvider> extends Craz
 				final String arg = args[0].toLowerCase();
 				for (final Entry<String, CrazyCommandExecutorInterface> subCommand : subExecutor.entrySet())
 					if (subCommand.getKey().toLowerCase().startsWith(arg))
-						if (subCommand.getValue().isAccessible(sender))
+						if (subCommand.getValue().isExecutable(sender) && subCommand.getValue().hasAccessPermission(sender))
 							res.add(subCommand.getKey());
 				return res;
 			}

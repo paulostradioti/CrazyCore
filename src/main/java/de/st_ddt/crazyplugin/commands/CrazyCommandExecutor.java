@@ -32,6 +32,11 @@ public abstract class CrazyCommandExecutor<S extends ChatHeaderProvider> impleme
 	{
 		try
 		{
+			if (!isExecutable(sender))
+			{
+				handleNotExecutable(sender);
+				return true;
+			}
 			if (!hasAccessPermission(sender))
 				throw new CrazyCommandPermissionException();
 			command(sender, args);
@@ -60,7 +65,7 @@ public abstract class CrazyCommandExecutor<S extends ChatHeaderProvider> impleme
 	@Override
 	public final List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args)
 	{
-		if (isAccessible(sender))
+		if (isExecutable(sender) && hasAccessPermission(sender))
 		{
 			final List<String> list = tab(sender, args);
 			if (list == null)
@@ -85,8 +90,15 @@ public abstract class CrazyCommandExecutor<S extends ChatHeaderProvider> impleme
 	}
 
 	@Override
-	public boolean isAccessible(final CommandSender sender)
+	public boolean isExecutable(final CommandSender sender)
 	{
-		return hasAccessPermission(sender);
+		return true;
+	}
+
+	@Override
+	public void handleNotExecutable(final CommandSender sender)
+	{
+		// TODO Auto-generated method stub
+		throw new IllegalStateException("Not implemented yet!");
 	}
 }

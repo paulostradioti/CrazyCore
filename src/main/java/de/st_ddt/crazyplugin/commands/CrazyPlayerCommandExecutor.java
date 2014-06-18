@@ -60,17 +60,33 @@ public abstract class CrazyPlayerCommandExecutor<S extends ChatHeaderProvider> e
 	}
 
 	@Override
-	public final boolean isAccessible(final CommandSender sender)
+	public final boolean isExecutable(final CommandSender sender)
 	{
 		if (sender instanceof Player)
-			return isAccessible((Player) sender);
+			return isExecutable((Player) sender);
 		else
 			return false;
 	}
 
 	@Override
-	public boolean isAccessible(final Player player)
+	public boolean isExecutable(final Player player)
 	{
-		return hasAccessPermission(player);
+		return true;
+	}
+
+	@Override
+	public final void handleNotExecutable(final CommandSender sender)
+	{
+		if (sender instanceof Player)
+			handleNotExecutable((Player) sender);
+		else
+			new CrazyCommandExecutorException(false).print(sender, owner.getChatHeader());
+	}
+
+	@Override
+	public void handleNotExecutable(final Player sender)
+	{
+		// TODO Auto-generated method stub
+		throw new IllegalStateException("Not implemented yet!");
 	}
 }

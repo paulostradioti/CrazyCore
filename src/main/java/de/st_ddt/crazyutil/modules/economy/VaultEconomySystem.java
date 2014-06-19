@@ -36,7 +36,7 @@ public class VaultEconomySystem implements EconomySystem
 	@Override
 	public double getMoney(final Player player)
 	{
-		return economy.getBalance(player.getName());
+		return economy.getBalance(player);
 	}
 
 	@Override

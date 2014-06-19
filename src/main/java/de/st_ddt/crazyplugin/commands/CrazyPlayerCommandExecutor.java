@@ -53,6 +53,14 @@ public abstract class CrazyPlayerCommandExecutor<S extends ChatHeaderProvider> e
 			return true;
 	}
 
+	public static final boolean hasAccessPermission(final CrazyPlayerCommandExecutorInterface command, final CommandSender sender)
+	{
+		if (sender instanceof Player)
+			return command.hasAccessPermission((Player) sender);
+		else
+			return true;
+	}
+
 	@Override
 	public boolean hasAccessPermission(final Player player)
 	{
@@ -68,6 +76,14 @@ public abstract class CrazyPlayerCommandExecutor<S extends ChatHeaderProvider> e
 			return false;
 	}
 
+	public static final boolean isExecutable(final CrazyPlayerCommandExecutorInterface command, final CommandSender sender)
+	{
+		if (sender instanceof Player)
+			return command.isExecutable((Player) sender);
+		else
+			return false;
+	}
+
 	@Override
 	public boolean isExecutable(final Player player)
 	{
@@ -77,10 +93,21 @@ public abstract class CrazyPlayerCommandExecutor<S extends ChatHeaderProvider> e
 	@Override
 	public final void handleNotExecutable(final CommandSender sender)
 	{
+		handleNotExecutable(this, sender);
+	}
+
+	public static final void handleNotExecutable(final CrazyPlayerCommandExecutorInterface command, final CommandSender sender)
+	{
 		if (sender instanceof Player)
-			handleNotExecutable((Player) sender);
+			command.handleNotExecutable((Player) sender);
 		else
-			new CrazyCommandExecutorException(false).print(sender, owner.getChatHeader());
+		{
+			final CrazyCommandExecutorException exception = new CrazyCommandExecutorException(false);
+			if (command instanceof CrazyCommandExecutor<?>)
+				exception.print(sender, ((CrazyCommandExecutor<?>) command).getOwner().getChatHeader());
+			else
+				exception.print(sender);
+		}
 	}
 
 	@Override

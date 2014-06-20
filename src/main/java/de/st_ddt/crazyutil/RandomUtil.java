@@ -18,7 +18,7 @@ public class RandomUtil
 		if (elements.length == 0)
 			return null;
 		else
-			return elements[RANDOM.nextInt(elements.length - 1)];
+			return elements[RANDOM.nextInt(elements.length)];
 	}
 
 	public static <E> E randomElement(final List<E> elements)
@@ -26,6 +26,6 @@ public class RandomUtil
 		if (elements.isEmpty())
 			return null;
 		else
-			return elements.get(RANDOM.nextInt(elements.size() - 1));
+			return elements.get(RANDOM.nextInt(elements.size()));
 	}
 }

@@ -13,7 +13,7 @@ public abstract class NumberParamitrisable<S extends Number> extends TypedParami
 		return value == null ? def : getValue();
 	}
 
-	public byte getValueAByte(final byte def)
+	public byte getValueAsByte(final byte def)
 	{
 		return value == null ? def : getValue().byteValue();
 	}
@@ -23,17 +23,17 @@ public abstract class NumberParamitrisable<S extends Number> extends TypedParami
 		return value == null ? def : getValue().intValue();
 	}
 
-	public long getValueAsInteger(final long def)
+	public long getValueAsLong(final long def)
 	{
 		return value == null ? def : getValue().longValue();
 	}
 
-	public float getValueAsInteger(final float def)
+	public float getValueAsFloat(final float def)
 	{
 		return value == null ? def : getValue().floatValue();
 	}
 
-	public double getValueAsInteger(final double def)
+	public double getValueAsDouble(final double def)
 	{
 		return value == null ? def : getValue().doubleValue();
 	}

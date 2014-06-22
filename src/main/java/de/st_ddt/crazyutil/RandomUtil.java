@@ -28,4 +28,24 @@ public class RandomUtil
 		else
 			return elements.get(RANDOM.nextInt(elements.size()));
 	}
+
+	public static int random(final int min, final int max)
+	{
+		return RANDOM.nextInt(max - min + 1) + min;
+	}
+
+	public static long random(final long min, final long max)
+	{
+		return Math.abs(RANDOM.nextLong()) % (max - min + 1) + min;
+	}
+
+	public static float random(final float min, final float max)
+	{
+		return RANDOM.nextFloat() * (max - min) + min;
+	}
+
+	public static double random(final double min, final double max)
+	{
+		return RANDOM.nextDouble() * (max - min) + min;
+	}
 }

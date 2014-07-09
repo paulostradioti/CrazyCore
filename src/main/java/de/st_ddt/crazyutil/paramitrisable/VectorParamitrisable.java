@@ -145,4 +145,12 @@ public class VectorParamitrisable extends TypedParamitrisable<Vector>
 	{
 		return value / ANGLECONVERTER;
 	}
+
+	public static Vector rotate(final Vector vector, final double yaw, final double pitch)
+	{
+		final double[] cart = fromVector(vector);
+		cart[1] += yaw;
+		cart[2] += pitch;
+		return getVector(cart[0], cart[1], cart[2]);
+	}
 }

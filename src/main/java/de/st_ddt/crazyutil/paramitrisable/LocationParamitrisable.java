@@ -1,5 +1,6 @@
 package de.st_ddt.crazyutil.paramitrisable;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -308,5 +309,42 @@ public class LocationParamitrisable extends TypedParamitrisable<Location>
 			return lowerLimit;
 		else
 			return upperLimit;
+	}
+
+	public static List<Location> getCircularLocations(final Location center, final int steps, final double radius)
+	{
+		return getCircularLocations(center, steps, radius, 0, 0);
+	}
+
+	public static List<Location> getCircularLocations(final Location center, final int steps, final double radius, final double yaw, final double pitch)
+	{
+		final List<Location> result = new ArrayList<Location>(steps);
+		final double full = Math.PI * 2;
+		for (double rot = 0; rot < full; rot += full / steps)
+			result.add(center.clone().add(VectorParamitrisable.getVector(radius, yaw + rot, pitch * Math.cos(rot))));
+		return result;
+	}
+
+	public static List<Location> getLinearLocations(final Location start, final Location end, final int steps)
+	{
+		return getLinearLocations(start, end, steps, false);
+	}
+
+	public static List<Location> getLinearLocations(final Location start, final Location end, final int steps, final boolean includeEnd)
+	{
+		return getLinearLocations(start, end, steps, true, includeEnd);
+	}
+
+	public static List<Location> getLinearLocations(final Location start, final Location end, final int steps, final boolean includeStart, final boolean includeEnd)
+	{
+		final List<Location> result = new ArrayList<Location>(steps + 2);
+		final Location diff = end.clone().subtract(start).multiply(1D / steps);
+		if (includeStart)
+			result.add(start.clone());
+		for (int step = 1; step < steps; step++)
+			result.add(diff.clone().multiply(step).add(start));
+		if (includeEnd)
+			result.add(end.clone());
+		return result;
 	}
 }

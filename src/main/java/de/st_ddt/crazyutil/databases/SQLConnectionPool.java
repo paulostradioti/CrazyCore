@@ -5,27 +5,32 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * The SQLConnectionPool
+ */
 public abstract class SQLConnectionPool
 {
 
-	protected final Queue<Connection> idleConenctions = new LinkedList<Connection>();
-	protected int busyConnections = 0;
-	protected final int maxConnections;
-	protected final SQLConnection mainConnection;
-	protected final Lock lock = new ReentrantLock();
+	private final static Random RANDOM = new Random();
+	private final static float REFRESHQUOTA = 0.05F;
+	private final Queue<Connection> idleConenctions = new LinkedList<Connection>();
+	private final Lock lock = new ReentrantLock();
+	private final SQLConnection mainConnection;
+	private final int maxConnections;
 
-	public SQLConnectionPool(final SQLConnection mysqlConnection)
+	public SQLConnectionPool(final SQLConnection sqlConnection)
 	{
-		this(mysqlConnection, 10);
+		this(sqlConnection, 10);
 	}
 
-	public SQLConnectionPool(final SQLConnection mysqlConnection, final int maxConnections)
+	public SQLConnectionPool(final SQLConnection sqlConnection, final int maxConnections)
 	{
 		super();
-		this.mainConnection = mysqlConnection;
+		this.mainConnection = sqlConnection;
 		this.maxConnections = maxConnections;
 	}
 
@@ -34,27 +39,21 @@ public abstract class SQLConnectionPool
 		return mainConnection;
 	}
 
-	public int getActiveConnections()
-	{
-		return busyConnections;
-	}
-
 	public void reset()
 	{
 		lock.lock();
 		final Iterator<Connection> it = idleConenctions.iterator();
 		while (it.hasNext())
 			try
-			{
+		{
 				it.next().close();
-			}
-			catch (final SQLException e)
-			{}
-			finally
-			{
-				it.remove();
-			}
-		busyConnections = 0;
+		}
+		catch (final SQLException e)
+		{}
+		finally
+		{
+			it.remove();
+		}
 		lock.unlock();
 	}
 
@@ -65,25 +64,22 @@ public abstract class SQLConnectionPool
 		{
 			final Connection connection = idleConenctions.poll();
 			if (connection == null)
-				if (busyConnections >= maxConnections)
-					return null;
-				else
-				{
-					busyConnections++;
-					return mainConnection.openConnection();
-				}
-			else if (connection.isValid(1))
-				return connection;
+				return mainConnection.openConnection();
 			else
+				try
 			{
-				connection.close();
-				return getConnection();
+					if (connection.isValid(1))
+						return connection;
+					else
+						connection.close();
 			}
+			catch (final SQLException e)
+			{}
+			return getConnection();
 		}
 		catch (final SQLException e)
 		{
-			e.printStackTrace();
-			return null;
+			throw new IllegalStateException("Could not open or get an active connetion to the database!", e);
 		}
 		finally
 		{
@@ -100,17 +96,20 @@ public abstract class SQLConnectionPool
 		lock.lock();
 		try
 		{
-			if (busyConnections == 0)
+			if (idleConenctions.size() > maxConnections || RANDOM.nextFloat() <= REFRESHQUOTA)
 				connection.close();
-			else
-			{
-				busyConnections--;
-				if (!connection.isClosed())
-					idleConenctions.add(connection);
-			}
+			else if (!connection.isClosed())
+				idleConenctions.add(connection);
 		}
 		catch (final SQLException e)
-		{}
+		{
+			try
+			{
+				connection.close();
+			}
+			catch (final SQLException e1)
+			{}
+		}
 		finally
 		{
 			lock.unlock();
